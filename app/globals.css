@@ -1,12 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Manrope:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #0B132B;
-  --surface: #111827;
+  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-sans: 'Manrope', system-ui, sans-serif;
+  --font-mono: 'DM Mono', Menlo, monospace;
+
+  --background: #070B14;
+  --surface: #0D1424;
   --primary: #10B981;
-  --primary-hover: #059669;
 }
 
 html {
@@ -15,35 +20,46 @@ html {
 }
 
 body {
-  background-color: #0B132B;
-  color: #F3F4F6;
+  background-color: #070B14;
+  color: #E2E8F0;
+  font-family: var(--font-sans);
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   overflow-x: hidden;
+  letter-spacing: -0.01em;
 }
 
-/* Custom glow utility */
-.glow-emerald {
-  box-shadow: 0 0 40px -10px rgba(16, 185, 129, 0.3);
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
 }
 
-.glow-emerald-lg {
-  box-shadow: 0 0 80px -15px rgba(16, 185, 129, 0.25);
+code, kbd, samp, pre, .font-mono {
+  font-family: var(--font-mono);
 }
 
-/* Custom scrollbar */
+/* Hairline technical borders */
+.border-technical {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.border-technical-firm {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* Custom technical scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0B132B;
+  background: #070B14;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1F2937;
-  border-radius: 4px;
+  background: #1E293B;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #374151;
+  background: #334155;
 }

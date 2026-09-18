@@ -1,324 +1,332 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Phone, PhoneOff, Mic, MicOff, Volume2, Sparkles, Bot, Clock, Shield, CheckCircle } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { Phone, PhoneOff, Mic, MicOff, Terminal, Activity, Volume2, ShieldCheck } from 'lucide-react'
 
-interface Scenario {
+interface VoiceScenario {
   id: string
   title: string
-  industry: string
-  agentName: string
-  firstMessage: string
-  callerMessage: string
-  responseMessage: string
+  caller: string
+  assistant: string
+  openingLine: string
+  callerReply: string
+  closingLine: string
 }
 
-const scenarios: Scenario[] = [
+const scenarios: VoiceScenario[] = [
   {
     id: 'legal',
-    title: 'High-Ticket Legal Firm',
-    industry: 'Legal',
-    agentName: 'Elena (Legal Intake AI)',
-    firstMessage: "Good morning, thank you for calling Sterling & Vance Law. How may I direct your legal inquiry today?",
-    callerMessage: "I need to schedule an urgent consultation regarding commercial property lease disputes.",
-    responseMessage: "I can prioritize that for you. Attorney Vance has availability tomorrow at 2:00 PM or Thursday at 10:00 AM EST. Would you like me to reserve the 2:00 PM slot and send the intake confirmation to your phone?"
+    title: 'Commercial Law Firm',
+    caller: 'Inbound Client',
+    assistant: 'Elena // Legal Intake AI',
+    openingLine: 'Good afternoon, Sterling & Vance Law. Are you calling regarding an existing case or a new consultation?',
+    callerReply: 'Hi, I need an urgent consultation regarding a commercial lease dispute for our warehouse.',
+    closingLine: 'I can reserve that with Senior Counsel David Vance tomorrow at 2:00 PM EST. I will send the intake confirmation to your mobile right away.',
   },
   {
-    id: 'dental',
-    title: 'Private Healthcare Clinic',
-    industry: 'Healthcare',
-    agentName: 'Aria (Clinic Coordinator AI)',
-    firstMessage: "Hello! You've reached Beacon Dental & Orthodontics. Are you calling to book a visit or do you have an inquiry?",
-    callerMessage: "Hi, I have a broken crown and need to see Dr. Miller as soon as possible.",
-    responseMessage: "I'm sorry to hear that. For emergency restorative visits, Dr. Miller has a priority opening today at 3:30 PM. I'll secure that for you now. Can I verify your date of birth?"
+    id: 'health',
+    title: 'Specialty Medical Practice',
+    caller: 'Patient',
+    assistant: 'Aria // Clinic Coordinator',
+    openingLine: 'Beacon Medical Clinic, this is Aria. Are you calling to schedule an appointment or speak with our nursing team?',
+    callerReply: 'I have acute knee swelling following surgery and need to be seen today.',
+    closingLine: 'Understood. I am flagging this as a priority postoperative review. Dr. Chen has an emergency slot at 3:15 PM today. Let me lock that in for you.',
   },
   {
-    id: 'realestate',
+    id: 'realty',
     title: 'Commercial Real Estate',
-    industry: 'Real Estate',
-    agentName: 'Marcus (Property Advisor AI)',
-    firstMessage: "Welcome to Skyline Commercial Realty. Looking for property acquisitions, leasing, or scheduling a site tour?",
-    callerMessage: "I'm interested in viewing the 12,000 sq ft warehouse on Industrial Parkway.",
-    responseMessage: "Excellent. That property features 3 loading docks and 24ft clearance. Our commercial lead, David, is conducting tours this Wednesday at 11 AM. Shall I add your team to the tour roster?"
-  }
+    caller: 'Commercial Broker',
+    assistant: 'Marcus // Acquisitions AI',
+    openingLine: 'Welcome to Skyline Commercial. Looking for property acquisitions, industrial leasing, or site walkthroughs?',
+    callerReply: 'We are interested in viewing the 25,000 sq ft logistics facility on Airport Road.',
+    closingLine: 'That facility features 4 high-dock bays and 30ft clear height. Our lead broker David is on site Thursday at 11 AM. Shall I add your team to the walkthrough register?',
+  },
 ]
 
 export default function AiVoiceDemo() {
-  const [activeScenario, setActiveScenario] = useState<Scenario>(scenarios[0])
-  const [callState, setCallState] = useState<'idle' | 'calling' | 'connected'>('idle')
+  const [activeScenario, setActiveScenario] = useState<VoiceScenario>(scenarios[0])
+  const [status, setStatus] = useState<'idle' | 'calling' | 'connected'>('idle')
   const [isMuted, setIsMuted] = useState(false)
-  const [chatStep, setChatStep] = useState<number>(0)
+  const [dialogueIndex, setDialogueIndex] = useState(0)
   const [isSpeaking, setIsSpeaking] = useState(false)
-  const [seconds, setSeconds] = useState(0)
+  const [duration, setDuration] = useState(0)
 
-  // Timer
   useEffect(() => {
-    let timer: any
-    if (callState === 'connected') {
-      timer = setInterval(() => {
-        setSeconds((s) => s + 1)
-      }, 1000)
+    let interval: any
+    if (status === 'connected') {
+      interval = setInterval(() => setDuration((d) => d + 1), 1000)
     } else {
-      setSeconds(0)
+      setDuration(0)
     }
-    return () => clearInterval(timer)
-  }, [callState])
+    return () => clearInterval(interval)
+  }, [status])
 
-  const speakMessage = (text: string, onEnd?: () => void) => {
+  const speak = (text: string, onDone?: () => void) => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel()
-      const utterance = new SpeechSynthesisUtterance(text)
-      utterance.rate = 1.05
-      utterance.pitch = 1.0
-      utterance.onstart = () => setIsSpeaking(true)
-      utterance.onend = () => {
+      const utt = new SpeechSynthesisUtterance(text)
+      utt.rate = 1.05
+      utt.pitch = 1.0
+      utt.onstart = () => setIsSpeaking(true)
+      utt.onend = () => {
         setIsSpeaking(false)
-        if (onEnd) onEnd()
+        if (onDone) onDone()
       }
-      utterance.onerror = () => {
+      utt.onerror = () => {
         setIsSpeaking(false)
-        if (onEnd) onEnd()
+        if (onDone) onDone()
       }
-      window.speechSynthesis.speak(utterance)
+      window.speechSynthesis.speak(utt)
     } else {
       setIsSpeaking(true)
       setTimeout(() => {
         setIsSpeaking(false)
-        if (onEnd) onEnd()
+        if (onDone) onDone()
       }, 3000)
     }
   }
 
   const startCall = () => {
-    setCallState('calling')
-    setChatStep(0)
+    setStatus('calling')
+    setDialogueIndex(0)
     setTimeout(() => {
-      setCallState('connected')
-      setChatStep(1)
-      speakMessage(activeScenario.firstMessage, () => {
-        // After AI speaks, simulate caller responding after 1.5s
+      setStatus('connected')
+      setDialogueIndex(1)
+      speak(activeScenario.openingLine, () => {
         setTimeout(() => {
-          setChatStep(2)
+          setDialogueIndex(2)
           setTimeout(() => {
-            setChatStep(3)
-            speakMessage(activeScenario.responseMessage)
+            setDialogueIndex(3)
+            speak(activeScenario.closingLine)
           }, 1800)
-        }, 1500)
+        }, 1200)
       })
-    }, 1500)
+    }, 1400)
   }
 
   const endCall = () => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel()
     }
-    setCallState('idle')
-    setChatStep(0)
+    setStatus('idle')
+    setDialogueIndex(0)
     setIsSpeaking(false)
   }
 
-  const formatTime = (totalSeconds: number) => {
-    const mins = Math.floor(totalSeconds / 60)
-    const secs = totalSeconds % 60
+  const formatTimer = (s: number) => {
+    const mins = Math.floor(s / 60)
+    const secs = s % 60
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
 
   return (
-    <section id="ai-voice-demo" className="py-28 bg-background relative overflow-hidden border-t border-gray-900">
-      {/* Background Ambient Glow */}
-      <div className="absolute top-1/2 right-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[140px] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-primary/30 bg-primary/10 text-xs font-mono text-primary mb-4">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>INTERACTIVE VOICE SIMULATOR</span>
+    <section id="ai-voice-demo" className="py-28 bg-[#070B14] border-b border-white/[0.08]">
+      <div className="max-w-7xl mx-auto px-6">
+        
+        {/* Header */}
+        <div className="max-w-3xl mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#0D1424] border border-white/[0.1] text-xs font-mono text-primary mb-4">
+            <span>VOICE TELEPHONY // § 15</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight mb-4">
-            Experience the <span className="text-primary">Sub-300ms</span> AI Voice Receptionist
+          <h2 className="text-3xl sm:text-5xl font-bold text-white tracking-tight font-display mb-4">
+            Sub-300ms conversational voice agents.
           </h2>
-          <p className="text-gray-400 text-base sm:text-lg">
-            Zero robot tone. Zero frustrating delay. Natural, contextual phone conversations that triage inquiries and sync straight to your CRM.
+          <p className="text-base sm:text-lg text-slate-400 leading-relaxed">
+            Zero synthetic delay. Zero robotic pauses. High-fidelity SIP telephony that conducts contextual phone intake and schedules appointments straight into your calendar.
           </p>
         </div>
 
-        {/* Demo Interface Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-6xl mx-auto">
+        {/* Audio Console Interface */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* Left Column: Scenario Selectors & Benefits */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="space-y-2">
-              <span className="text-xs uppercase font-mono text-gray-400 tracking-wider">Select Industry Scenario</span>
-              <div className="space-y-3">
-                {scenarios.map((sc) => {
-                  const isSelected = activeScenario.id === sc.id
-                  return (
-                    <button
-                      key={sc.id}
-                      onClick={() => {
-                        endCall()
-                        setActiveScenario(sc)
-                      }}
-                      className={`w-full text-left p-4 rounded-xl border transition-all duration-200 ${
-                        isSelected
-                          ? 'bg-surface/90 border-primary shadow-[0_0_20px_rgba(16,185,129,0.15)]'
-                          : 'bg-surface/40 border-gray-800 hover:border-gray-700 hover:bg-surface/60'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-semibold text-white">{sc.title}</span>
-                        <span className="text-[10px] font-mono uppercase bg-primary/10 text-primary px-2 py-0.5 rounded">
-                          {sc.industry}
-                        </span>
-                      </div>
-                      <p className="text-xs text-gray-400 mt-1 line-clamp-1">{sc.agentName}</p>
-                    </button>
-                  )
-                })}
-              </div>
+          {/* Preset Selector & Specs (Left: 5 cols) */}
+          <div className="lg:col-span-5 space-y-4">
+            <div className="font-mono text-xs text-slate-500 uppercase tracking-wider">
+              Select Vertical Scenario
             </div>
 
-            {/* Feature Highlights */}
-            <div className="p-5 rounded-2xl bg-surface/40 border border-gray-800/80 space-y-3">
-              <div className="flex items-center gap-3 text-xs text-gray-300">
-                <CheckCircle className="w-4 h-4 text-primary shrink-0" />
-                <span>Instant Google Calendar & CRM booking</span>
+            <div className="space-y-2">
+              {scenarios.map((sc) => {
+                const isSelected = activeScenario.id === sc.id
+                return (
+                  <button
+                    key={sc.id}
+                    type="button"
+                    onClick={() => {
+                      endCall()
+                      setActiveScenario(sc)
+                    }}
+                    className={`w-full p-4 rounded-xl border text-left transition-all duration-150 ${
+                      isSelected
+                        ? 'bg-[#0D1424] border-primary shadow-[0_0_15px_rgba(16,185,129,0.1)]'
+                        : 'bg-[#0A0F1D] border-white/[0.08] text-slate-400 hover:border-white/[0.16] hover:text-white'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-semibold text-white font-display">
+                        {sc.title}
+                      </span>
+                      <span className="font-mono text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/20">
+                        ACTIVE
+                      </span>
+                    </div>
+                    <div className="font-mono text-xs text-slate-500 mt-1">
+                      {sc.assistant}
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* Architecture Telemetry Box */}
+            <div className="bg-[#0A0F1D] border border-white/[0.08] rounded-xl p-5 font-mono text-xs space-y-2.5 text-slate-400">
+              <div className="flex justify-between">
+                <span className="text-slate-500">Telephony Engine:</span>
+                <span className="text-slate-200">Twilio SIP Trunking</span>
               </div>
-              <div className="flex items-center gap-3 text-xs text-gray-300">
-                <CheckCircle className="w-4 h-4 text-primary shrink-0" />
-                <span>Real-time Twilio, Vapi & Bland.ai telephony</span>
+              <div className="flex justify-between">
+                <span className="text-slate-500">ASR Transcriber:</span>
+                <span className="text-slate-200">Deepgram Nova-2 (Streaming)</span>
               </div>
-              <div className="flex items-center gap-3 text-xs text-gray-300">
-                <CheckCircle className="w-4 h-4 text-primary shrink-0" />
-                <span>Warm transfer to human staff for VIP clients</span>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Orchestrator:</span>
+                <span className="text-slate-200">Vapi.ai / Custom WebSocket</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Measured Latency:</span>
+                <span className="text-primary">264ms end-to-end</span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Virtual Smartphone / Calling Terminal */}
+          {/* Virtual Telephony Station (Right: 7 cols) */}
           <div className="lg:col-span-7">
-            <div className="rounded-3xl bg-glass-panel border border-gray-800 p-6 md:p-8 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.6)] relative overflow-hidden">
+            <div className="bg-[#0D1424] border border-white/[0.12] rounded-xl p-6 sm:p-8">
               
-              {/* Header inside phone console */}
-              <div className="flex items-center justify-between pb-6 border-b border-gray-800/80">
+              {/* Top Station Bar */}
+              <div className="flex items-center justify-between pb-5 border-b border-white/[0.08]">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center">
-                    <Bot className="w-5 h-5 text-primary" />
+                  <div className="w-9 h-9 rounded-lg bg-black/40 border border-white/[0.1] flex items-center justify-center font-mono text-xs text-primary font-bold">
+                    SIP
                   </div>
                   <div>
-                    <div className="text-sm font-bold text-white">{activeScenario.agentName}</div>
-                    <div className="text-xs font-mono text-gray-400 flex items-center gap-1.5">
-                      <span className={`w-2 h-2 rounded-full ${callState === 'connected' ? 'bg-primary animate-pulse' : 'bg-gray-500'}`} />
-                      <span>{callState === 'connected' ? `Live • ${formatTime(seconds)}` : callState === 'calling' ? 'Connecting...' : 'Ready to Test'}</span>
+                    <div className="text-sm font-bold text-white font-display">
+                      {activeScenario.assistant}
+                    </div>
+                    <div className="font-mono text-xs text-slate-400 flex items-center gap-2">
+                      <span className={`w-2 h-2 rounded-full ${status === 'connected' ? 'bg-primary animate-pulse' : 'bg-slate-600'}`} />
+                      <span>{status === 'connected' ? `CONNECTED // ${formatTimer(duration)}` : status === 'calling' ? 'NEGOTIATING SIP...' : 'STATION READY'}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="text-xs font-mono px-3 py-1 rounded-full bg-surface border border-gray-800 text-gray-400">
-                  Latency: 280ms
+                <div className="font-mono text-xs text-slate-400 bg-black/40 px-3 py-1 rounded border border-white/[0.08]">
+                  OPUS 48kHz
                 </div>
               </div>
 
-              {/* Waveform / Audio Visualizer Display */}
-              <div className="py-8 flex flex-col items-center justify-center min-h-[180px]">
-                {callState === 'idle' && (
+              {/* Waveform / Visualizer */}
+              <div className="py-8 flex flex-col items-center justify-center min-h-[160px]">
+                {status === 'idle' && (
                   <div className="text-center space-y-2">
-                    <div className="w-16 h-16 rounded-full bg-surface border border-gray-800 flex items-center justify-center mx-auto text-primary">
-                      <Phone className="w-7 h-7" />
-                    </div>
-                    <p className="text-sm text-gray-400">Click below to start a live audio simulation with the AI Receptionist</p>
+                    <p className="text-xs font-mono text-slate-400">
+                      Press below to initiate interactive SIP voice simulation
+                    </p>
                   </div>
                 )}
 
-                {callState === 'calling' && (
-                  <div className="text-center space-y-4">
-                    <div className="w-16 h-16 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center mx-auto animate-pulse text-primary">
-                      <Phone className="w-7 h-7" />
-                    </div>
-                    <span className="text-sm font-mono text-primary">Establishing low-latency SIP connection...</span>
+                {status === 'calling' && (
+                  <div className="text-center space-y-2">
+                    <Activity className="w-8 h-8 text-primary animate-pulse mx-auto" />
+                    <span className="font-mono text-xs text-primary">
+                      Establishing low-latency WebRTC audio stream...
+                    </span>
                   </div>
                 )}
 
-                {callState === 'connected' && (
+                {status === 'connected' && (
                   <div className="w-full space-y-6">
-                    {/* Animated Waveform Bars */}
-                    <div className="flex items-center justify-center gap-1.5 h-16">
-                      {[...Array(20)].map((_, i) => (
+                    {/* Audio Bars */}
+                    <div className="flex items-center justify-center gap-1 h-14">
+                      {[...Array(24)].map((_, i) => (
                         <motion.div
                           key={i}
                           animate={{
                             height: isSpeaking
-                              ? [10, Math.sin(i * 0.5) * 35 + 25, 12]
-                              : [6, 12, 6],
+                              ? [8, Math.sin(i * 0.4) * 28 + 20, 8]
+                              : [4, 10, 4],
                           }}
                           transition={{
                             repeat: Infinity,
-                            duration: isSpeaking ? 0.4 + (i % 5) * 0.1 : 1.2,
+                            duration: isSpeaking ? 0.35 + (i % 6) * 0.08 : 1.4,
                             ease: 'easeInOut',
                           }}
-                          className={`w-1.5 rounded-full ${
-                            isSpeaking ? 'bg-primary' : 'bg-gray-600'
+                          className={`w-1 rounded-full ${
+                            isSpeaking ? 'bg-primary' : 'bg-slate-700'
                           }`}
                         />
                       ))}
                     </div>
 
                     {/* Dialogue Transcript Stream */}
-                    <div className="space-y-3 bg-surface/60 rounded-xl p-4 border border-gray-800 text-xs font-sans max-h-48 overflow-y-auto">
-                      {chatStep >= 1 && (
-                        <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2">
-                          <span className="font-bold text-primary shrink-0">AI:</span>
-                          <span className="text-gray-200">{activeScenario.firstMessage}</span>
-                        </motion.div>
+                    <div className="space-y-3 bg-[#070B14] p-4 rounded-lg border border-white/[0.08] font-mono text-xs">
+                      {dialogueIndex >= 1 && (
+                        <div className="flex gap-2">
+                          <span className="text-primary font-semibold">AI:</span>
+                          <span className="text-slate-200">{activeScenario.openingLine}</span>
+                        </div>
                       )}
-                      {chatStep >= 2 && (
-                        <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2">
-                          <span className="font-bold text-gray-400 shrink-0">Caller:</span>
-                          <span className="text-gray-300 italic">{activeScenario.callerMessage}</span>
-                        </motion.div>
+                      {dialogueIndex >= 2 && (
+                        <div className="flex gap-2">
+                          <span className="text-slate-500 font-semibold">Caller:</span>
+                          <span className="text-slate-300">{activeScenario.callerReply}</span>
+                        </div>
                       )}
-                      {chatStep >= 3 && (
-                        <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2">
-                          <span className="font-bold text-primary shrink-0">AI:</span>
-                          <span className="text-gray-200">{activeScenario.responseMessage}</span>
-                        </motion.div>
+                      {dialogueIndex >= 3 && (
+                        <div className="flex gap-2">
+                          <span className="text-primary font-semibold">AI:</span>
+                          <span className="text-slate-200">{activeScenario.closingLine}</span>
+                        </div>
                       )}
                     </div>
                   </div>
                 )}
               </div>
 
-              {/* Action Controls */}
-              <div className="pt-6 border-t border-gray-800/80 flex items-center justify-center gap-4">
-                {callState === 'idle' ? (
+              {/* Controls */}
+              <div className="pt-4 border-t border-white/[0.08]">
+                {status === 'idle' ? (
                   <button
+                    type="button"
                     onClick={startCall}
-                    className="w-full py-4 bg-primary hover:bg-primaryHover text-background font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(16,185,129,0.3)] hover:shadow-[0_0_35px_rgba(16,185,129,0.45)] active:scale-95"
+                    className="w-full py-3.5 bg-primary hover:bg-primaryHover text-[#070B14] font-semibold rounded-lg font-mono text-xs uppercase tracking-wider transition-all duration-150 flex items-center justify-center gap-2"
                   >
-                    <Phone className="w-5 h-5" />
-                    <span>Call AI Receptionist Now</span>
+                    <Phone className="w-4 h-4" />
+                    <span>Initiate Voice Simulation</span>
                   </button>
                 ) : (
-                  <div className="flex items-center gap-4 w-full">
+                  <div className="grid grid-cols-2 gap-3">
                     <button
+                      type="button"
                       onClick={() => setIsMuted(!isMuted)}
-                      className={`flex-1 py-3.5 rounded-xl border flex items-center justify-center gap-2 text-sm font-medium transition-all ${
+                      className={`py-3 rounded-lg border font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
                         isMuted
                           ? 'bg-amber-500/20 border-amber-500 text-amber-300'
-                          : 'bg-surface border-gray-700 text-gray-300 hover:text-white'
+                          : 'bg-[#070B14] border-white/[0.12] text-slate-300 hover:text-white'
                       }`}
                     >
                       {isMuted ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                       <span>{isMuted ? 'Unmute' : 'Mute'}</span>
                     </button>
-                    
+
                     <button
+                      type="button"
                       onClick={endCall}
-                      className="flex-1 py-3.5 bg-red-600/90 hover:bg-red-600 text-white rounded-xl flex items-center justify-center gap-2 text-sm font-bold shadow-[0_0_20px_rgba(239,68,68,0.3)] transition-all active:scale-95"
+                      className="py-3 bg-red-600/90 hover:bg-red-600 text-white rounded-lg font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all font-semibold"
                     >
                       <PhoneOff className="w-4 h-4" />
-                      <span>End Call</span>
+                      <span>Terminate Call</span>
                     </button>
                   </div>
                 )}
@@ -328,6 +336,7 @@ export default function AiVoiceDemo() {
           </div>
 
         </div>
+
       </div>
     </section>
   )

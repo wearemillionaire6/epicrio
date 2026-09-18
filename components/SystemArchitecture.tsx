@@ -1,130 +1,172 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { MessageSquare, Users, Zap, Database, Phone, BarChart3, Layers, CheckCircle2, ArrowRight } from 'lucide-react'
+import { Zap, MessageSquare, Users, Phone, BarChart3, ArrowRight, CheckCircle2, Terminal } from 'lucide-react'
 
-interface NodeProps {
-  icon: React.ComponentType<{ className?: string }>
-  label: string
-  sublabel: string
-  delay: number
-  status?: string
+interface ArchitectureNode {
+  id: string
+  title: string
+  protocol: string
+  role: string
+  tools: string
 }
 
-const Node = ({ icon: Icon, label, sublabel, delay, status = 'ACTIVE' }: NodeProps) => (
-  <motion.div 
-    initial={{ opacity: 0, scale: 0.9 }}
-    whileInView={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.5, delay }}
-    viewport={{ once: true }}
-    className="flex flex-col items-center gap-3 z-10 relative"
-  >
-    <div className="w-20 h-20 rounded-2xl bg-surface/90 border border-gray-700/80 hover:border-primary/60 flex flex-col items-center justify-center shadow-[0_0_35px_rgba(16,185,129,0.08)] relative group transition-all duration-300 backdrop-blur-md">
-      <div className="absolute inset-0 bg-primary/5 rounded-2xl group-hover:bg-primary/20 transition-colors" />
-      <Icon className="w-7 h-7 text-primary group-hover:scale-110 transition-transform duration-300" />
-      
-      {/* Live ping dot */}
-      <span className="absolute top-2 right-2 flex h-2 w-2">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-      </span>
-    </div>
-    
-    <div className="text-center">
-      <div className="text-sm font-semibold text-white tracking-wide">{label}</div>
-      <div className="text-xs text-gray-400 font-mono mt-0.5">{sublabel}</div>
-    </div>
-  </motion.div>
-)
+const nodes: ArchitectureNode[] = [
+  {
+    id: 'capture',
+    title: 'Inbound Enquiries & Web',
+    protocol: 'HTTP/2 REST API',
+    role: 'Captures and enriches lead data from form submissions in <100ms.',
+    tools: 'Next.js 15 • Cloudflare Edge • Clay Enriched',
+  },
+  {
+    id: 'voice',
+    title: 'AI Voice Receptionist',
+    protocol: 'SIP Trunking // WebRTC',
+    role: 'Answers phone calls in <300ms, qualifies intent, and schedules consultations.',
+    tools: 'Vapi.ai • Twilio SIP • Deepgram Nova-2',
+  },
+  {
+    id: 'messaging',
+    title: 'Omnichannel WhatsApp & SMS',
+    protocol: 'WhatsApp Business Cloud API',
+    role: 'Instant booking confirmations, reminders, and 2-way conversation threads.',
+    tools: 'Meta Cloud API • Twilio Messaging Service',
+  },
+  {
+    id: 'crm',
+    title: 'Central CRM Fabric',
+    protocol: 'Bi-directional Realtime Webhook',
+    role: 'Single source of truth for deal pipelines, contacts, and custom field sync.',
+    tools: 'HubSpot • GoHighLevel • Salesforce',
+  },
+  {
+    id: 'ops',
+    title: 'Operations & Autonomous Workflows',
+    protocol: 'Stateful Queue & DLQ Replay',
+    role: 'Executes back-office work: contract generation, invoicing, and team alerts.',
+    tools: 'n8n Self-Hosted • Python Workers • Stripe API',
+  },
+]
 
 export default function SystemArchitecture() {
-  return (
-    <section id="architecture" className="py-28 bg-background border-t border-gray-900 relative overflow-hidden">
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-primary/5 rounded-full blur-[130px] pointer-events-none" />
+  const [selectedNode, setSelectedNode] = useState<ArchitectureNode>(nodes[3])
 
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-gray-800 bg-surface/60 text-xs font-mono text-gray-300 mb-4">
-            <Layers className="w-3.5 h-3.5 text-primary" />
-            <span>UNIFIED SYSTEM FABRIC</span>
+  return (
+    <section id="architecture" className="py-28 bg-[#070B14] border-b border-white/[0.08] relative">
+      <div className="max-w-7xl mx-auto px-6">
+        
+        {/* Section Header */}
+        <div className="max-w-3xl mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#0D1424] border border-white/[0.1] text-xs font-mono text-primary mb-4">
+            <span>ARCHITECTURE // § 13</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
-            One Technology Partner. <span className="text-primary">Your Entire Stack.</span>
+          <h2 className="text-3xl sm:text-5xl font-bold text-white tracking-tight font-display mb-4">
+            One connected technology infrastructure.
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-base sm:text-lg">
-            Your business has too many disconnected systems. We architect, integrate, and synchronize them into a single high-velocity operational pipeline.
+          <p className="text-base sm:text-lg text-slate-400 leading-relaxed">
+            Your organization runs on too many isolated tools. We engineer low-latency event conduits that synchronize your entire stack in real time.
           </p>
         </div>
 
-        {/* Node Diagram Container */}
-        <div className="relative max-w-4xl mx-auto py-8 px-4 rounded-3xl bg-surface/30 border border-gray-800/80 backdrop-blur-xl">
+        {/* Interactive Architecture Schema */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* Animated Connecting Lines (Desktop/Tablet) */}
-          <div className="hidden md:block absolute inset-0 pointer-events-none">
-            {/* Vertical spine */}
-            <div className="absolute top-16 bottom-16 left-1/2 w-0.5 bg-gradient-to-b from-primary/10 via-primary/60 to-primary/10 -translate-x-1/2">
-              <div className="w-full h-16 bg-primary blur-sm animate-data-flow" />
-            </div>
+          {/* Node Ledger (Left side: 7 cols) */}
+          <div className="lg:col-span-7 space-y-3">
+            {nodes.map((n, idx) => {
+              const isSelected = selectedNode.id === n.id
+              return (
+                <div
+                  key={n.id}
+                  onClick={() => setSelectedNode(n)}
+                  className={`p-5 rounded-xl border transition-all duration-200 cursor-pointer ${
+                    isSelected
+                      ? 'bg-[#0D1424] border-primary shadow-[0_0_20px_rgba(16,185,129,0.12)]'
+                      : 'bg-[#0A0F1D] border-white/[0.08] hover:border-white/[0.18] hover:bg-[#0D1424]/50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-3">
+                      <span className="font-mono text-xs text-primary font-bold">
+                        0{idx + 1}
+                      </span>
+                      <h3 className="text-base font-semibold text-white font-display">
+                        {n.title}
+                      </h3>
+                    </div>
+                    <span className="font-mono text-[11px] text-slate-400 bg-black/40 px-2.5 py-0.5 rounded border border-white/[0.06]">
+                      {n.protocol}
+                    </span>
+                  </div>
 
-            {/* Horizontal crossbar */}
-            <div className="absolute top-1/2 left-[18%] right-[18%] h-0.5 bg-gradient-to-r from-primary/10 via-primary/50 to-primary/10 -translate-y-1/2">
-              <div className="h-full w-20 bg-primary blur-sm animate-pulse" />
-            </div>
+                  <p className="text-xs text-slate-400 mb-3 pl-7">
+                    {n.role}
+                  </p>
+
+                  <div className="font-mono text-[11px] text-slate-500 pl-7 flex items-center gap-2">
+                    <span className="text-slate-600 font-semibold">STACK:</span>
+                    <span>{n.tools}</span>
+                  </div>
+                </div>
+              )
+            })}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-y-12 md:gap-y-20 relative">
-            {/* Top Node */}
-            <div className="md:col-span-3 flex justify-center">
-              <Node icon={Zap} label="Website & Enquiries" sublabel="Instant Capture & Triage" delay={0.1} />
-            </div>
-            
-            {/* Middle Row Nodes */}
-            <div className="flex justify-center">
-              <Node icon={MessageSquare} label="WhatsApp & Omnichannel" sublabel="Automated Chat Flows" delay={0.2} />
-            </div>
+          {/* Interactive Inspection Console (Right side: 5 cols) */}
+          <div className="lg:col-span-5 sticky top-28">
+            <div className="bg-[#0D1424] border border-white/[0.12] rounded-xl p-6 font-mono text-xs">
+              <div className="flex items-center justify-between pb-4 border-b border-white/[0.08] text-slate-300 mb-4">
+                <span className="flex items-center gap-2 font-bold text-white uppercase tracking-wider">
+                  <Terminal className="w-4 h-4 text-primary" />
+                  <span>Conduit Inspector</span>
+                </span>
+                <span className="text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded">
+                  200 OK
+                </span>
+              </div>
 
-            <div className="flex justify-center">
-              <div className="relative p-1 rounded-3xl bg-gradient-to-b from-primary/40 to-transparent">
-                <div className="p-3 bg-background/90 rounded-[22px]">
-                  <Node icon={Users} label="Central CRM Fabric" sublabel="Single Source of Truth" delay={0.3} />
+              <div className="space-y-4">
+                <div>
+                  <span className="text-slate-500 uppercase tracking-wider text-[10px] block mb-1">Target Component</span>
+                  <div className="text-sm font-semibold text-white font-display">
+                    {selectedNode.title}
+                  </div>
+                </div>
+
+                <div>
+                  <span className="text-slate-500 uppercase tracking-wider text-[10px] block mb-1">Active Protocol</span>
+                  <div className="text-primary text-xs bg-black/50 p-2 rounded border border-white/[0.08]">
+                    {selectedNode.protocol}
+                  </div>
+                </div>
+
+                <div>
+                  <span className="text-slate-500 uppercase tracking-wider text-[10px] block mb-1">Live Payload Schema</span>
+                  <pre className="bg-[#070B14] p-3 rounded-lg border border-white/[0.08] text-[11px] text-slate-300 overflow-x-auto leading-relaxed">
+{`{
+  "system_id": "${selectedNode.id}",
+  "sync_state": "SYNCHRONIZED",
+  "latency_ms": 142,
+  "telemetry": {
+    "engine": "${selectedNode.tools.split('•')[0].trim()}",
+    "retries": 0,
+    "integrity": "verified"
+  }
+}`}
+                  </pre>
+                </div>
+
+                <div className="pt-2 text-[11px] text-slate-400 border-t border-white/[0.08] leading-relaxed">
+                  Every pipeline includes automatic retry logic, Dead-Letter-Queues (DLQ), and Slack alerting on abnormal failure rates.
                 </div>
               </div>
-            </div>
-
-            <div className="flex justify-center">
-              <Node icon={Phone} label="AI Voice Receptionist" sublabel="Live 24/7 Voice Calling" delay={0.4} />
-            </div>
-
-            {/* Bottom Node */}
-            <div className="md:col-span-3 flex justify-center">
-              <Node icon={BarChart3} label="Operations & Realtime Analytics" sublabel="Autonomous Execution" delay={0.5} />
-            </div>
-          </div>
-
-          {/* Architecture Feature Cards Footer */}
-          <div className="mt-14 pt-8 border-t border-gray-800/80 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
-            <div className="p-4 rounded-xl bg-surface/50 border border-gray-800/50">
-              <div className="flex items-center gap-2 text-primary text-xs font-semibold uppercase tracking-wider mb-1">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Bi-Directional Sync
-              </div>
-              <p className="text-xs text-gray-400">Zero duplicate entries. Contacts, states, and telemetry update everywhere in &lt;1 second.</p>
-            </div>
-            <div className="p-4 rounded-xl bg-surface/50 border border-gray-800/50">
-              <div className="flex items-center gap-2 text-primary text-xs font-semibold uppercase tracking-wider mb-1">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Enterprise Webhooks
-              </div>
-              <p className="text-xs text-gray-400">Custom middleware connecting legacy SQL databases, Zapier/Make, and custom APIs.</p>
-            </div>
-            <div className="p-4 rounded-xl bg-surface/50 border border-gray-800/50">
-              <div className="flex items-center gap-2 text-primary text-xs font-semibold uppercase tracking-wider mb-1">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Self-Healing Logic
-              </div>
-              <p className="text-xs text-gray-400">Automated error recovery and fallback notifications ensure critical leads never slip away.</p>
             </div>
           </div>
 
         </div>
+
       </div>
     </section>
   )

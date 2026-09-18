@@ -1,119 +1,118 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { Users, Zap, Mic, Bot, Link2, Code2, Sparkles, ArrowRight } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 
 const solutions = [
   {
-    icon: Users,
-    title: "Central CRM Architecture",
-    desc: "Turn leads into customers automatically. Custom CRM pipelines designed specifically around your high-ticket sales process.",
-    tech: "HubSpot • GoHighLevel • Salesforce",
-    link: "Explore CRM Architecture",
-    target: "#lead-form"
+    num: '01',
+    title: 'Central CRM Architecture',
+    desc: 'Bespoke CRM setups tailored to your actual sales mechanics. Automated pipeline stages, attribution tracking, and instant rep notification.',
+    stack: 'HubSpot • GoHighLevel • Salesforce • Twenty CRM',
+    cta: 'Explore CRM Engineering',
+    href: '#lead-form',
   },
   {
-    icon: Zap,
-    title: "Autonomous Workflows",
-    desc: "Make repetitive manual work disappear. Automated lead scoring, contract routing, customer onboarding, and invoicing.",
-    tech: "n8n • Make.com • Custom Python Workers",
-    link: "Explore Automations",
-    target: "#lead-form"
+    num: '02',
+    title: 'Autonomous Workflow Engines',
+    desc: 'Eliminate manual data transfer between teams. Self-hosted workflow runners that handle contract dispatch, customer onboarding, and invoicing automatically.',
+    stack: 'n8n Self-Hosted • Make • Python Microservices',
+    cta: 'Explore Automations',
+    href: '#lead-form',
   },
   {
-    icon: Mic,
-    title: "AI Voice Receptionist",
-    desc: "Never miss an incoming customer call. Human-grade conversational AI that answers in <300ms, qualifies, and books meetings.",
-    tech: "Vapi.ai • Bland AI • Twilio WebRTC",
-    link: "Test Interactive Demo",
-    target: "#ai-voice-demo"
+    num: '03',
+    title: 'AI Voice Receptionist',
+    desc: 'Sub-300ms conversational telephony that answers customer calls 24/7, screens qualifications, resolves FAQs, and directly books calendar meetings.',
+    stack: 'Vapi.ai • Twilio SIP • Deepgram • Cal.com',
+    cta: 'Test Voice Demo',
+    href: '#ai-voice-demo',
   },
   {
-    icon: Bot,
-    title: "Enterprise AI Agents",
-    desc: "Put intelligence directly into your daily operations. Knowledge-base RAG bots, document analyzers, and customer support co-pilots.",
-    tech: "Claude 3.5 • OpenAI • LangChain",
-    link: "Explore AI Solutions",
-    target: "#lead-form"
+    num: '04',
+    title: 'Enterprise AI Agents & Knowledge RAG',
+    desc: 'Contextual AI co-pilots connected to your internal SOPs, documents, and historical customer tickets for instant operational leverage.',
+    stack: 'Claude 3.5 Sonnet • OpenAI • LangChain • Supabase Vector',
+    cta: 'Explore AI Agents',
+    href: '#lead-form',
   },
   {
-    icon: Link2,
-    title: "Unified Integrations",
-    desc: "Connect your disjointed tools into one brain. Realtime data synchronization across WhatsApp, Email, Slack, Stripe, and ERPs.",
-    tech: "Webhooks • REST APIs • GraphQL Sync",
-    link: "Explore Integrations",
-    target: "#architecture"
+    num: '05',
+    title: 'Unified Tool Integrations',
+    desc: 'Custom API middleware connecting legacy databases, WhatsApp Business, Stripe billing, and customer communication channels.',
+    stack: 'REST APIs • Webhook Middleware • PostgreSQL CDC',
+    cta: 'Inspect Integrations',
+    href: '#architecture',
   },
   {
-    icon: Code2,
-    title: "Custom Technology & Portals",
-    desc: "Build proprietary software your competitors can't buy off the shelf. Client portals, executive dashboards, and bespoke apps.",
-    tech: "Next.js • Supabase • Node • Python",
-    link: "Explore Custom Tech",
-    target: "#lead-form"
+    num: '06',
+    title: 'Custom Portals & Dashboards',
+    desc: 'Proprietary client portals and executive telemetry dashboards built when off-the-shelf software cannot meet your operational requirements.',
+    stack: 'Next.js 15 • TypeScript • Supabase • Tailwind CSS',
+    cta: 'Explore Custom Portals',
+    href: '#lead-form',
   },
 ]
 
 export default function Solutions() {
   return (
-    <section id="solutions" className="py-28 bg-background relative">
+    <section id="solutions" className="py-28 bg-[#070B14] border-b border-white/[0.08]">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-gray-800 bg-surface/60 text-xs font-mono text-primary mb-4">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>ENGINEERED SOLUTIONS</span>
+        
+        {/* Section Header */}
+        <div className="max-w-3xl mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#0D1424] border border-white/[0.1] text-xs font-mono text-primary mb-4">
+            <span>PILLARS // § 11</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight mb-4">
-            Six Pillars of Modern Business Infrastructure
+          <h2 className="text-3xl sm:text-5xl font-bold text-white tracking-tight font-display mb-4">
+            Engineered capabilities. No templates.
           </h2>
-          <p className="text-gray-400 text-base sm:text-lg">
-            Modular engineering components tailored to eliminate operational friction and compound your revenue per employee.
+          <p className="text-base sm:text-lg text-slate-400 leading-relaxed">
+            Six architectural disciplines deployed to eliminate manual human overhead and accelerate company throughput.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {solutions.map((s, i) => (
-            <motion.a
-              href={s.target}
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-              viewport={{ once: true }}
-              className="group relative bg-glass-panel border border-gray-800 hover:border-primary/50 rounded-2xl p-8 transition-all duration-300 hover:bg-surface/90 backdrop-blur-md flex flex-col justify-between hover:shadow-[0_10px_35px_rgba(16,185,129,0.12)] hover:-translate-y-1 block"
+        {/* Editorial Rows (per DESIGN.md & ADR-006: mono 01-06, not boxed cards) */}
+        <div className="divide-y divide-white/[0.08] border-y border-white/[0.08]">
+          {solutions.map((item) => (
+            <div
+              key={item.num}
+              className="py-8 sm:py-10 grid grid-cols-1 md:grid-cols-12 gap-6 items-start hover:bg-[#0D1424]/40 transition-colors px-4 -mx-4 rounded-lg group"
             >
-              <div>
-                <div className="flex items-center justify-between mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-300">
-                    <s.icon className="w-6 h-6" />
-                  </div>
-                  <span className="text-[11px] font-mono text-gray-400 bg-surface px-2.5 py-1 rounded-md border border-gray-800">
-                    0{i + 1}
-                  </span>
-                </div>
+              {/* Number Index */}
+              <div className="md:col-span-1 font-mono text-sm font-bold text-primary">
+                {item.num}
+              </div>
 
-                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors">
-                  {s.title}
+              {/* Title & Description */}
+              <div className="md:col-span-6 space-y-2">
+                <h3 className="text-xl sm:text-2xl font-bold text-white font-display group-hover:text-primary transition-colors">
+                  {item.title}
                 </h3>
-                
-                <p className="text-gray-400 mb-6 text-sm leading-relaxed">
-                  {s.desc}
+                <p className="text-sm text-slate-400 leading-relaxed max-w-xl">
+                  {item.desc}
                 </p>
               </div>
 
-              <div>
-                <div className="text-[11px] font-mono text-gray-500 mb-4 pb-4 border-b border-gray-800/80">
-                  {s.tech}
-                </div>
-
-                <div className="text-primary text-sm font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
-                  <span>{s.link}</span>
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </div>
+              {/* Tech Stack */}
+              <div className="md:col-span-3 font-mono text-xs text-slate-500 self-center">
+                <span className="text-[10px] uppercase text-slate-600 block mb-1">Stack Components</span>
+                <span className="text-slate-400">{item.stack}</span>
               </div>
-            </motion.a>
+
+              {/* CTA link */}
+              <div className="md:col-span-2 flex md:justify-end self-center">
+                <a
+                  href={item.href}
+                  className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-slate-300 group-hover:text-primary transition-colors uppercase tracking-wider"
+                >
+                  <span>{item.cta}</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </a>
+              </div>
+            </div>
           ))}
         </div>
+
       </div>
     </section>
   )

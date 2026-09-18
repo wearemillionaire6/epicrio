@@ -9,29 +9,35 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: '#0B132B', // Deep Navy
-        surface: '#111827', // Dark Slate
-        primary: '#10B981', // Emerald Accent
+        background: '#070B14', // Deep obsidian canvas
+        surface: '#0D1424', // Technical dark slate
+        surfaceElevated: '#131C31',
+        primary: '#10B981', // Crisp emerald
         primaryHover: '#059669',
-        borderGlow: 'rgba(16, 185, 129, 0.2)',
+        borderSoft: 'rgba(255, 255, 255, 0.08)',
+        borderFirm: 'rgba(255, 255, 255, 0.16)',
+        muted: '#94A3B8',
       },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'glass-panel': 'linear-gradient(180deg, rgba(17, 24, 39, 0.7) 0%, rgba(11, 19, 43, 0.9) 100%)',
+      fontFamily: {
+        display: ['var(--font-display)', 'Bricolage Grotesque', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-sans)', 'Manrope', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'DM Mono', 'Menlo', 'monospace'],
       },
       animation: {
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'data-flow': 'dataFlow 2s linear infinite',
+        'data-flow': 'dataFlow 2.4s linear infinite',
       },
       keyframes: {
         dataFlow: {
           '0%': { transform: 'translateY(-100%)', opacity: '0' },
-          '50%': { opacity: '1' },
+          '30%': { opacity: '1' },
+          '70%': { opacity: '1' },
           '100%': { transform: 'translateY(100%)', opacity: '0' },
-        }
-      }
+        },
+      },
     },
   },
   plugins: [],
 }
+
 export default config

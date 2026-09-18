@@ -2,14 +2,13 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, ArrowLeft, Check, CheckCircle2, Sparkles, Building, Mail, User, Phone, ShieldCheck } from 'lucide-react'
+import { ArrowRight, ArrowLeft, Check, CheckCircle2, ShieldCheck, Terminal } from 'lucide-react'
 import confetti from 'canvas-confetti'
 
 export default function LeadForm() {
   const [step, setStep] = useState(1)
   const [submitted, setSubmitted] = useState(false)
 
-  // Form state
   const [bottlenecks, setBottlenecks] = useState<string[]>([])
   const [companySize, setCompanySize] = useState<string>('')
   const [currentTools, setCurrentTools] = useState<string[]>([])
@@ -22,23 +21,23 @@ export default function LeadForm() {
   })
 
   const bottleneckOptions = [
-    'Leads falling through the cracks / slow response time',
-    'Disconnected CRM, spreadsheets, and manual data entry',
-    'High call volume / missed phone calls after hours',
-    'Repetitive team tasks eating up billable employee hours',
-    'Lack of custom dashboards or real-time business visibility',
-    'Outgrown off-the-shelf tools; need custom web app/portal',
+    'Leads slipping through cracks due to delayed follow-up',
+    'Disconnected CRM, spreadsheets, and manual re-entry',
+    'High call volume / missed phone inquiries after hours',
+    'Repetitive team workflows draining billable hours',
+    'Lack of real-time pipeline telemetry & reporting',
+    'Outgrown standard SaaS; need bespoke API/portal software',
   ]
 
-  const sizeOptions = ['1 - 10 Employees', '11 - 50 Employees', '51 - 200 Employees', '200+ Enterprise']
+  const sizeOptions = ['1–10 Employees', '11–50 Employees', '51–200 Employees', '200+ Enterprise']
 
-  const toolOptions = ['HubSpot', 'Salesforce', 'GoHighLevel', 'Make / Zapier', 'Slack / WhatsApp', 'Custom Database / Spreadsheets']
+  const toolOptions = ['HubSpot', 'Salesforce', 'GoHighLevel', 'Make / n8n', 'Twilio / WhatsApp', 'Custom DB / Postgres']
 
-  const toggleBottleneck = (option: string) => {
-    if (bottlenecks.includes(option)) {
-      setBottlenecks(bottlenecks.filter((item) => item !== option))
+  const toggleBottleneck = (opt: string) => {
+    if (bottlenecks.includes(opt)) {
+      setBottlenecks(bottlenecks.filter((item) => item !== opt))
     } else {
-      setBottlenecks([...bottlenecks, option])
+      setBottlenecks([...bottlenecks, opt])
     }
   }
 
@@ -55,8 +54,8 @@ export default function LeadForm() {
     setSubmitted(true)
     try {
       confetti({
-        particleCount: 120,
-        spread: 80,
+        particleCount: 80,
+        spread: 70,
         origin: { y: 0.6 },
         colors: ['#10B981', '#059669', '#34D399', '#ffffff'],
       })
@@ -66,34 +65,33 @@ export default function LeadForm() {
   }
 
   return (
-    <section id="lead-form" className="py-28 bg-background relative border-t border-gray-900">
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-primary/10 rounded-full blur-[150px] pointer-events-none" />
-
-      <div className="max-w-4xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-primary/30 bg-primary/10 text-xs font-mono text-primary mb-4">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>SYSTEM AUDIT & SCOPING</span>
+    <section id="lead-form" className="py-28 bg-[#070B14] border-b border-white/[0.08]">
+      <div className="max-w-4xl mx-auto px-6">
+        
+        {/* Header */}
+        <div className="max-w-2xl mb-12">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#0D1424] border border-white/[0.1] text-xs font-mono text-primary mb-4">
+            <span>INTAKE // SYSTEMS AUDIT</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight mb-4">
-            Architect Your Autonomous Stack
+          <h2 className="text-3xl sm:text-5xl font-bold text-white tracking-tight font-display mb-4">
+            Request an architecture review.
           </h2>
-          <p className="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto">
-            Answer a few quick questions to receive a tailored architecture blueprint and book a 1-on-1 engineering review.
+          <p className="text-base sm:text-lg text-slate-400 leading-relaxed">
+            Specify your operational bottlenecks. Our systems architects will evaluate your stack and present an actionable blueprint.
           </p>
         </div>
 
-        <div className="bg-glass-panel border border-gray-800 rounded-3xl p-6 sm:p-10 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        {/* Solid grounded card (NO GLASSMORPHISM on forms per DESIGN.md) */}
+        <div className="bg-[#0D1424] border border-white/[0.12] rounded-2xl p-6 sm:p-10 shadow-2xl">
           {!submitted ? (
             <div>
-              {/* Progress bar */}
-              <div className="mb-8">
-                <div className="flex items-center justify-between text-xs font-mono text-gray-400 mb-2">
-                  <span>Step 0{step} of 03</span>
-                  <span>{step === 1 ? 'Operational Bottlenecks' : step === 2 ? 'Stack & Scale' : 'Contact & Schedule'}</span>
+              {/* Stepper Header */}
+              <div className="mb-8 pb-6 border-b border-white/[0.08]">
+                <div className="flex items-center justify-between font-mono text-xs text-slate-400 mb-2">
+                  <span className="text-primary font-semibold">STAGE 0{step} / 03</span>
+                  <span>{step === 1 ? 'Operational Friction' : step === 2 ? 'Stack & Volume' : 'Contact & Dispatch'}</span>
                 </div>
-                <div className="w-full h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                <div className="w-full h-1 bg-[#070B14] rounded-full overflow-hidden">
                   <div
                     className="h-full bg-primary transition-all duration-300"
                     style={{ width: `${(step / 3) * 100}%` }}
@@ -105,16 +103,16 @@ export default function LeadForm() {
                 {step === 1 && (
                   <motion.div
                     key="step1"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
                     className="space-y-6"
                   >
                     <div>
-                      <h3 className="text-xl font-bold text-white mb-1">
-                        Where is friction slowing down your growth?
+                      <h3 className="text-lg font-bold text-white font-display mb-1">
+                        Where is friction slowing down your throughput?
                       </h3>
-                      <p className="text-xs text-gray-400">Select all areas you want to automate or overhaul:</p>
+                      <p className="text-xs font-mono text-slate-400">Select all operational pain points that apply:</p>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -125,18 +123,18 @@ export default function LeadForm() {
                             type="button"
                             key={opt}
                             onClick={() => toggleBottleneck(opt)}
-                            className={`p-4 rounded-xl border text-left text-xs sm:text-sm font-medium transition-all duration-200 flex items-start gap-3 ${
+                            className={`p-4 rounded-xl border text-left text-xs font-medium transition-all duration-150 flex items-start gap-3 min-h-[56px] ${
                               isSelected
-                                ? 'bg-primary/10 border-primary text-white shadow-[0_0_15px_rgba(16,185,129,0.15)]'
-                                : 'bg-surface/50 border-gray-800 text-gray-400 hover:border-gray-700 hover:text-gray-200'
+                                ? 'bg-primary/10 border-primary text-white'
+                                : 'bg-[#0A0F1D] border-white/[0.08] text-slate-400 hover:border-white/[0.16] hover:text-white'
                             }`}
                           >
                             <div
-                              className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 mt-0.5 ${
-                                isSelected ? 'bg-primary border-primary text-background' : 'border-gray-700'
+                              className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 mt-0.5 ${
+                                isSelected ? 'bg-primary border-primary text-[#070B14]' : 'border-white/[0.2]'
                               }`}
                             >
-                              {isSelected && <Check className="w-3.5 h-3.5 font-bold stroke-[3]" />}
+                              {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
                             </div>
                             <span className="leading-snug">{opt}</span>
                           </button>
@@ -149,14 +147,14 @@ export default function LeadForm() {
                         type="button"
                         onClick={() => setStep(2)}
                         disabled={bottlenecks.length === 0}
-                        className={`px-7 py-3.5 rounded-xl font-semibold text-sm flex items-center gap-2 transition-all ${
+                        className={`h-11 px-6 rounded-lg font-mono text-xs uppercase tracking-wider font-semibold flex items-center gap-2 transition-all ${
                           bottlenecks.length > 0
-                            ? 'bg-primary hover:bg-primaryHover text-background shadow-[0_0_20px_rgba(16,185,129,0.3)]'
-                            : 'bg-gray-800 text-gray-500 cursor-not-allowed'
+                            ? 'bg-primary hover:bg-primaryHover text-[#070B14]'
+                            : 'bg-[#0A0F1D] text-slate-600 border border-white/[0.06] cursor-not-allowed'
                         }`}
                       >
-                        <span>Continue</span>
-                        <ArrowRight className="w-4 h-4" />
+                        <span>Continue to Step 02</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </motion.div>
@@ -165,33 +163,33 @@ export default function LeadForm() {
                 {step === 2 && (
                   <motion.div
                     key="step2"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
                     className="space-y-6"
                   >
                     <div>
-                      <h3 className="text-xl font-bold text-white mb-1">
-                        Tell us about your team size and current tools
+                      <h3 className="text-lg font-bold text-white font-display mb-1">
+                        Team Scale & Software Stack
                       </h3>
-                      <p className="text-xs text-gray-400">This helps us match the right architectural tier for you.</p>
+                      <p className="text-xs font-mono text-slate-400">Specifies the appropriate engineering tier for your company:</p>
                     </div>
 
-                    {/* Company Size */}
+                    {/* Scale */}
                     <div className="space-y-2">
-                      <label className="text-xs font-mono text-gray-300 uppercase tracking-wider block">
+                      <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block">
                         Team Size
-                      </label>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      </span>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                         {sizeOptions.map((sz) => (
                           <button
                             type="button"
                             key={sz}
                             onClick={() => setCompanySize(sz)}
-                            className={`py-3 px-3 rounded-xl border text-xs font-medium transition-all ${
+                            className={`h-11 px-3 rounded-lg border text-xs font-mono transition-all ${
                               companySize === sz
-                                ? 'bg-primary/10 border-primary text-white'
-                                : 'bg-surface/50 border-gray-800 text-gray-400 hover:border-gray-700 hover:text-white'
+                                ? 'bg-primary/10 border-primary text-white font-semibold'
+                                : 'bg-[#0A0F1D] border-white/[0.08] text-slate-400 hover:border-white/[0.16]'
                             }`}
                           >
                             {sz}
@@ -200,12 +198,12 @@ export default function LeadForm() {
                       </div>
                     </div>
 
-                    {/* Tools in Use */}
+                    {/* Tools */}
                     <div className="space-y-2 pt-2">
-                      <label className="text-xs font-mono text-gray-300 uppercase tracking-wider block">
-                        Tools Currently in Your Stack
-                      </label>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block">
+                        Existing Software in Use
+                      </span>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                         {toolOptions.map((tool) => {
                           const isSelected = currentTools.includes(tool)
                           return (
@@ -213,10 +211,10 @@ export default function LeadForm() {
                               type="button"
                               key={tool}
                               onClick={() => toggleTool(tool)}
-                              className={`p-3 rounded-xl border text-left text-xs font-medium transition-all flex items-center justify-between ${
+                              className={`h-11 px-3 rounded-lg border text-left text-xs font-mono transition-all flex items-center justify-between ${
                                 isSelected
-                                  ? 'bg-primary/10 border-primary text-white'
-                                  : 'bg-surface/50 border-gray-800 text-gray-400 hover:border-gray-700'
+                                  ? 'bg-primary/10 border-primary text-white font-semibold'
+                                  : 'bg-[#0A0F1D] border-white/[0.08] text-slate-400 hover:border-white/[0.16]'
                               }`}
                             >
                               <span>{tool}</span>
@@ -231,9 +229,9 @@ export default function LeadForm() {
                       <button
                         type="button"
                         onClick={() => setStep(1)}
-                        className="px-5 py-3 rounded-xl border border-gray-800 text-gray-400 hover:text-white hover:border-gray-700 text-sm flex items-center gap-2"
+                        className="h-11 px-5 rounded-lg border border-white/[0.1] text-slate-400 hover:text-white font-mono text-xs uppercase tracking-wider flex items-center gap-2"
                       >
-                        <ArrowLeft className="w-4 h-4" />
+                        <ArrowLeft className="w-3.5 h-3.5" />
                         <span>Back</span>
                       </button>
 
@@ -241,14 +239,14 @@ export default function LeadForm() {
                         type="button"
                         onClick={() => setStep(3)}
                         disabled={!companySize}
-                        className={`px-7 py-3.5 rounded-xl font-semibold text-sm flex items-center gap-2 transition-all ${
+                        className={`h-11 px-6 rounded-lg font-mono text-xs uppercase tracking-wider font-semibold flex items-center gap-2 transition-all ${
                           companySize
-                            ? 'bg-primary hover:bg-primaryHover text-background shadow-[0_0_20px_rgba(16,185,129,0.3)]'
-                            : 'bg-gray-800 text-gray-500 cursor-not-allowed'
+                            ? 'bg-primary hover:bg-primaryHover text-[#070B14]'
+                            : 'bg-[#0A0F1D] text-slate-600 border border-white/[0.06] cursor-not-allowed'
                         }`}
                       >
-                        <span>Final Step</span>
-                        <ArrowRight className="w-4 h-4" />
+                        <span>Proceed to Final Step</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </motion.div>
@@ -258,88 +256,76 @@ export default function LeadForm() {
                   <motion.form
                     key="step3"
                     onSubmit={handleSubmit}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    className="space-y-5"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="space-y-4"
                   >
                     <div>
-                      <h3 className="text-xl font-bold text-white mb-1">
-                        Where should we send your architecture blueprint?
+                      <h3 className="text-lg font-bold text-white font-display mb-1">
+                        Where should we dispatch your blueprint?
                       </h3>
-                      <p className="text-xs text-gray-400">Our engineering lead will review your submission before our call.</p>
+                      <p className="text-xs font-mono text-slate-400">Our systems architect will review your stack prior to our call:</p>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="text-xs font-mono text-gray-300 block mb-1.5">Full Name *</label>
-                        <div className="relative">
-                          <User className="w-4 h-4 text-gray-500 absolute left-3.5 top-3.5" />
-                          <input
-                            required
-                            type="text"
-                            placeholder="John Doe"
-                            value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            className="w-full bg-surface/70 border border-gray-800 focus:border-primary focus:outline-none rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 transition-colors"
-                          />
-                        </div>
+                        <label className="text-[11px] font-mono text-slate-400 block mb-1">Full Name *</label>
+                        <input
+                          required
+                          type="text"
+                          placeholder="Bhavesh Waghmare"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          className="w-full h-11 bg-[#0A0F1D] border border-white/[0.12] focus:border-primary focus:outline-none rounded-lg px-3.5 text-xs font-mono text-white placeholder-slate-600 transition-colors"
+                        />
                       </div>
 
                       <div>
-                        <label className="text-xs font-mono text-gray-300 block mb-1.5">Work Email *</label>
-                        <div className="relative">
-                          <Mail className="w-4 h-4 text-gray-500 absolute left-3.5 top-3.5" />
-                          <input
-                            required
-                            type="email"
-                            placeholder="john@company.com"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="w-full bg-surface/70 border border-gray-800 focus:border-primary focus:outline-none rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 transition-colors"
-                          />
-                        </div>
+                        <label className="text-[11px] font-mono text-slate-400 block mb-1">Work Email *</label>
+                        <input
+                          required
+                          type="email"
+                          placeholder="bhavesh@company.com"
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          className="w-full h-11 bg-[#0A0F1D] border border-white/[0.12] focus:border-primary focus:outline-none rounded-lg px-3.5 text-xs font-mono text-white placeholder-slate-600 transition-colors"
+                        />
                       </div>
 
                       <div>
-                        <label className="text-xs font-mono text-gray-300 block mb-1.5">Company Name *</label>
-                        <div className="relative">
-                          <Building className="w-4 h-4 text-gray-500 absolute left-3.5 top-3.5" />
-                          <input
-                            required
-                            type="text"
-                            placeholder="Acme Global Inc."
-                            value={formData.company}
-                            onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                            className="w-full bg-surface/70 border border-gray-800 focus:border-primary focus:outline-none rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 transition-colors"
-                          />
-                        </div>
+                        <label className="text-[11px] font-mono text-slate-400 block mb-1">Company Entity *</label>
+                        <input
+                          required
+                          type="text"
+                          placeholder="Acme Global Corp"
+                          value={formData.company}
+                          onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                          className="w-full h-11 bg-[#0A0F1D] border border-white/[0.12] focus:border-primary focus:outline-none rounded-lg px-3.5 text-xs font-mono text-white placeholder-slate-600 transition-colors"
+                        />
                       </div>
 
                       <div>
-                        <label className="text-xs font-mono text-gray-300 block mb-1.5">Direct Phone / Mobile *</label>
-                        <div className="relative">
-                          <Phone className="w-4 h-4 text-gray-500 absolute left-3.5 top-3.5" />
-                          <input
-                            required
-                            type="tel"
-                            placeholder="+1 (555) 000-0000"
-                            value={formData.phone}
-                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                            className="w-full bg-surface/70 border border-gray-800 focus:border-primary focus:outline-none rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 transition-colors"
-                          />
-                        </div>
+                        <label className="text-[11px] font-mono text-slate-400 block mb-1">Direct Mobile / Phone *</label>
+                        <input
+                          required
+                          type="tel"
+                          placeholder="+1 (555) 234-5678"
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          className="w-full h-11 bg-[#0A0F1D] border border-white/[0.12] focus:border-primary focus:outline-none rounded-lg px-3.5 text-xs font-mono text-white placeholder-slate-600 transition-colors"
+                        />
                       </div>
                     </div>
 
                     <div>
-                      <label className="text-xs font-mono text-gray-300 block mb-1.5">Additional Context (Optional)</label>
+                      <label className="text-[11px] font-mono text-slate-400 block mb-1">System Scope or Target Volume (Optional)</label>
                       <textarea
                         rows={3}
-                        placeholder="Tell us about specific workflows, volumes, or software you want connected..."
+                        placeholder="e.g. 500 inbound leads/month needing instant voice qualification and two-way CRM sync..."
                         value={formData.notes}
                         onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                        className="w-full bg-surface/70 border border-gray-800 focus:border-primary focus:outline-none rounded-xl p-3 text-sm text-white placeholder-gray-600 transition-colors"
+                        className="w-full bg-[#0A0F1D] border border-white/[0.12] focus:border-primary focus:outline-none rounded-lg p-3 text-xs font-mono text-white placeholder-slate-600 transition-colors"
                       />
                     </div>
 
@@ -347,18 +333,18 @@ export default function LeadForm() {
                       <button
                         type="button"
                         onClick={() => setStep(2)}
-                        className="px-5 py-3 rounded-xl border border-gray-800 text-gray-400 hover:text-white hover:border-gray-700 text-sm flex items-center gap-2"
+                        className="h-11 px-5 rounded-lg border border-white/[0.1] text-slate-400 hover:text-white font-mono text-xs uppercase tracking-wider flex items-center gap-2"
                       >
-                        <ArrowLeft className="w-4 h-4" />
+                        <ArrowLeft className="w-3.5 h-3.5" />
                         <span>Back</span>
                       </button>
 
                       <button
                         type="submit"
-                        className="px-8 py-3.5 bg-primary hover:bg-primaryHover text-background font-bold text-sm rounded-xl flex items-center gap-2 shadow-[0_0_25px_rgba(16,185,129,0.35)] transition-all active:scale-95"
+                        className="h-11 px-6 bg-primary hover:bg-primaryHover text-[#070B14] font-semibold font-mono text-xs uppercase tracking-wider rounded-lg flex items-center gap-2 transition-all"
                       >
-                        <span>Submit & Request Systems Audit</span>
-                        <ArrowRight className="w-4 h-4" />
+                        <span>Dispatch Architecture Request</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </motion.form>
@@ -366,27 +352,24 @@ export default function LeadForm() {
               </AnimatePresence>
             </div>
           ) : (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="py-10 text-center space-y-5"
-            >
-              <div className="w-16 h-16 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center mx-auto text-primary">
-                <CheckCircle2 className="w-8 h-8" />
+            <div className="py-12 text-center space-y-4">
+              <div className="w-12 h-12 rounded-lg bg-primary/20 border border-primary/40 flex items-center justify-center mx-auto text-primary">
+                <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h3 className="text-2xl font-bold text-white">
-                Systems Audit Request Received!
+              <h3 className="text-2xl font-bold text-white font-display">
+                Architecture Request Dispatched
               </h3>
-              <p className="text-sm text-gray-400 max-w-md mx-auto">
-                Thank you, {formData.name || 'there'}. Our systems architect is compiling your preliminary blueprint for {formData.company || 'your organization'}. Expect our calendar invitation within 2 hours.
+              <p className="text-xs font-mono text-slate-400 max-w-md mx-auto leading-relaxed">
+                Thank you, {formData.name || 'there'}. Our systems architect is compiling your preliminary stack analysis for {formData.company || 'your entity'}. Check your email for calendar availability.
               </p>
-              <div className="p-4 rounded-xl bg-surface/60 border border-gray-800 inline-flex items-center gap-3 text-xs text-primary font-mono">
-                <ShieldCheck className="w-4 h-4" />
-                <span>NDA & Confidentiality Guaranteed</span>
+              <div className="inline-flex items-center gap-2 text-[11px] font-mono text-primary bg-black/40 px-3 py-1 rounded border border-white/[0.08]">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>NDA Protected Intake</span>
               </div>
-            </motion.div>
+            </div>
           )}
         </div>
+
       </div>
     </section>
   )
