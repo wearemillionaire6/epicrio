@@ -1,42 +1,89 @@
-import Navigation from '@/components/Navigation'
-import Hero from '@/components/Hero'
-import SystemArchitecture from '@/components/SystemArchitecture'
-import Solutions from '@/components/Solutions'
-import AiVoiceDemo from '@/components/AiVoiceDemo'
-import HowWeWork from '@/components/HowWeWork'
-import Industries from '@/components/Industries'
-import LeadForm from '@/components/LeadForm'
-import Footer from '@/components/Footer'
+'use client'
+
+import { useState, useEffect } from 'react'
+import PixelHeader from '@/components/PixelHeader'
+import Biography from '@/components/Biography'
+import ProjectsArchitecture from '@/components/ProjectsArchitecture'
+import ServicesList from '@/components/ServicesList'
+import VoiceTerminal from '@/components/VoiceTerminal'
+import ProcessMethodology from '@/components/ProcessMethodology'
+import Sectors from '@/components/Sectors'
+import ContactTerminal from '@/components/ContactTerminal'
+import TerminalFooter from '@/components/TerminalFooter'
 
 export default function Home() {
+  const [inverted, setInverted] = useState(false)
+
+  const toggleInvert = () => {
+    setInverted((prev) => !prev)
+  }
+
+  // Keyboard navigation shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore when typing inside input / textarea
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement).tagName)) {
+        return
+      }
+
+      const key = e.key.toLowerCase()
+
+      if (key === 'h') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else if (key === 'b') {
+        document.getElementById('biography')?.scrollIntoView({ behavior: 'smooth' })
+      } else if (key === 'p' || key === 'a') {
+        document.getElementById('architecture')?.scrollIntoView({ behavior: 'smooth' })
+      } else if (key === 's') {
+        document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })
+      } else if (key === 'v') {
+        document.getElementById('voice')?.scrollIntoView({ behavior: 'smooth' })
+      } else if (key === 'c') {
+        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+      } else if (key === 'i') {
+        toggleInvert()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
   return (
-    <main className="min-h-screen bg-background selection:bg-primary/30 selection:text-white font-sans overflow-x-hidden">
-      {/* Sticky Glassmorphic Navbar (PRD §24) */}
-      <Navigation />
+    <div
+      id="home"
+      className={`min-h-screen transition-colors duration-200 selection:bg-[#00FF88] selection:text-black ${
+        inverted ? 'inverted bg-white text-black' : 'bg-black text-white'
+      }`}
+    >
+      <div className="max-w-5xl mx-auto px-6 sm:px-10">
+        {/* Top Pixel Header & Key Navigation */}
+        <PixelHeader onToggleInvert={toggleInvert} inverted={inverted} />
 
-      {/* Hero Section */}
-      <Hero />
+        {/* Columnar Biography Manifesto */}
+        <Biography />
 
-      {/* Interactive System Architecture & Data Flows (PRD §13) */}
-      <SystemArchitecture />
+        {/* Projects / System Architecture */}
+        <ProjectsArchitecture />
 
-      {/* Glassmorphism Solutions Grid (PRD §11) */}
-      <Solutions />
+        {/* Services Staircase Tree */}
+        <ServicesList />
 
-      {/* AI Voice Receptionist Interactive Demo (PRD §15) */}
-      <AiVoiceDemo />
+        {/* Interactive Voice Receptionist Station */}
+        <VoiceTerminal />
 
-      {/* Engineering Sprint Methodology */}
-      <HowWeWork />
+        {/* 4-Stage Sprint Process */}
+        <ProcessMethodology />
 
-      {/* Vertical Specialization Cards */}
-      <Industries />
+        {/* Sector Ledgers */}
+        <Sectors />
 
-      {/* High-Conversion Multi-Step Lead Qualification Form */}
-      <LeadForm />
+        {/* Intake Protocol Contact Form */}
+        <ContactTerminal />
 
-      {/* Engineering Footer with System Telemetry */}
-      <Footer />
-    </main>
+        {/* Bottom Keycaps Footer */}
+        <TerminalFooter onToggleInvert={toggleInvert} />
+      </div>
+    </div>
   )
 }

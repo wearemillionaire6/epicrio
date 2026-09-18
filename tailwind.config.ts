@@ -9,31 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: '#060913',
-        surface: '#0B1120',
-        surfaceHover: '#10182C',
-        primary: '#10B981',
-        primaryHover: '#059669',
-        borderSoft: 'rgba(255, 255, 255, 0.08)',
-        borderGlow: 'rgba(16, 185, 129, 0.25)',
+        background: '#000000',
+        foreground: '#FFFFFF',
+        surface: '#0A0A0A',
+        primary: '#00FF88', // Terminal mint/emerald accent
+        muted: '#777777',
+        borderMuted: '#222222',
       },
       fontFamily: {
-        display: ['var(--font-display)', 'Bricolage Grotesque', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-serif)', 'Playfair Display', 'Georgia', 'serif'],
-        sans: ['var(--font-sans)', 'Manrope', 'system-ui', 'sans-serif'],
-        mono: ['var(--font-mono)', 'DM Mono', 'Menlo', 'monospace'],
-      },
-      animation: {
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'data-beam': 'dataBeam 2.5s ease-in-out infinite',
-      },
-      keyframes: {
-        dataBeam: {
-          '0%': { transform: 'translateY(-100%)', opacity: '0' },
-          '20%': { opacity: '1' },
-          '80%': { opacity: '1' },
-          '100%': { transform: 'translateY(100%)', opacity: '0' },
-        },
+        pixel: ['Doto', 'Silkscreen', 'VT323', 'monospace'],
+        mono: ['Space Mono', 'DM Mono', 'monospace'],
       },
     },
   },
