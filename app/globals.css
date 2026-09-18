@@ -18,6 +18,11 @@
   --accent-color: #008844;
 }
 
+/* Remove original OS cursors completely */
+*, *::before, *::after, html, body, a, button, input, textarea, select, [role="button"] {
+  cursor: none !important;
+}
+
 html {
   scroll-behavior: smooth;
   background-color: var(--bg-color);

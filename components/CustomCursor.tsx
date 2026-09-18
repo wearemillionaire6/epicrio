@@ -1,39 +1,48 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useState, useRef } from 'react'
 
 export default function CustomCursor() {
-  const [mousePos, setMousePos] = useState({ x: -100, y: -100 })
-  const [isHovered, setIsHovered] = useState(false)
+  const [pos, setPos] = useState({ x: -100, y: -100 })
+  const [hoverType, setHoverType] = useState<'default' | 'link' | 'input' | 'button'>('default')
   const [isClicked, setIsClicked] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const cursorRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     // Only enable on non-touch devices
     if (window.matchMedia('(pointer: coarse)').matches) return
 
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY })
+      const x = e.clientX
+      const y = e.clientY
+      setPos({ x, y })
       if (!isVisible) setIsVisible(true)
 
-      // Detect hover on interactive elements
+      // Directly update transform for zero-latency tracking
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`
+      }
+
+      // Check hovered element
       const target = e.target as HTMLElement | null
-      if (
-        target &&
-        (target.tagName === 'A' ||
-          target.tagName === 'BUTTON' ||
-          target.tagName === 'INPUT' ||
-          target.tagName === 'SELECT' ||
-          target.tagName === 'TEXTAREA' ||
-          target.closest('a') ||
-          target.closest('button') ||
-          target.getAttribute('role') === 'button' ||
-          target.classList.contains('cursor-pointer'))
+      if (!target) return
+
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        setHoverType('input')
+      } else if (
+        target.tagName === 'A' ||
+        target.closest('a')
       ) {
-        setIsHovered(true)
+        setHoverType('link')
+      } else if (
+        target.tagName === 'BUTTON' ||
+        target.closest('button') ||
+        target.getAttribute('role') === 'button'
+      ) {
+        setHoverType('button')
       } else {
-        setIsHovered(false)
+        setHoverType('default')
       }
     }
 
@@ -42,7 +51,7 @@ export default function CustomCursor() {
     const handleMouseLeave = () => setIsVisible(false)
     const handleMouseEnter = () => setIsVisible(true)
 
-    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mousemove', handleMouseMove, { passive: true })
     window.addEventListener('mousedown', handleMouseDown)
     window.addEventListener('mouseup', handleMouseUp)
     document.addEventListener('mouseleave', handleMouseLeave)
@@ -60,52 +69,65 @@ export default function CustomCursor() {
   if (!isVisible) return null
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden">
-      {/* Primary Pixel Crosshair / Terminal Box */}
-      <motion.div
-        className="fixed top-0 left-0"
-        animate={{
-          x: mousePos.x - (isHovered ? 12 : 5),
-          y: mousePos.y - (isHovered ? 12 : 5),
-          scale: isClicked ? 0.8 : isHovered ? 1.3 : 1,
-        }}
-        transition={{
-          type: 'spring',
-          damping: 28,
-          stiffness: 400,
-          mass: 0.1,
-        }}
-      >
-        {isHovered ? (
-          /* Focused terminal brackets on hover */
-          <div className="flex items-center justify-center font-mono text-[10px] text-primary font-bold tracking-tighter mix-blend-difference select-none">
-            <span>[</span>
-            <span className="text-[7px] mx-0.5">■</span>
-            <span>]</span>
-          </div>
-        ) : (
-          /* Solid pixel dot / square */
-          <div className="w-2.5 h-2.5 bg-primary mix-blend-difference shadow-[0_0_8px_rgba(0,255,136,0.8)]" />
-        )}
-      </motion.div>
+    <div
+      ref={cursorRef}
+      className="pointer-events-none fixed top-0 left-0 z-[999999] will-change-transform select-none"
+      style={{
+        transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
+      }}
+    >
+      {/* Retro 8-bit Pixel Arrow */}
+      <div className="relative">
+        <svg
+          width="20"
+          height="22"
+          viewBox="0 0 20 22"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className={`filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] transition-transform duration-75 ${
+            isClicked ? 'scale-90' : 'scale-100'
+          }`}
+          style={{ imageRendering: 'pixelated' }}
+        >
+          {/* Black pixel outline */}
+          <path
+            d="M0 0V17H4V14H7V20H10V18H12V15H9V12H14V9H11V6H8V3H5V0H0Z"
+            fill="#000000"
+          />
+          {/* Stark white interior */}
+          <path
+            d="M1 1V15H3V12H6V11H7V17H9V16H10V14H7V9H12V8H9V5H6V2H3V1H1Z"
+            fill={isClicked ? '#00FF88' : '#FFFFFF'}
+          />
+        </svg>
 
-      {/* Trailing Crosshair Ring */}
-      <motion.div
-        className="fixed top-0 left-0 border border-primary/40 rounded-none pointer-events-none"
-        animate={{
-          x: mousePos.x - (isHovered ? 20 : 14),
-          y: mousePos.y - (isHovered ? 20 : 14),
-          width: isHovered ? 40 : 28,
-          height: isHovered ? 40 : 28,
-          opacity: isHovered ? 0.9 : 0.4,
-        }}
-        transition={{
-          type: 'spring',
-          damping: 32,
-          stiffness: 220,
-          mass: 0.3,
-        }}
-      />
+        {/* Retro Font Telemetry Tag beside cursor */}
+        <div className="absolute top-3 left-4 flex items-center gap-1 font-mono text-[9px] font-bold uppercase tracking-wider whitespace-nowrap bg-black text-white px-1.5 py-0.5 border border-[#333333] shadow-md pointer-events-none">
+          {hoverType === 'link' ? (
+            <span className="text-primary flex items-center gap-1">
+              <span>[LINK</span>
+              <span>-&gt;]</span>
+            </span>
+          ) : hoverType === 'button' ? (
+            <span className="text-primary flex items-center gap-1">
+              <span>[EXEC</span>
+              <span className="text-[7px]">■</span>
+              <span>]</span>
+            </span>
+          ) : hoverType === 'input' ? (
+            <span className="text-white flex items-center gap-0.5">
+              <span>[TYPE</span>
+              <span className="animate-cursor">_</span>
+              <span>]</span>
+            </span>
+          ) : (
+            <span className="text-muted flex items-center gap-1">
+              <span>&gt;</span>
+              <span className="text-primary animate-cursor">_</span>
+            </span>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
