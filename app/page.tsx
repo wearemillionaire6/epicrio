@@ -1,13 +1,18 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import TopNavbar from '@/components/TopNavbar'
+import LiveTelemetryTicker from '@/components/LiveTelemetryTicker'
 import PixelHeader from '@/components/PixelHeader'
 import Biography from '@/components/Biography'
+import MetricsCounter from '@/components/MetricsCounter'
 import ProjectsArchitecture from '@/components/ProjectsArchitecture'
 import ServicesList from '@/components/ServicesList'
+import DataFlowVisualizer from '@/components/DataFlowVisualizer'
 import VoiceTerminal from '@/components/VoiceTerminal'
 import ProcessMethodology from '@/components/ProcessMethodology'
 import Sectors from '@/components/Sectors'
+import TechStackMatrix from '@/components/TechStackMatrix'
 import ContactTerminal from '@/components/ContactTerminal'
 import TerminalFooter from '@/components/TerminalFooter'
 import CustomCursor from '@/components/CustomCursor'
@@ -15,10 +20,15 @@ import { sound } from '@/lib/sound'
 
 export default function Home() {
   const [inverted, setInverted] = useState(false)
+  const [soundEnabled, setSoundEnabled] = useState(true)
 
   const toggleInvert = () => {
-    sound.beep()
+    if (soundEnabled) sound.beep()
     setInverted((prev) => !prev)
+  }
+
+  const toggleSound = () => {
+    setSoundEnabled((prev) => !prev)
   }
 
   // Keyboard navigation shortcuts
@@ -32,22 +42,22 @@ export default function Home() {
       const key = e.key.toLowerCase()
 
       if (key === 'h') {
-        sound.click()
+        if (soundEnabled) sound.click()
         window.scrollTo({ top: 0, behavior: 'smooth' })
       } else if (key === 'b') {
-        sound.click()
+        if (soundEnabled) sound.click()
         document.getElementById('biography')?.scrollIntoView({ behavior: 'smooth' })
       } else if (key === 'p' || key === 'a') {
-        sound.click()
+        if (soundEnabled) sound.click()
         document.getElementById('architecture')?.scrollIntoView({ behavior: 'smooth' })
       } else if (key === 's') {
-        sound.click()
+        if (soundEnabled) sound.click()
         document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })
       } else if (key === 'v') {
-        sound.click()
+        if (soundEnabled) sound.click()
         document.getElementById('voice')?.scrollIntoView({ behavior: 'smooth' })
       } else if (key === 'c') {
-        sound.click()
+        if (soundEnabled) sound.click()
         document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
       } else if (key === 'i') {
         toggleInvert()
@@ -56,7 +66,7 @@ export default function Home() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
+  }, [soundEnabled, inverted])
 
   return (
     <div
@@ -67,33 +77,56 @@ export default function Home() {
     >
       <CustomCursor />
 
-      <div className="max-w-5xl mx-auto px-6 sm:px-10">
-        {/* Top Pixel Header & Key Navigation */}
-        <PixelHeader onToggleInvert={toggleInvert} inverted={inverted} />
+      {/* Persistent Sticky Top Navigation Menu */}
+      <TopNavbar
+        onToggleInvert={toggleInvert}
+        inverted={inverted}
+        soundEnabled={soundEnabled}
+        onToggleSound={toggleSound}
+      />
 
-        {/* Columnar Biography Manifesto */}
-        <Biography />
+      {/* Spacing compensation for sticky top navbar */}
+      <div className="pt-12">
+        {/* Real-time Streaming Telemetry Ticker */}
+        <LiveTelemetryTicker />
 
-        {/* Projects / System Architecture */}
-        <ProjectsArchitecture />
+        <main className="max-w-6xl mx-auto px-4 sm:px-8">
+          {/* Top Pixel Header & Key Navigation */}
+          <PixelHeader onToggleInvert={toggleInvert} inverted={inverted} />
 
-        {/* Services Staircase Tree */}
-        <ServicesList />
+          {/* Columnar Biography Manifesto */}
+          <Biography />
 
-        {/* Interactive Voice Receptionist Station */}
-        <VoiceTerminal />
+          {/* Viewport-Animated Production Metrics & SLAs */}
+          <MetricsCounter />
 
-        {/* 4-Stage Sprint Process */}
-        <ProcessMethodology />
+          {/* Projects / System Architecture Ledgers */}
+          <ProjectsArchitecture />
 
-        {/* Sector Ledgers */}
-        <Sectors />
+          {/* Aligned Stepped Services Tree + Live Telemetry Console */}
+          <ServicesList />
 
-        {/* Intake Protocol Contact Form */}
-        <ContactTerminal />
+          {/* Interactive System Fabric Node Visualizer */}
+          <DataFlowVisualizer />
 
-        {/* Bottom Keycaps Footer */}
-        <TerminalFooter onToggleInvert={toggleInvert} />
+          {/* Interactive Voice Receptionist Telephony Lab */}
+          <VoiceTerminal />
+
+          {/* 4-Stage Sprint Methodology */}
+          <ProcessMethodology />
+
+          {/* Interactive Sector Intelligence Command Center + ROI Calculator */}
+          <Sectors />
+
+          {/* Filterable Enterprise Tech Stack Matrix */}
+          <TechStackMatrix />
+
+          {/* Terminal Intake Application Form */}
+          <ContactTerminal />
+
+          {/* Keycaps Footer */}
+          <TerminalFooter onToggleInvert={toggleInvert} />
+        </main>
       </div>
     </div>
   )
