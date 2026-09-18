@@ -105,7 +105,7 @@ export default function DataFlowVisualizer() {
                 }}
                 className={`p-3 border text-left transition-all cursor-pointer relative ${
                   isSelected
-                    ? 'border-primary bg-primary/10 text-white shadow-[0_0_12px_rgba(0,255,136,0.2)]'
+                    ? 'border-primary bg-primary/10 text-white shadow-[0_0_12px_rgba(255,51,51,0.2)]'
                     : 'border-[#222222] bg-black text-muted hover:border-white hover:text-white'
                 }`}
               >

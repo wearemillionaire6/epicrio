@@ -182,7 +182,7 @@ export default function VoiceAgentStudioPage() {
                   }}
                   className={`w-full p-4 border text-left transition-all cursor-pointer ${
                     isSelected
-                      ? 'border-primary bg-primary/10 text-white shadow-[0_0_10px_rgba(0,255,136,0.15)]'
+                      ? 'border-primary bg-primary/10 text-white shadow-[0_0_10px_rgba(255,51,51,0.15)]'
                       : 'border-[#222222] bg-[#070707] text-muted hover:border-white hover:text-white'
                   }`}
                 >

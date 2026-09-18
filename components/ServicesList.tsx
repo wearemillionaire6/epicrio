@@ -195,7 +195,7 @@ export default function ServicesList() {
                   }}
                   className={`border transition-all duration-150 p-3 sm:p-3.5 cursor-pointer select-none ${
                     isActive
-                      ? 'border-primary bg-primary/10 text-white shadow-[0_0_15px_rgba(0,255,136,0.15)]'
+                      ? 'border-primary bg-primary/10 text-white shadow-[0_0_15px_rgba(255,51,51,0.15)]'
                       : 'border-[#222222] bg-black/60 text-[#aaaaaa] hover:border-white hover:text-white'
                   }`}
                 >
@@ -329,7 +329,7 @@ export default function ServicesList() {
                 <span>[SAMPLE JSON WIRE TRANSMISSION]</span>
                 <span className="text-[9px] text-muted">200 OK</span>
               </div>
-              <pre className="p-2.5 bg-black border border-[#222222] text-[10px] text-[#00FF88] font-mono leading-tight overflow-x-auto">
+              <pre className="p-2.5 bg-black border border-[#222222] text-[10px] text-[#FF3333] font-mono leading-tight overflow-x-auto">
                 {currentSvc.payloadPreview}
               </pre>
             </div>

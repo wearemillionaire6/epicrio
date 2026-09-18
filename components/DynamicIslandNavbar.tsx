@@ -104,7 +104,7 @@ export default function DynamicIslandNavbar({
             onClick={handleIslandToggle}
             className={`px-3 sm:px-4 py-1.5 rounded-full border transition-all duration-200 flex items-center justify-between gap-2.5 cursor-pointer max-w-full overflow-hidden ${
               isExpanded
-                ? 'border-primary bg-primary/10 shadow-[0_0_15px_rgba(0,255,136,0.3)]'
+                ? 'border-primary bg-primary/10 shadow-[0_0_15px_rgba(255,51,51,0.3)]'
                 : 'border-white/20 bg-black/80 hover:border-primary/60 hover:bg-black'
             }`}
           >
@@ -146,7 +146,7 @@ export default function DynamicIslandNavbar({
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.96 }}
                 transition={{ duration: 0.18, ease: 'easeOut' }}
-                className="absolute top-12 left-1/2 -translate-x-1/2 w-[92vw] sm:w-[480px] bg-black/95 backdrop-blur-3xl border border-primary/50 rounded-2xl p-5 shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_30px_rgba(0,255,136,0.15)] z-50 text-white font-mono space-y-4"
+                className="absolute top-12 left-1/2 -translate-x-1/2 w-[92vw] sm:w-[480px] bg-black/95 backdrop-blur-3xl border border-primary/50 rounded-2xl p-5 shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_30px_rgba(255,51,51,0.15)] z-50 text-white font-mono space-y-4"
               >
                 {/* HUD Header */}
                 <div className="flex items-center justify-between pb-3 border-b border-[#222222] text-[10px]">

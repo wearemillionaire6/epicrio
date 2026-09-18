@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from 'react'
 
 export default function CustomCursor() {
   const [pos, setPos] = useState({ x: -100, y: -100 })
-  const [hoverType, setHoverType] = useState<'default' | 'link' | 'input' | 'button'>('default')
   const [isClicked, setIsClicked] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const cursorRef = useRef<HTMLDivElement | null>(null)
@@ -22,27 +21,6 @@ export default function CustomCursor() {
       // Directly update transform for zero-latency tracking
       if (cursorRef.current) {
         cursorRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`
-      }
-
-      // Check hovered element
-      const target = e.target as HTMLElement | null
-      if (!target) return
-
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
-        setHoverType('input')
-      } else if (
-        target.tagName === 'A' ||
-        target.closest('a')
-      ) {
-        setHoverType('link')
-      } else if (
-        target.tagName === 'BUTTON' ||
-        target.closest('button') ||
-        target.getAttribute('role') === 'button'
-      ) {
-        setHoverType('button')
-      } else {
-        setHoverType('default')
       }
     }
 
@@ -76,58 +54,29 @@ export default function CustomCursor() {
         transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
       }}
     >
-      {/* Retro 8-bit Pixel Arrow */}
-      <div className="relative">
-        <svg
-          width="20"
-          height="22"
-          viewBox="0 0 20 22"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className={`filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] transition-transform duration-75 ${
-            isClicked ? 'scale-90' : 'scale-100'
-          }`}
-          style={{ imageRendering: 'pixelated' }}
-        >
-          {/* Black pixel outline */}
-          <path
-            d="M0 0V17H4V14H7V20H10V18H12V15H9V12H14V9H11V6H8V3H5V0H0Z"
-            fill="#000000"
-          />
-          {/* Stark white interior */}
-          <path
-            d="M1 1V15H3V12H6V11H7V17H9V16H10V14H7V9H12V8H9V5H6V2H3V1H1Z"
-            fill={isClicked ? '#00FF88' : '#FFFFFF'}
-          />
-        </svg>
-
-        {/* Retro Font Telemetry Tag beside cursor */}
-        <div className="absolute top-3 left-4 flex items-center gap-1 font-mono text-[9px] font-bold uppercase tracking-wider whitespace-nowrap bg-black text-white px-1.5 py-0.5 border border-[#333333] shadow-md pointer-events-none">
-          {hoverType === 'link' ? (
-            <span className="text-primary flex items-center gap-1">
-              <span>[LINK</span>
-              <span>-&gt;]</span>
-            </span>
-          ) : hoverType === 'button' ? (
-            <span className="text-primary flex items-center gap-1">
-              <span>[EXEC</span>
-              <span className="text-[7px]">■</span>
-              <span>]</span>
-            </span>
-          ) : hoverType === 'input' ? (
-            <span className="text-white flex items-center gap-0.5">
-              <span>[TYPE</span>
-              <span className="animate-cursor">_</span>
-              <span>]</span>
-            </span>
-          ) : (
-            <span className="text-muted flex items-center gap-1">
-              <span>&gt;</span>
-              <span className="text-primary animate-cursor">_</span>
-            </span>
-          )}
-        </div>
-      </div>
+      {/* Clean Retro 8-bit Pixel Arrow without any attached static tag/box */}
+      <svg
+        width="20"
+        height="22"
+        viewBox="0 0 20 22"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className={`filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] transition-transform duration-75 ${
+          isClicked ? 'scale-90' : 'scale-100'
+        }`}
+        style={{ imageRendering: 'pixelated' }}
+      >
+        {/* Black pixel outline */}
+        <path
+          d="M0 0V17H4V14H7V20H10V18H12V15H9V12H14V9H11V6H8V3H5V0H0Z"
+          fill="#000000"
+        />
+        {/* Stark white interior with terminal red click feedback */}
+        <path
+          d="M1 1V15H3V12H6V11H7V17H9V16H10V14H7V9H12V8H9V5H6V2H3V1H1Z"
+          fill={isClicked ? '#FF3333' : '#FFFFFF'}
+        />
+      </svg>
     </div>
   )
 }

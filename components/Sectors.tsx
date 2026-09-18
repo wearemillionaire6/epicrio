@@ -194,7 +194,7 @@ export default function Sectors() {
               onClick={() => handleSelectTab(idx)}
               className={`p-2.5 sm:p-3 text-left border transition-all text-xs cursor-pointer flex flex-col justify-between min-h-[75px] ${
                 isActive
-                  ? 'border-primary bg-primary/10 text-white shadow-[0_0_12px_rgba(0,255,136,0.2)]'
+                  ? 'border-primary bg-primary/10 text-white shadow-[0_0_12px_rgba(255,51,51,0.2)]'
                   : 'border-[#222222] bg-black text-muted hover:border-white hover:text-white'
               }`}
             >
@@ -340,7 +340,7 @@ export default function Sectors() {
                 step="25"
                 value={monthlyLeads}
                 onChange={(e) => setMonthlyLeads(Number(e.target.value))}
-                className="w-full accent-[#00FF88] cursor-pointer"
+                className="w-full accent-[#FF3333] cursor-pointer"
               />
               <div className="flex justify-between text-[9px] text-[#555555] mt-1">
                 <span>50</span>
@@ -363,7 +363,7 @@ export default function Sectors() {
                 step="500"
                 value={avgTicket}
                 onChange={(e) => setAvgTicket(Number(e.target.value))}
-                className="w-full accent-[#00FF88] cursor-pointer"
+                className="w-full accent-[#FF3333] cursor-pointer"
               />
               <div className="flex justify-between text-[9px] text-[#555555] mt-1">
                 <span>$1,000</span>

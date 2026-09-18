@@ -73,7 +73,7 @@ export default function Home() {
   return (
     <div
       id="home"
-      className={`min-h-screen transition-colors duration-200 selection:bg-[#00FF88] selection:text-black font-mono uppercase ${
+      className={`min-h-screen transition-colors duration-200 selection:bg-[#FF3333] selection:text-black font-mono uppercase ${
         inverted ? 'inverted bg-white text-black' : 'bg-black text-white'
       }`}
     >

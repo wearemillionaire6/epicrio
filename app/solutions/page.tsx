@@ -130,7 +130,7 @@ export default function SolutionsPage() {
               }}
               className={`p-3 border text-left transition-colors uppercase cursor-pointer ${
                 selectedIdx === i
-                  ? 'border-primary bg-primary/10 text-white font-bold shadow-[0_0_10px_rgba(0,255,136,0.15)]'
+                  ? 'border-primary bg-primary/10 text-white font-bold shadow-[0_0_10px_rgba(255,51,51,0.15)]'
                   : 'border-[#222222] bg-[#070707] text-muted hover:border-white hover:text-white'
               }`}
             >

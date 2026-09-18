@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Doto:wght@600;800;900&family=Silkscreen:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,14 +8,14 @@
   --bg-color: #000000;
   --text-color: #FFFFFF;
   --border-color: #222222;
-  --accent-color: #00FF88;
+  --accent-color: #FF3333;
 }
 
 .inverted {
   --bg-color: #FFFFFF;
   --text-color: #000000;
   --border-color: #DDDDDD;
-  --accent-color: #008844;
+  --accent-color: #CC1111;
 }
 
 /* Remove original OS cursors completely */
@@ -29,37 +29,27 @@ html {
   color: var(--text-color);
 }
 
+/* UNIFIED FONT: Exactly the same Space Mono font across EVERYTHING */
+*, *::before, *::after {
+  font-family: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
-  font-family: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   overflow-x: hidden;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Force all text elements to inherit the exact same unified monospace font */
-p, span, div, a, button, input, textarea, select, label, pre, code {
-  font-family: inherit;
-  letter-spacing: inherit;
-}
-
-/* Pixel display font for headers */
-.font-pixel {
-  font-family: 'Doto', 'Silkscreen', 'VT323', monospace !important;
-  letter-spacing: 0.06em;
-  font-weight: 800;
-}
-
-.font-doto {
-  font-family: 'Doto', 'Silkscreen', monospace !important;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-}
-
-.font-terminal {
-  font-family: 'Space Mono', ui-monospace, monospace !important;
+/* Force unified typography styling on all headings and elements */
+h1, h2, h3, h4, h5, h6, .font-pixel, .font-doto, .font-terminal {
+  font-family: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
 }
 
 /* Brutalist Box-Style Info Card */
@@ -75,7 +65,7 @@ p, span, div, a, button, input, textarea, select, label, pre, code {
 
 .box-info-active {
   border: 1px solid var(--accent-color);
-  background-color: rgba(0, 255, 136, 0.04);
+  background-color: rgba(255, 51, 51, 0.06);
 }
 
 /* Brutalist borders */

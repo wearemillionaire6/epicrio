@@ -125,7 +125,7 @@ export default function ArchitecturePage() {
               }}
               className={`p-3 border text-left transition-colors uppercase cursor-pointer ${
                 selectedIdx === i
-                  ? 'border-primary bg-primary/10 text-white font-bold shadow-[0_0_10px_rgba(0,255,136,0.15)]'
+                  ? 'border-primary bg-primary/10 text-white font-bold shadow-[0_0_10px_rgba(255,51,51,0.15)]'
                   : 'border-[#222222] bg-[#070707] text-muted hover:border-white hover:text-white'
               }`}
             >
@@ -168,7 +168,7 @@ export default function ArchitecturePage() {
               <span>WIRE PAYLOAD RECONCILIATION</span>
               <span className="text-primary font-bold">200 OK • VERIFIED ATOMIC COMMIT</span>
             </div>
-            <pre className="p-4 bg-black border border-[#222222] text-xs text-[#00FF88] font-mono overflow-x-auto leading-relaxed">
+            <pre className="p-4 bg-black border border-[#222222] text-xs text-[#FF3333] font-mono overflow-x-auto leading-relaxed">
               {activeLayer.payload}
             </pre>
           </div>
