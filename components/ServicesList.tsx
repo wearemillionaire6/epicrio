@@ -27,129 +27,96 @@ const services: ServiceItem[] = [
     id: 'crm',
     code: 'SYS.01',
     name: 'CENTRAL CRM & PIPELINE ARCHITECTURE',
-    tagline: 'Single source of revenue truth across multi-channel lead funnels.',
-    desc: 'Bespoke sales pipeline engineering, real-time attribution, and dynamic deal routing in HubSpot, Salesforce, and GoHighLevel with zero data fragmentation.',
-    stack: ['HubSpot API', 'Salesforce REST', 'PostgreSQL', 'Redis Queue'],
+    tagline: 'SINGLE SOURCE OF REVENUE TRUTH ACROSS MULTI-CHANNEL INBOUND FUNNELS.',
+    desc: 'BESPOKE SALES PIPELINE ENGINEERING, REAL-TIME ATTRIBUTION, AND DYNAMIC DEAL ROUTING IN HUBSPOT, SALESFORCE, AND GOHIGHLEVEL WITH ZERO DATA FRAGMENTATION.',
+    stack: ['HUBSPOT API', 'SALESFORCE REST', 'POSTGRESQL', 'REDIS QUEUE'],
     metrics: {
-      latency: '85ms',
+      latency: '85MS',
       reliability: '99.99%',
-      throughput: '12.4k events/min',
+      throughput: '12.4K EVENTS/MIN',
     },
     diagram: '[INBOUND WEBHOOK] ──> [ROUTER] ──> [ENRICHMENT] ──> [CRM DEPOSIT]',
-    payloadPreview: `{
-  "event": "lead.qualified",
-  "source": "inbound_call",
-  "score": 94,
-  "assigned_rep": "enterprise_pod_1",
-  "routing_latency_ms": 78
-}`,
+    payloadPreview: `{\n  "event": "lead.qualified",\n  "source": "inbound_call",\n  "score": 94,\n  "assigned_rep": "enterprise_pod_1",\n  "routing_latency_ms": 78\n}`,
     specLink: '/solutions#crm',
   },
   {
     id: 'workflows',
     code: 'SYS.02',
     name: 'AUTONOMOUS WORKFLOW ENGINES',
-    tagline: 'Self-hosted execution runtimes for multi-step operational logic.',
-    desc: 'Deterministic orchestration of billing, invoicing, client onboarding, NDA execution, and contract generation deployed on air-gapped n8n clusters.',
-    stack: ['Self-Hosted n8n', 'Docker', 'Stripe Webhooks', 'DocuSign API'],
+    tagline: 'SELF-HOSTED EXECUTION RUNTIMES FOR MULTI-STEP OPERATIONAL LOGIC.',
+    desc: 'DETERMINISTIC ORCHESTRATION OF BILLING, INVOICING, CLIENT ONBOARDING, NDA EXECUTION, AND CONTRACT GENERATION DEPLOYED ON AIR-GAPPED N8N CLUSTERS.',
+    stack: ['SELF-HOSTED N8N', 'DOCKER PODS', 'STRIPE API', 'DOCUSIGN API'],
     metrics: {
-      latency: '140ms',
+      latency: '140MS',
       reliability: '99.98%',
-      throughput: '4.8k jobs/hour',
+      throughput: '4.8K JOBS/HOUR',
     },
-    diagram: '[TRIGGER] ──> [n8n RUNTIME] ──> [TRANSFORM] ──> [STRIPE / DOCUSIGN]',
-    payloadPreview: `{
-  "workflow_id": "wf_client_onboard_v4",
-  "status": "EXECUTED",
-  "steps_completed": 7,
-  "invoice_id": "inv_8941_paid",
-  "vault_synced": true
-}`,
+    diagram: '[TRIGGER] ──> [N8N RUNTIME] ──> [TRANSFORM] ──> [STRIPE / DOCUSIGN]',
+    payloadPreview: `{\n  "workflow_id": "wf_client_onboard_v4",\n  "status": "EXECUTED",\n  "steps_completed": 7,\n  "invoice_id": "inv_8941_paid",\n  "vault_synced": true\n}`,
     specLink: '/solutions#workflows',
   },
   {
     id: 'voice',
     code: 'SYS.03',
     name: 'SUB-300MS AI VOICE RECEPTIONIST',
-    tagline: 'Deterministic conversational telephony operating 24/7/365.',
-    desc: 'Human-grade inbound triage, after-hours dispatch, calendar booking, and multi-line trunking powered by ultra-low latency TTS/STT and Twilio SIP.',
-    stack: ['Vapi', 'Twilio SIP Trunking', 'Deepgram Nova-2', 'Cartesia TTS'],
+    tagline: 'DETERMINISTIC CONVERSATIONAL TELEPHONY OPERATING 24/7/365.',
+    desc: 'HUMAN-GRADE INBOUND TRIAGE, AFTER-HOURS DISPATCH, CALENDAR BOOKING, AND MULTI-LINE TRUNKING POWERED BY ULTRA-LOW LATENCY TTS/STT AND TWILIO SIP.',
+    stack: ['VAPI', 'TWILIO SIP TRUNKING', 'DEEPGRAM NOVA-2', 'CARTESIA TTS'],
     metrics: {
-      latency: '280ms TTFT',
+      latency: '280MS TTFT',
       reliability: '99.95%',
-      throughput: '120 concurrent lines',
+      throughput: '120 CONCURRENT LINES',
     },
     diagram: '[INBOUND SIP] ──> [DEEPGRAM STT] ──> [LLM BRAIN] ──> [CARTESIA TTS]',
-    payloadPreview: `{
-  "call_sid": "CA9942817x84",
-  "duration_sec": 142,
-  "sentiment": "high_intent",
-  "appointment_booked": "2026-09-22T14:00:00Z",
-  "ttft_ms": 274
-}`,
+    payloadPreview: `{\n  "call_sid": "CA9942817x84",\n  "duration_sec": 142,\n  "sentiment": "high_intent",\n  "appointment_booked": "2026-09-22T14:00:00Z",\n  "ttft_ms": 274\n}`,
     specLink: '/voice-agent',
   },
   {
     id: 'rag',
     code: 'SYS.04',
     name: 'ENTERPRISE KNOWLEDGE RAG AGENTS',
-    tagline: 'Grounded reasoning over proprietary regulatory and technical archives.',
-    desc: 'Internal AI co-pilots and customer service engines tied directly to standard operating procedures, contracts, past tickets, and compliance manuals.',
-    stack: ['LangChain', 'pgvector', 'Claude 3.5 Sonnet', 'OpenAI Embeddings'],
+    tagline: 'GROUNDED REASONING OVER PROPRIETARY REGULATORY ARCHIVES.',
+    desc: 'INTERNAL AI CO-PILOTS TIED DIRECTLY TO STANDARD OPERATING PROCEDURES, CONTRACT ARCHIVES, HISTORICAL TICKETS, AND COMPLIANCE LEDGERS.',
+    stack: ['LANGCHAIN', 'PGVECTOR', 'CLAUDE 3.5 SONNET', 'SUPABASE'],
     metrics: {
-      latency: '520ms',
+      latency: '520MS',
       reliability: '99.99%',
       throughput: '850 QPS',
     },
     diagram: '[USER QUERY] ──> [HYBRID RETRIEVAL] ──> [RERANKER] ──> [GROUNDED SYNTHESIS]',
-    payloadPreview: `{
-  "rag_session": "compliance_audit_2026",
-  "sources_cited": ["sop_sec_04.pdf", "nda_rev_8.md"],
-  "hallucination_score": 0.00,
-  "confidence": 0.988
-}`,
+    payloadPreview: `{\n  "rag_session": "compliance_audit_2026",\n  "sources_cited": ["sop_sec_04.pdf", "nda_rev_8.md"],\n  "hallucination_score": 0.00,\n  "confidence": 0.988\n}`,
     specLink: '/solutions#rag',
   },
   {
     id: 'api',
     code: 'SYS.05',
     name: 'UNIFIED API CONDUITS & INTEGRATIONS',
-    tagline: 'Resilient middleware bridges connecting legacy & modern stacks.',
-    desc: 'Stateful webhook routers, bi-directional sync workers, and rate-limiting brokers bridging proprietary SQL databases, ERPs, and cloud SaaS.',
-    stack: ['Next.js App Router', 'Redis Pub/Sub', 'PostgreSQL', 'Cloudflare Workers'],
+    tagline: 'RESILIENT MIDDLEWARE BRIDGES CONNECTING LEGACY & MODERN STACKS.',
+    desc: 'STATEFUL WEBHOOK ROUTERS, BI-DIRECTIONAL SYNC WORKERS, AND RATE-LIMITING BROKERS BRIDGING PROPRIETARY SQL DATABASES, ERPS, AND CLOUD SAAS.',
+    stack: ['NEXT.JS 15', 'REDIS PUB/SUB', 'POSTGRESQL', 'CLOUDFLARE'],
     metrics: {
-      latency: '45ms',
+      latency: '45MS',
       reliability: '99.999%',
-      throughput: '45k events/sec',
+      throughput: '45K EVENTS/SEC',
     },
     diagram: '[LEGACY DB / ERP] ──> [STATEFUL BROKER] ──> [DEAD LETTER QUEUE] ──> [DESTINATION]',
-    payloadPreview: `{
-  "event_id": "evt_pipe_98241",
-  "handshake": "HMAC_SHA256_VERIFIED",
-  "retry_attempts": 0,
-  "latency_ms": 42
-}`,
+    payloadPreview: `{\n  "event_id": "evt_pipe_98241",\n  "handshake": "HMAC_SHA256_VERIFIED",\n  "retry_attempts": 0,\n  "latency_ms": 42\n}`,
     specLink: '/solutions#api',
   },
   {
     id: 'portals',
     code: 'SYS.06',
     name: 'CUSTOM OPERATING PORTALS & DASHBOARDS',
-    tagline: 'High-speed administrative command centers and client portals.',
-    desc: 'Bespoke Next.js 15 client dashboards and executive telemetry consoles engineered specifically for your internal workflows and high-security operations.',
-    stack: ['Next.js 15', 'Tailwind CSS', 'Framer Motion', 'Supabase Auth'],
+    tagline: 'HIGH-SPEED ADMINISTRATIVE COMMAND CENTERS AND CLIENT PORTALS.',
+    desc: 'BESPOKE NEXT.JS 15 CLIENT DASHBOARDS AND EXECUTIVE TELEMETRY CONSOLES ENGINEERED SPECIFICALLY FOR YOUR INTERNAL WORKFLOWS AND REVENUE RECONCILIATION.',
+    stack: ['NEXT.JS 15', 'TAILWIND CSS', 'FRAMER MOTION', 'SUPABASE AUTH'],
     metrics: {
-      latency: '18ms TTFB',
+      latency: '18MS TTFB',
       reliability: '100%',
-      throughput: 'Real-time WebSockets',
+      throughput: 'REALTIME WEBSOCKETS',
     },
     diagram: '[EXECUTIVE CONSOLE] ──> [WEBSOCKET REALTIME] ──> [ANALYTICS ENGINE]',
-    payloadPreview: `{
-  "tenant_id": "org_enterprise_core",
-  "live_sessions": 34,
-  "active_agent_count": 18,
-  "monthly_automated_volume": "$840,000"
-}`,
+    payloadPreview: `{\n  "tenant_id": "org_enterprise_core",\n  "live_sessions": 34,\n  "active_agent_count": 18,\n  "monthly_automated_volume": "$840,000"\n}`,
     specLink: '/solutions#portals',
   },
 ]
@@ -178,11 +145,11 @@ export default function ServicesList() {
         </div>
       </div>
 
-      {/* Terminal prompt prompt header */}
+      {/* Terminal prompt header */}
       <div className="text-muted text-xs sm:text-sm mb-8 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-primary">[/&gt; : ]</span>
-          <span className="text-[#888888]">SELECT SYSTEM PROTOCOL FOR TELEMETRY MONITOR</span>
+          <span className="text-primary">[/&gt; CAPABILITY_EXPLORER : ]</span>
+          <span className="text-white">SELECT SYSTEM PROTOCOL FOR TELEMETRY MONITOR</span>
         </div>
         <div className="text-[11px] text-muted hidden md:block">
           STATUS: <span className="text-primary font-bold">ALL 6 RUNTIMES ACTIVE</span>
@@ -196,7 +163,6 @@ export default function ServicesList() {
           {services.map((svc, idx) => {
             const isActive = activeIdx === idx
 
-            // Consistent mathematical step offset: 0px, 16px, 32px, 48px, 64px, 80px
             const indentStyle = {
               marginLeft: `${idx * 16}px`,
             }
@@ -269,9 +235,9 @@ export default function ServicesList() {
                           animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="mt-3 pt-3 border-t border-[#222222] text-xs space-y-2 text-[#cccccc]"
+                          className="mt-3 pt-3 border-t border-[#222222] text-xs space-y-2 text-white"
                         >
-                          <p className="text-[11px] leading-relaxed text-muted">
+                          <p className="text-[11px] leading-relaxed text-[#aaaaaa]">
                             {svc.desc}
                           </p>
                           <div className="flex items-center justify-between text-[10px] text-primary pt-1">
@@ -306,11 +272,11 @@ export default function ServicesList() {
 
         {/* Right Column: High-Tech Live Architecture Telemetry Monitor (Desktop) */}
         <div className="hidden lg:block lg:col-span-6 sticky top-16">
-          <div className="border border-white/20 bg-[#080808] p-5 relative overflow-hidden">
+          <div className="border border-white/20 bg-[#070707] p-5 sm:p-6 relative overflow-hidden">
             {/* Monitor Header */}
             <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#222222] text-xs">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                <span className="w-2 h-2 bg-primary rounded-none animate-pulse" />
                 <span className="font-bold text-white tracking-wider">
                   TELEMETRY MONITOR: {currentSvc.code}
                 </span>
@@ -325,7 +291,7 @@ export default function ServicesList() {
               <h3 className="font-bold text-base text-white mb-1 tracking-wide">
                 {currentSvc.name}
               </h3>
-              <p className="text-xs text-muted leading-relaxed">
+              <p className="text-xs text-[#aaaaaa] leading-relaxed">
                 {currentSvc.desc}
               </p>
             </div>
@@ -363,7 +329,7 @@ export default function ServicesList() {
                 <span>[SAMPLE JSON WIRE TRANSMISSION]</span>
                 <span className="text-[9px] text-muted">200 OK</span>
               </div>
-              <pre className="p-2.5 bg-black border border-[#222222] text-[10px] text-[#88ffaa] font-mono leading-tight overflow-x-auto">
+              <pre className="p-2.5 bg-black border border-[#222222] text-[10px] text-[#00FF88] font-mono leading-tight overflow-x-auto">
                 {currentSvc.payloadPreview}
               </pre>
             </div>

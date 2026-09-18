@@ -18,46 +18,46 @@ const nodes: ArchitectureNode[] = [
     id: 'ingest',
     name: '01 // INBOUND PROTOCOL INGESTION',
     category: 'ENTRY CONDUIT',
-    latency: '12ms',
-    throughput: '50,000 req/min',
-    details: 'Validates HMAC signatures, performs SSL termination, and buffers events into durable Redis streams to protect downstream backends from traffic bursts.',
-    protocols: ['Twilio SIP', 'HubSpot Webhook', 'Next.js API Routes', 'Stripe Signing Secret'],
+    latency: '12MS',
+    throughput: '50,000 REQ/MIN',
+    details: 'VALIDATES HMAC SIGNATURES, PERFORMS SSL TERMINATION, AND BUFFERS EVENTS INTO DURABLE REDIS STREAMS TO PROTECT DOWNSTREAM BACKENDS FROM TRAFFIC BURSTS.',
+    protocols: ['TWILIO SIP', 'HUBSPOT WEBHOOK', 'NEXT.JS API ROUTES', 'STRIPE SIGNING SECRET'],
   },
   {
     id: 'router',
     name: '02 // COGNITIVE TRIAGE & ROUTER',
     category: 'DECISION ENGINE',
-    latency: '110ms',
-    throughput: '3,200 ev/sec',
-    details: 'Evaluates intent, customer tier, urgency, and data schemas to route events to either conversational telephony, vector RAG retrieval, or deterministic execution.',
-    protocols: ['Claude 3.5 Sonnet', 'JSON Schema Validation', 'Priority Queue', 'Rule Engine'],
+    latency: '110MS',
+    throughput: '3,200 EV/SEC',
+    details: 'EVALUATES INTENT, CUSTOMER TIER, URGENCY, AND DATA SCHEMAS TO ROUTE EVENTS TO EITHER CONVERSATIONAL TELEPHONY, VECTOR RAG RETRIEVAL, OR DETERMINISTIC EXECUTION.',
+    protocols: ['CLAUDE 3.5 SONNET', 'JSON SCHEMA VALIDATION', 'PRIORITY QUEUE', 'RULE ENGINE'],
   },
   {
     id: 'rag',
     name: '03 // REGULATORY VECTOR RAG',
     category: 'KNOWLEDGE FABRIC',
-    latency: '240ms',
+    latency: '240MS',
     throughput: '850 QPS',
-    details: 'Hybrid dense + sparse semantic search across proprietary SOPs, equipment specifications, legal precedents, and customer records with 0.00% hallucination verification.',
-    protocols: ['pgvector', 'Hybrid BM25', 'Cohere Rerank', 'Supabase Postgres'],
+    details: 'HYBRID DENSE + SPARSE SEMANTIC SEARCH ACROSS PROPRIETARY SOPS, EQUIPMENT SPECIFICATIONS, LEGAL PRECEDENTS, AND CUSTOMER RECORDS WITH 0.00% HALLUCINATION VERIFICATION.',
+    protocols: ['PGVECTOR', 'HYBRID BM25', 'COHERE RERANK', 'SUPABASE POSTGRES'],
   },
   {
     id: 'runtime',
     name: '04 // DETERMINISTIC RUNTIME (N8N)',
     category: 'EXECUTION CLUSTER',
-    latency: '85ms',
-    throughput: '12,000 jobs/hr',
-    details: 'Self-hosted air-gapped n8n workers executing complex multi-step state machines with automated exponential backoff and dead-letter queue notifications in Slack.',
-    protocols: ['Docker Cluster', 'PostgreSQL State Store', 'Redis Job Queue', 'Dead-Letter Bus'],
+    latency: '85MS',
+    throughput: '12,000 JOBS/HR',
+    details: 'SELF-HOSTED AIR-GAPPED N8N WORKERS EXECUTING COMPLEX MULTI-STEP STATE MACHES WITH AUTOMATED EXPONENTIAL BACKOFF AND DEAD-LETTER QUEUE NOTIFICATIONS IN SLACK.',
+    protocols: ['DOCKER CLUSTER', 'POSTGRESQL STATE STORE', 'REDIS JOB QUEUE', 'DEAD-LETTER BUS'],
   },
   {
     id: 'destination',
     name: '05 // REVENUE LEDGER & DISPATCH',
     category: 'STATE COMMIT',
-    latency: '60ms',
-    throughput: 'Real-time Push',
-    details: 'Two-way synchronized write to enterprise CRMs (HubSpot, Salesforce), calendar locks, SMS dispatches to field technicians, and automated Stripe billing reconciliation.',
-    protocols: ['HubSpot v3 API', 'Salesforce REST', 'Twilio Messaging', 'Stripe Invoicing'],
+    latency: '60MS',
+    throughput: 'REAL-TIME PUSH',
+    details: 'TWO-WAY SYNCHRONIZED WRITE TO ENTERPRISE CRMS (HUBSPOT, SALESFORCE), CALENDAR LOCKS, SMS DISPATCHES TO FIELD TECHNICIANS, AND AUTOMATED STRIPE BILLING RECONCILIATION.',
+    protocols: ['HUBSPOT V3 API', 'SALESFORCE REST', 'TWILIO MESSAGING', 'STRIPE INVOICING'],
   },
 ]
 
@@ -86,14 +86,14 @@ export default function DataFlowVisualizer() {
       </div>
 
       {/* Interactive Circuit Flow Visualizer */}
-      <div className="border border-[#222222] bg-[#070707] p-6 mb-6">
+      <div className="border border-white/20 bg-[#070707] p-6 mb-6">
         <div className="text-muted text-[10px] uppercase tracking-wider mb-4 flex items-center justify-between">
           <span>[END-TO-END AUTONOMOUS CIRCUIT]</span>
           <span className="text-primary text-[10px] animate-pulse">● TRANSMISSION ACTIVE</span>
         </div>
 
-        {/* Node Stepper */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
+        {/* Node Stepper Box Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 mb-6">
           {nodes.map((node, i) => {
             const isSelected = selectedNodeId === node.id
             return (
@@ -106,7 +106,7 @@ export default function DataFlowVisualizer() {
                 className={`p-3 border text-left transition-all cursor-pointer relative ${
                   isSelected
                     ? 'border-primary bg-primary/10 text-white shadow-[0_0_12px_rgba(0,255,136,0.2)]'
-                    : 'border-[#262626] bg-black text-muted hover:border-white hover:text-white'
+                    : 'border-[#222222] bg-black text-muted hover:border-white hover:text-white'
                 }`}
               >
                 <div className="flex items-center justify-between text-[9px] mb-1">
@@ -120,7 +120,6 @@ export default function DataFlowVisualizer() {
                   {node.category}
                 </div>
 
-                {/* Arrow connector indicator */}
                 {i < nodes.length - 1 && (
                   <div className="hidden lg:block absolute -right-2 top-1/2 -translate-y-1/2 z-10 text-muted text-[10px]">
                     &gt;
@@ -131,8 +130,8 @@ export default function DataFlowVisualizer() {
           })}
         </div>
 
-        {/* Selected Node Deep Dive Inspector */}
-        <div className="p-5 bg-black border border-primary/30">
+        {/* Selected Node Deep Dive Inspector Box */}
+        <div className="p-5 bg-black border border-[#222222]">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-3 border-b border-[#222222] gap-2">
             <div>
               <span className="text-[10px] text-primary uppercase font-bold">

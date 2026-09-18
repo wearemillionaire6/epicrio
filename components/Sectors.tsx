@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { sound } from '@/lib/sound'
 
 interface SectorData {
@@ -31,15 +30,15 @@ const sectorData: SectorData[] = [
     shortTitle: 'HVAC & FIELD SERVICES',
     metric: '18+ HRS',
     metricLabel: 'SAVED PER ESTIMATOR / WEEK',
-    friction: 'Emergency after-hours equipment failures go to voicemail; field technicians and estimators waste 35% of their day manually transcribing equipment serials and driving quotes.',
-    solution: 'Sub-300ms voice triage for emergency breakdowns, automated equipment catalog lookup (leveraging HvacEQ data pipelines), instant technician dispatch, and automated quote follow-ups.',
-    agentsDeployed: ['Emergency Voice Triage Agent', 'Equipment Spec OCR Worker', 'ServiceTitan / Procore Bridge', 'Auto-Review Generator'],
+    friction: 'EMERGENCY AFTER-HOURS EQUIPMENT FAILURES GO TO VOICEMAIL; FIELD TECHNICIANS AND ESTIMATORS WASTE 35% OF THEIR DAY MANUALLY TRANSCRIBING EQUIPMENT SERIALS AND RETYPING QUOTES.',
+    solution: 'SUB-300MS VOICE TRIAGE FOR EMERGENCY BREAKDOWNS, AUTOMATED EQUIPMENT CATALOG LOOKUP (HVACEQ PIPELINES), INSTANT TECHNICIAN DISPATCH, AND AUTOMATED QUOTE FOLLOW-UPS.',
+    agentsDeployed: ['EMERGENCY VOICE TRIAGE AGENT', 'EQUIPMENT SPEC OCR WORKER', 'SERVICETITAN / PROCORE BRIDGE', 'AUTO-REVIEW GENERATOR'],
     workflowNodes: ['[INBOUND EMERGENCY CALL]', '[EQUIPMENT MODEL PARSE]', '[AVAILABILITY & GEO-ROUTING]', '[DISPATCH SMS & CALENDAR]'],
     defaultMonthlyVolume: 350,
     avgDealSize: 4200,
     sampleTranscript: [
-      { speaker: 'CALLER', text: 'Our 40-ton rooftop unit on building B just threw a critical head pressure code and our freezer room is heating up.' },
-      { speaker: 'VOICE AGENT', text: 'Understood. Flagged as Priority 1 commercial refrigeration emergency. I am routing your location and Carrier RTU serial to Senior Tech Marcus who is 12 minutes away.' },
+      { speaker: 'CALLER', text: 'OUR 40-TON ROOFTOP UNIT ON BUILDING B JUST THREW A CRITICAL HEAD PRESSURE CODE AND OUR FREEZER ROOM IS HEATING UP.' },
+      { speaker: 'VOICE AGENT', text: 'UNDERSTOOD. FLAGGED AS PRIORITY 1 COMMERCIAL REFRIGERATION EMERGENCY. ROUTING LOCATION AND CARRIER RTU SERIAL TO SENIOR TECH MARCUS WHO IS 12 MINUTES AWAY.' },
     ],
   },
   {
@@ -49,15 +48,15 @@ const sectorData: SectorData[] = [
     shortTitle: 'LEGAL & LAW FIRMS',
     metric: '+48%',
     metricLabel: 'RETAINERS SIGNED SAME-DAY',
-    friction: 'Prospective clients in high-intent distress call after 5 PM and hang up during long web questionnaires; staff spend hours on manual conflict-of-interest checks.',
-    solution: '24/7 empathetic conversational intake, immediate multi-database conflict checks against internal firm ledgers, and automated retainer agreement dispatch via DocuSign.',
-    agentsDeployed: ['Inbound Retainer Voice Agent', 'Conflict Check Microservice', 'Clio / Clio Grow Sync', 'DocuSign Automated Pipeline'],
+    friction: 'PROSPECTIVE CLIENTS IN HIGH-INTENT DISTRESS CALL AFTER 5 PM AND HANG UP DURING LONG WEB QUESTIONNAIRES; STAFF SPEND HOURS ON MANUAL CONFLICT-OF-INTEREST CHECKS.',
+    solution: '24/7 EMPATHETIC CONVERSATIONAL INTAKE, IMMEDIATE MULTI-DATABASE CONFLICT CHECKS AGAINST INTERNAL FIRM LEDGERS, AND AUTOMATED RETAINER AGREEMENT DISPATCH VIA DOCUSIGN.',
+    agentsDeployed: ['INBOUND RETAINER VOICE AGENT', 'CONFLICT CHECK MICROSERVICE', 'CLIO / CLIO GROW SYNC', 'DOCUSIGN AUTOMATED PIPELINE'],
     workflowNodes: ['[AFTER-HOURS CALL]', '[JURISDICTION / CONFLICT CHECK]', '[CASE QUALIFICATION SCORE]', '[INSTANT PARTNER CALENDAR BOOK]'],
     defaultMonthlyVolume: 180,
     avgDealSize: 6500,
     sampleTranscript: [
-      { speaker: 'CALLER', text: 'I was just served with a federal IP injunction and I need an emergency consultation before the morning filing deadline.' },
-      { speaker: 'VOICE AGENT', text: 'I am immediately logging this under emergency civil defense. Conflict check against opposing counsel has cleared. I have reserved partner David Vance for 8:15 AM tomorrow.' },
+      { speaker: 'CALLER', text: 'I WAS JUST SERVED WITH A FEDERAL IP INJUNCTION AND I NEED AN EMERGENCY CONSULTATION BEFORE THE MORNING FILING DEADLINE.' },
+      { speaker: 'VOICE AGENT', text: 'LOGGING UNDER EMERGENCY CIVIL DEFENSE. CONFLICT CHECK AGAINST OPPOSING COUNSEL HAS CLEARED. I HAVE RESERVED SENIOR PARTNER DAVID VANCE FOR 8:15 AM TOMORROW.' },
     ],
   },
   {
@@ -67,15 +66,15 @@ const sectorData: SectorData[] = [
     shortTitle: 'HEALTHCARE & MED SPAS',
     metric: '-62%',
     metricLabel: 'REDUCTION IN NO-SHOW LOSS',
-    friction: 'Overburdened front desks miss high-ticket surgical consultation calls; patients cancel last minute leaving expensive OR slots idle with zero automated backfill.',
-    solution: 'HIPAA-compliant conversational voice booking, smart 2-way SMS confirmation loops, and automated standby list backfill that fills cancelled slots in under 4 minutes.',
-    agentsDeployed: ['HIPAA Voice Scheduler', 'Waitlist Auto-Fill Engine', 'EHR / Nextech Conduit', 'Post-Op Follow-up Bot'],
+    friction: 'OVERBURDENED FRONT DESKS MISS HIGH-TICKET SURGICAL CONSULTATION CALLS; PATIENTS CANCEL LAST MINUTE LEAVING EXPENSIVE OR SLOTS IDLE WITH ZERO AUTOMATED BACKFILL.',
+    solution: 'HIPAA-COMPLIANT CONVERSATIONAL VOICE BOOKING, SMART 2-WAY SMS CONFIRMATION LOOPS, AND AUTOMATED STANDBY LIST BACKFILL THAT FILLS CANCELLED SLOTS IN UNDER 4 MINUTES.',
+    agentsDeployed: ['HIPAA VOICE SCHEDULER', 'WAITLIST AUTO-FILL ENGINE', 'EHR / NEXTECH CONDUIT', 'POST-OP FOLLOW-UP BOT'],
     workflowNodes: ['[CONSULTATION INQUIRY]', '[INSURANCE & PROCEDURE TRIAGE]', '[EHR SLOT RESERVATION]', '[2-WAY SMS CADENCE]'],
     defaultMonthlyVolume: 420,
     avgDealSize: 2800,
     sampleTranscript: [
-      { speaker: 'CALLER', text: 'Hi, I need to reschedule my consultation with Dr. Reyes next Tuesday, do you have anything open on Thursday afternoon?' },
-      { speaker: 'VOICE AGENT', text: 'Yes, Dr. Reyes has an opening at 2:30 PM on Thursday. I have updated your chart and texted you the updated prep guidelines.' },
+      { speaker: 'CALLER', text: 'HI, I NEED TO RESCHEDULE MY CONSULTATION WITH DR. REYES NEXT TUESDAY, DO YOU HAVE ANYTHING OPEN ON THURSDAY AFTERNOON?' },
+      { speaker: 'VOICE AGENT', text: 'YES, DR. REYES HAS AN OPENING AT 2:30 PM ON THURSDAY. I HAVE UPDATED YOUR CHART AND TEXTED YOU THE UPDATED PREP GUIDELINES.' },
     ],
   },
   {
@@ -85,15 +84,15 @@ const sectorData: SectorData[] = [
     shortTitle: 'COMMERCIAL REAL ESTATE',
     metric: '10X',
     metricLabel: 'SPEED-TO-LEAD ON ASSET TOURS',
-    friction: 'Institutional brokers miss tenant inquiries during multi-hour property tours; prospective tenants move on to competing properties before receiving asset pitch decks.',
-    solution: 'Sub-60s instant qualification, automated WhatsApp & email brochure delivery with NDAs, and live agent-guided tour booking synchronized across the brokerage.',
-    agentsDeployed: ['Asset Brochure Dispatcher', 'Tenant KYC Pre-Filter', 'WhatsApp Business Engine', 'Buildout / Salesforce Sync'],
+    friction: 'INSTITUTIONAL BROKERS MISS TENANT INQUIRIES DURING MULTI-HOUR PROPERTY TOURS; PROSPECTIVE TENANTS MOVE ON TO COMPETING PROPERTIES BEFORE RECEIVING ASSET PITCH DECKS.',
+    solution: 'SUB-60S INSTANT QUALIFICATION, AUTOMATED WHATSAPP & EMAIL BROCHURE DELIVERY WITH NDAS, AND LIVE AGENT-GUIDED TOUR BOOKING SYNCHRONIZED ACROSS THE BROKERAGE.',
+    agentsDeployed: ['ASSET BROCHURE DISPATCHER', 'TENANT KYC PRE-FILTER', 'WHATSAPP BUSINESS ENGINE', 'BUILDOUT / SALESFORCE SYNC'],
     workflowNodes: ['[PORTAL INQUIRY]', '[TENANT SQUARE-FOOTAGE PARSE]', '[INSTANT BROCHURE & NDA]', '[CALENDLY / CRM LOCK]'],
     defaultMonthlyVolume: 240,
     avgDealSize: 12000,
     sampleTranscript: [
-      { speaker: 'INVESTOR', text: 'Looking at the 25,000 sq ft industrial flex space on Airport Blvd. Can I get the trailing 12-month cap rate and rent roll?' },
-      { speaker: 'VOICE AGENT', text: 'I have dispatched the encrypted offering memorandum and NDA to your email. I can also schedule a walkthrough with Managing Director Sarah this Friday.' },
+      { speaker: 'INVESTOR', text: 'LOOKING AT THE 25,000 SQ FT INDUSTRIAL FLEX SPACE ON AIRPORT BLVD. CAN I GET THE TRAILING 12-MONTH CAP RATE AND RENT ROLL?' },
+      { speaker: 'VOICE AGENT', text: 'I HAVE DISPATCHED THE ENCRYPTED OFFERING MEMORANDUM AND NDA TO YOUR EMAIL. I CAN ALSO SCHEDULE A WALKTHROUGH WITH MANAGING DIRECTOR SARAH THIS FRIDAY.' },
     ],
   },
   {
@@ -103,15 +102,15 @@ const sectorData: SectorData[] = [
     shortTitle: 'B2B SAAS & TECH ADVISORY',
     metric: '3.4X',
     metricLabel: 'DEMO-TO-CONTRACT VELOCITY',
-    friction: 'Sales reps waste 40% of their day manually qualifying inbound demo requests, updating messy CRM properties, and hand-crafting proposals in Google Docs.',
-    solution: 'Instant Clearbit/Apollo webhook enrichment upon form submission, autonomous demo qualification, and automated Stripe/PandaDoc contract pipelines upon deal close.',
-    agentsDeployed: ['Enrichment & Scoring Worker', 'Autonomous Contract Generator', 'Stripe Billing Reconciler', 'Slack War-Room Bot'],
+    friction: 'SALES REPS WASTE 40% OF THEIR DAY MANUALLY QUALIFYING INBOUND DEMO REQUESTS, UPDATING MESSY CRM PROPERTIES, AND HAND-CRAFTING PROPOSALS IN GOOGLE DOCS.',
+    solution: 'INSTANT CLEARBIT/APOLLO WEBHOOK ENRICHMENT UPON FORM SUBMISSION, AUTONOMOUS DEMO QUALIFICATION, AND AUTOMATED STRIPE/PANDADOC CONTRACT PIPELINES UPON DEAL CLOSE.',
+    agentsDeployed: ['ENRICHMENT & SCORING WORKER', 'AUTONOMOUS CONTRACT GENERATOR', 'STRIPE BILLING RECONCILER', 'SLACK WAR-ROOM BOT'],
     workflowNodes: ['[DEMO SUBMIT]', '[CLEARBIT DATA ENRICHMENT]', '[ENTERPRISE TIER ROUTE]', '[PROPOSAL AUTO-DISPATCH]'],
     defaultMonthlyVolume: 300,
     avgDealSize: 8500,
     sampleTranscript: [
-      { speaker: 'BUYER', text: 'We have 250 seats and need SOC2 compliance validation before we can start a 30-day proof-of-concept.' },
-      { speaker: 'VOICE AGENT', text: 'Our enterprise tier covers full SOC2 Type II and HIPAA compliance. I am generating your customized POC agreement and security package now.' },
+      { speaker: 'BUYER', text: 'WE HAVE 250 SEATS AND NEED SOC2 COMPLIANCE VALIDATION BEFORE WE CAN START A 30-DAY PROOF-OF-CONCEPT.' },
+      { speaker: 'VOICE AGENT', text: 'OUR ENTERPRISE TIER COVERS FULL SOC2 TYPE II AND HIPAA COMPLIANCE. I AM GENERATING YOUR CUSTOMIZED POC AGREEMENT AND SECURITY PACKAGE NOW.' },
     ],
   },
   {
@@ -121,15 +120,15 @@ const sectorData: SectorData[] = [
     shortTitle: 'WEALTH MANAGEMENT',
     metric: '100%',
     metricLabel: 'COMPLIANCE AUDIT TRAIL ACCURACY',
-    friction: 'High-net-worth client onboarding requires back-and-forth email PDF submissions, manual KYC verifications, and disjointed risk questionnaires.',
-    solution: 'Bespoke client onboarding portal with automated document extraction, real-time risk profile scoring, and direct custodial database integration.',
-    agentsDeployed: ['Secure KYC Portal', 'Document Extraction OCR', 'Custodian API Bridge', 'Encrypted Telemetry Ledger'],
+    friction: 'HIGH-NET-WORTH CLIENT ONBOARDING REQUIRES BACK-AND-FORTH EMAIL PDF SUBMISSIONS, MANUAL KYC VERIFICATIONS, AND DISJOINTED RISK QUESTIONNAIRES.',
+    solution: 'BESPOKE CLIENT ONBOARDING PORTAL WITH AUTOMATED DOCUMENT EXTRACTION, REAL-TIME RISK PROFILE SCORING, AND DIRECT CUSTODIAL DATABASE INTEGRATION.',
+    agentsDeployed: ['SECURE KYC PORTAL', 'DOCUMENT EXTRACTION OCR', 'CUSTODIAN API BRIDGE', 'ENCRYPTED TELEMETRY LEDGER'],
     workflowNodes: ['[CLIENT INTAKE PORTAL]', '[KYC / AML IDENTITY CHECK]', '[PORTFOLIO RISK PROFILE]', '[CUSTODIAN ACCT SYNC]'],
     defaultMonthlyVolume: 80,
     avgDealSize: 25000,
     sampleTranscript: [
-      { speaker: 'CLIENT', text: 'I am rolling over a family trust portfolio and want to make sure the tax-loss harvesting strategy aligns with our state estate laws.' },
-      { speaker: 'VOICE AGENT', text: 'All estate tax parameters have been logged against the trust schedule. I have scheduled an intake review with Senior Wealth Advisor Miller for Tuesday.' },
+      { speaker: 'CLIENT', text: 'I AM ROLLING OVER A FAMILY TRUST PORTFOLIO AND WANT TO ENSURE THE TAX-LOSS HARVESTING STRATEGY ALIGNS WITH OUR STATE ESTATE LAWS.' },
+      { speaker: 'VOICE AGENT', text: 'ALL ESTATE TAX PARAMETERS HAVE BEEN LOGGED AGAINST THE TRUST SCHEDULE. I HAVE SCHEDULED AN INTAKE REVIEW WITH SENIOR WEALTH ADVISOR MILLER FOR TUESDAY.' },
     ],
   },
 ]
@@ -143,8 +142,8 @@ export default function Sectors() {
   const [avgTicket, setAvgTicket] = useState<number>(currentSector.avgDealSize)
 
   // Calculations
-  const hoursSavedPerMonth = Math.round((monthlyLeads * 0.45))
-  const capturedDealsPerMonth = Math.max(1, Math.round((monthlyLeads * 0.04)))
+  const hoursSavedPerMonth = Math.round(monthlyLeads * 0.45)
+  const capturedDealsPerMonth = Math.max(1, Math.round(monthlyLeads * 0.04))
   const estimatedRevenueGain = Math.round(capturedDealsPerMonth * avgTicket * 12)
 
   const handleSelectTab = (idx: number) => {
@@ -161,7 +160,7 @@ export default function Sectors() {
         <div>
           <div className="text-primary text-xs tracking-widest uppercase mb-1 flex items-center gap-2">
             <span className="inline-block w-2 h-2 bg-primary" />
-            <span>[VERTICAL_INTELLIGENCE // MODULE 03]</span>
+            <span>[VERTICAL_INTELLIGENCE // MODULE 05]</span>
           </div>
           <h2 className="font-pixel text-3xl sm:text-5xl md:text-6xl text-white tracking-widest">
             SECTORS
@@ -178,7 +177,7 @@ export default function Sectors() {
       <div className="text-muted text-xs sm:text-sm mb-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-primary">[/&gt; SECTOR_SWITCHER : ]</span>
-          <span className="text-[#888888]">SELECT DOMAIN TO RUN SIMULATION</span>
+          <span className="text-white">SELECT DOMAIN TO RUN SIMULATION</span>
         </div>
         <span className="text-[11px] text-primary hidden md:inline">
           6 PRODUCTION BLUEPRINTS
@@ -186,17 +185,17 @@ export default function Sectors() {
       </div>
 
       {/* Sector Tab Selector Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mb-6">
         {sectorData.map((sec, idx) => {
           const isActive = activeTab === idx
           return (
             <button
               key={sec.id}
               onClick={() => handleSelectTab(idx)}
-              className={`p-2.5 sm:p-3 text-left border transition-all text-xs cursor-pointer flex flex-col justify-between min-h-[70px] ${
+              className={`p-2.5 sm:p-3 text-left border transition-all text-xs cursor-pointer flex flex-col justify-between min-h-[75px] ${
                 isActive
                   ? 'border-primary bg-primary/10 text-white shadow-[0_0_12px_rgba(0,255,136,0.2)]'
-                  : 'border-[#222222] bg-black/40 text-muted hover:border-white hover:text-white'
+                  : 'border-[#222222] bg-black text-muted hover:border-white hover:text-white'
               }`}
             >
               <div className="flex items-center justify-between w-full">
@@ -212,14 +211,14 @@ export default function Sectors() {
       </div>
 
       {/* Active Sector Command Hub Showcase */}
-      <div className="border border-[#222222] bg-[#070707] p-6 sm:p-8 relative">
+      <div className="border border-white/20 bg-[#070707] p-6 sm:p-8 relative">
         {/* Hub Header */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 mb-6 border-b border-[#222222]">
           <div>
             <div className="flex items-center gap-2 text-[10px] text-primary uppercase tracking-wider mb-1">
               <span>SECTOR PROTOCOL // {currentSector.code}</span>
               <span>•</span>
-              <span>VERIFIED PRODUCTION BLUEPRINT</span>
+              <span className="text-white">VERIFIED PRODUCTION BLUEPRINT</span>
             </div>
             <h3 className="font-bold text-lg sm:text-2xl text-white tracking-wide">
               {currentSector.name}
@@ -239,8 +238,8 @@ export default function Sectors() {
         </div>
 
         {/* Operational Friction vs Solution Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          <div className="p-4 border border-[#262626] bg-black/60">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div className="p-4 border border-[#262626] bg-black">
             <div className="text-red-400 text-[10px] font-bold tracking-widest uppercase mb-2 flex items-center gap-1.5">
               <span>[X]</span>
               <span>CURRENT OPERATIONAL BOTTLENECK</span>
@@ -262,7 +261,7 @@ export default function Sectors() {
         </div>
 
         {/* Interactive Architecture Flow Nodes */}
-        <div className="mb-8 p-4 bg-black border border-[#222222]">
+        <div className="mb-6 p-4 bg-black border border-[#222222]">
           <div className="text-muted text-[10px] uppercase tracking-wider mb-3 flex items-center justify-between">
             <span>[REAL-TIME DATA DISPATCH PIPELINE]</span>
             <span className="text-primary text-[9px]">END-TO-END AUTONOMOUS</span>
@@ -284,26 +283,26 @@ export default function Sectors() {
         </div>
 
         {/* Live Audio / Telephony Intake Transcript Sample */}
-        <div className="mb-8 p-4 bg-black border border-[#222222]">
+        <div className="mb-6 p-4 bg-black border border-[#222222]">
           <div className="text-muted text-[10px] uppercase tracking-wider mb-3 flex items-center justify-between">
             <span>[AI VOICE AGENT INTAKE LOG // LIVE AUDIO TRANSCRIPTION]</span>
             <span className="text-primary text-[9px]">280MS TTFT</span>
           </div>
-          <div className="space-y-2 text-xs">
+          <div className="space-y-2.5 text-xs">
             {currentSector.sampleTranscript.map((line, idx) => (
               <div key={idx} className="flex items-start gap-3">
                 <span
                   className={`text-[10px] font-bold uppercase px-1.5 py-0.5 border flex-shrink-0 ${
                     line.speaker === 'VOICE AGENT'
                       ? 'border-primary text-primary bg-primary/10'
-                      : 'border-[#333333] text-muted'
+                      : 'border-[#333333] text-muted bg-black'
                   }`}
                 >
                   {line.speaker}
                 </span>
                 <p
                   className={`text-[11px] leading-relaxed ${
-                    line.speaker === 'VOICE AGENT' ? 'text-white' : 'text-[#888888]'
+                    line.speaker === 'VOICE AGENT' ? 'text-white' : 'text-[#aaaaaa]'
                   }`}
                 >
                   &ldquo;{line.text}&rdquo;
@@ -314,7 +313,7 @@ export default function Sectors() {
         </div>
 
         {/* Interactive Sector ROI Calculator Widget */}
-        <div className="p-5 sm:p-6 bg-black border border-white/20 mb-6">
+        <div className="p-5 sm:p-6 bg-black border border-[#222222] mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-4 border-b border-[#222222] gap-2">
             <div>
               <span className="text-[10px] text-primary uppercase font-bold">
@@ -376,7 +375,7 @@ export default function Sectors() {
           </div>
 
           {/* Calculator Output Metrics */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-[#0a0a0a] border border-[#222222] text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-[#070707] border border-[#222222] text-center">
             <div>
               <span className="text-[10px] text-muted block mb-1">SAVED LABOR HOURS</span>
               <span className="text-lg sm:text-xl font-bold text-white">

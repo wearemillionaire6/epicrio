@@ -33,27 +33,49 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   font-family: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   overflow-x: hidden;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+/* Force all text elements to inherit the exact same unified monospace font */
+p, span, div, a, button, input, textarea, select, label, pre, code {
+  font-family: inherit;
+  letter-spacing: inherit;
+}
+
 /* Pixel display font for headers */
 .font-pixel {
-  font-family: 'Doto', 'Silkscreen', 'VT323', monospace;
-  letter-spacing: 0.04em;
+  font-family: 'Doto', 'Silkscreen', 'VT323', monospace !important;
+  letter-spacing: 0.06em;
   font-weight: 800;
 }
 
 .font-doto {
-  font-family: 'Doto', 'Silkscreen', monospace;
+  font-family: 'Doto', 'Silkscreen', monospace !important;
   font-weight: 900;
   letter-spacing: 0.08em;
 }
 
 .font-terminal {
-  font-family: 'Space Mono', 'VT323', monospace;
+  font-family: 'Space Mono', ui-monospace, monospace !important;
+}
+
+/* Brutalist Box-Style Info Card */
+.box-info {
+  border: 1px solid #222222;
+  background-color: #080808;
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.box-info:hover {
+  border-color: #444444;
+}
+
+.box-info-active {
+  border: 1px solid var(--accent-color);
+  background-color: rgba(0, 255, 136, 0.04);
 }
 
 /* Brutalist borders */

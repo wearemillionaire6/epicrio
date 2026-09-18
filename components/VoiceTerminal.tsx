@@ -1,9 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { sound } from '@/lib/sound'
 
 interface Scenario {
   id: string
+  code: string
   name: string
   caller: string
   agent: string
@@ -14,31 +16,34 @@ interface Scenario {
 
 const scenarios: Scenario[] = [
   {
+    id: 'hvac',
+    code: 'SCENARIO 01',
+    name: 'COMMERCIAL HVAC DISPATCH',
+    caller: 'FACILITIES DIRECTOR',
+    agent: 'KAI // DISPATCH AI',
+    opening: 'METRO MECHANICAL 24/7 DISPATCH. ARE YOU REPORTING AN ACTIVE SYSTEM FAULT OR SCHEDULING ROUTINE CHILLER SERVICE?',
+    callerReply: 'CRITICAL HEAD PRESSURE ALARM ON OUR 50-TON ROOFTOP UNIT. SERVERS ARE OVERHEATING.',
+    closing: 'PRIORITY 1 ESCALATION LOGGED. SENIOR TECHNICIAN DEREK IS 11 MINUTES AWAY WITH OEM SENSORS. SMS DISPATCH SENT.',
+  },
+  {
     id: 'legal',
-    name: 'COMMERCIAL LAW INTAKE',
-    caller: 'INBOUND CLIENT',
+    code: 'SCENARIO 02',
+    name: 'COMMERCIAL LITIGATION INTAKE',
+    caller: 'CORPORATE COUNSEL',
     agent: 'ELENA // INTAKE AI',
-    opening: 'STERLING & VANCE LAW. ARE YOU CALLING REGARDING AN EXISTING MATTER OR SCHEDULING A SENIOR PARTNER CONSULTATION?',
-    callerReply: 'URGENT LEASE DISPUTE REGARDING OUR COMMERCIAL WAREHOUSE.',
-    closing: 'RESERVING TOMORROW AT 2:00 PM EST WITH SENIOR COUNSEL DAVID VANCE. CONFIRMATION SENT VIA SMS.',
+    opening: 'STERLING & VANCE LAW. ARE YOU CALLING REGARDING AN ACTIVE INJUNCTION OR SCHEDULING A SENIOR PARTNER CONSULTATION?',
+    callerReply: 'URGENT BREACH OF CONTRACT AND EMERGENCY TEMPORARY RESTRAINING ORDER.',
+    closing: 'CONFLICT CHECK AUTOMATICALLY CLEARED. SECURED MANAGING PARTNER DAVID VANCE FOR 8:30 AM TOMORROW. NDA DISPATCHED.',
   },
   {
     id: 'medical',
-    name: 'PRIVATE MEDICAL CLINIC',
+    code: 'SCENARIO 03',
+    name: 'SURGICAL SPECIALTY CLINIC',
     caller: 'PATIENT',
     agent: 'ARIA // COORDINATOR AI',
-    opening: 'BEACON CLINIC. ARE YOU CALLING TO SCHEDULE AN APPOINTMENT OR SPEAK WITH CLINICAL TRIAGE?',
-    callerReply: 'I HAVE POST-OPERATIVE SWELLING AND NEED TO SEE DR. CHEN TODAY.',
-    closing: 'FLAGGED FOR PRIORITY REVIEW. SECURING DR. CHEN AT 3:15 PM TODAY. DIRECTIONS SENT TO YOUR MOBILE.',
-  },
-  {
-    id: 'realty',
-    name: 'COMMERCIAL REAL ESTATE',
-    caller: 'ACQUISITION LEAD',
-    agent: 'MARCUS // ADVISOR AI',
-    opening: 'SKYLINE REALTY. ARE YOU CALLING REGARDING ASSET LEASING OR SCHEDULING A SITE TOUR?',
-    callerReply: 'INTERESTED IN THE 25,000 SQ FT WAREHOUSE ON INDUSTRIAL PARKWAY.',
-    closing: 'FACILITY INCLUDES 4 DOCK BAYS. LEAD BROKER ON SITE THURSDAY AT 11 AM. ADDING YOUR TEAM TO THE ROSTER.',
+    opening: 'BEACON SURGICAL SUITES. ARE YOU CALLING TO SCHEDULE A CONSULTATION OR DISCUSS POST-OP PROTOCOLS?',
+    callerReply: 'I HAVE POST-OPERATIVE SWELLING AND NEED TO SEE DR. REYES IMMEDIATELY.',
+    closing: 'CLINICAL TRIAGE CHART UPDATED. RESERVED EMERGENCY SLOT WITH DR. REYES AT 2:15 PM TODAY. DIRECTIONS TEXTED.',
   },
 ]
 
@@ -72,6 +77,7 @@ export default function VoiceTerminal() {
   }
 
   const startCall = () => {
+    sound.beep()
     setCallState('calling')
     setDialogueStep(0)
     setTimeout(() => {
@@ -90,6 +96,7 @@ export default function VoiceTerminal() {
   }
 
   const endCall = () => {
+    sound.click()
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel()
     }
@@ -98,21 +105,41 @@ export default function VoiceTerminal() {
   }
 
   return (
-    <section id="voice" className="py-20 border-b border-[#222222]">
-      {/* Section Title in Pixel Font */}
-      <h2 className="font-pixel text-3xl sm:text-5xl md:text-6xl text-white tracking-widest mb-10">
-        VOICE DEMO
-      </h2>
-
-      {/* Terminal prompt */}
-      <div className="font-mono text-muted text-xs sm:text-sm mb-8">
-        [/&gt; SIP TRUNKING // &lt;300MS LATENCY ]
+    <section id="voice" className="py-20 border-b border-[#222222] font-mono">
+      {/* Section Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-[#222222] gap-4">
+        <div>
+          <div className="text-primary text-xs tracking-widest uppercase mb-1 flex items-center gap-2">
+            <span className="inline-block w-2 h-2 bg-primary" />
+            <span>[TELEPHONY_LAB // MODULE 03]</span>
+          </div>
+          <h2 className="font-pixel text-3xl sm:text-5xl md:text-6xl text-white tracking-widest">
+            VOICE DEMO
+          </h2>
+        </div>
+        <div className="text-right text-xs text-muted">
+          <span>HUMAN-GRADE TELEPHONY LAB</span>
+          <br />
+          <span className="text-white">TWILIO SIP • &lt;280MS FIRST-TOKEN LATENCY</span>
+        </div>
       </div>
 
-      <div className="border border-[#333333] bg-[#0A0A0A] p-6 font-mono text-xs sm:text-sm space-y-6">
+      {/* Terminal Prompt Header */}
+      <div className="text-muted text-xs sm:text-sm mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="text-primary">[/&gt; VOICE_BENCHMARK_STATION : ]</span>
+          <span className="text-white">CLICK INITIATE TO TRIGGER WEBRTC AUDIO SYNTHESIS</span>
+        </div>
+        <span className="text-[11px] text-primary hidden md:inline">
+          STATUS: READY
+        </span>
+      </div>
+
+      {/* Box-Style Main Telephony Console */}
+      <div className="border border-white/20 bg-[#070707] p-6 sm:p-8 space-y-6">
         
-        {/* Preset Selector */}
-        <div className="flex flex-wrap gap-3 pb-4 border-b border-[#222222]">
+        {/* Preset Selector Box Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pb-4 border-b border-[#222222]">
           {scenarios.map((sc) => {
             const isSel = activeScenario.id === sc.id
             return (
@@ -120,76 +147,104 @@ export default function VoiceTerminal() {
                 key={sc.id}
                 type="button"
                 onClick={() => {
+                  sound.click()
                   endCall()
                   setActiveScenario(sc)
                 }}
-                className={`px-3 py-1.5 border text-xs uppercase transition-colors ${
+                className={`p-3 border text-left text-xs transition-all cursor-pointer flex items-center justify-between ${
                   isSel
-                    ? 'border-white bg-white text-black font-bold'
-                    : 'border-[#333333] text-muted hover:border-slate-500 hover:text-white'
+                    ? 'border-primary bg-primary/10 text-white shadow-[0_0_10px_rgba(0,255,136,0.15)]'
+                    : 'border-[#222222] bg-black text-muted hover:border-white hover:text-white'
                 }`}
               >
-                [ {sc.name} ]
+                <div>
+                  <span className="text-[9px] text-primary font-bold block">[{sc.code}]</span>
+                  <span className="font-bold text-xs text-white mt-0.5 block">{sc.name}</span>
+                </div>
+                {isSel && <span className="text-primary font-bold">■</span>}
               </button>
             )
           })}
         </div>
 
-        {/* Telemetry Stream */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-muted">
-          <div>
-            <span>TELEPHONY:</span> <span className="text-white">TWILIO SIP</span>
+        {/* 4 Boxed Telemetry Spec Cells */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+          <div className="p-3 border border-[#222222] bg-black">
+            <span className="text-[9px] text-muted block mb-1">CARRIER INFRASTRUCTURE</span>
+            <span className="text-white font-bold block">TWILIO SIP TRUNK</span>
           </div>
-          <div>
-            <span>LATENCY:</span> <span className="text-primary">264MS TTFT</span>
+
+          <div className="p-3 border border-[#222222] bg-black">
+            <span className="text-[9px] text-muted block mb-1">MEASURED TTFT</span>
+            <span className="text-primary font-bold block">264MS LATENCY</span>
           </div>
-          <div>
-            <span>CODEC:</span> <span className="text-white">OPUS 48KHZ</span>
+
+          <div className="p-3 border border-[#222222] bg-black">
+            <span className="text-[9px] text-muted block mb-1">AUDIO COMPRESSION</span>
+            <span className="text-white font-bold block">OPUS 48KHZ STEREO</span>
           </div>
-          <div>
-            <span>STATUS:</span>{' '}
-            <span className={callState === 'connected' ? 'text-primary' : 'text-slate-400'}>
-              {callState === 'connected' ? `LIVE (${timer}S)` : callState === 'calling' ? 'CONNECTING' : 'IDLE'}
+
+          <div className="p-3 border border-[#222222] bg-black">
+            <span className="text-[9px] text-muted block mb-1">SESSION STATE</span>
+            <span className={`font-bold block ${callState === 'connected' ? 'text-primary' : 'text-white'}`}>
+              {callState === 'connected' ? `LIVE (${timer}S)` : callState === 'calling' ? 'CONNECTING...' : 'DISCONNECTED'}
             </span>
           </div>
         </div>
 
-        {/* ASCII Waveform Display */}
-        <div className="py-6 border-y border-[#222222] text-center font-mono">
+        {/* Waveform & Dialogue Monitor */}
+        <div className="p-5 border border-[#222222] bg-black text-center font-mono min-h-[150px] flex flex-col justify-center">
           {callState === 'idle' && (
-            <div className="text-muted text-xs">
-              ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-              <div className="mt-2 text-white font-bold">READY FOR INBOUND CALL SIMULATION</div>
+            <div className="text-muted text-xs py-4 space-y-2">
+              <div className="tracking-widest text-[#444444]">
+                ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+              </div>
+              <div className="text-white font-bold text-xs sm:text-sm">
+                READY FOR INBOUND TELEPHONY SIMULATION
+              </div>
+              <div className="text-[10px] text-muted">
+                SELECT SCENARIO ABOVE AND CLICK INITIATE TO HEAR NEURAL TTS SYNTHESIS
+              </div>
             </div>
           )}
 
           {callState === 'calling' && (
-            <div className="text-primary text-xs animate-pulse">
-              ░▒▓█ NEGOTIATING WEBRTC HANDSHAKE // ROUTING PACKETS █▓▒░
+            <div className="text-primary text-xs py-6 animate-pulse font-bold space-y-2">
+              <div>░▒▓█ NEGOTIATING WEBRTC HANDSHAKE // CARRIER ACKNOWLEDGED █▓▒░</div>
+              <div className="text-[10px] text-muted">ROUTING INBOUND SIP STREAM TO NEURAL RUNTIME...</div>
             </div>
           )}
 
           {callState === 'connected' && (
-            <div className="space-y-4 text-left">
-              <div className="text-primary text-center tracking-widest text-sm overflow-x-hidden">
+            <div className="space-y-4 text-left w-full">
+              <div className="text-primary text-center tracking-widest text-sm overflow-x-hidden animate-pulse">
                 ░▒▓██▓▒░░▒▓████▓▒░░▒▓██▓▒░░▒▓████▓▒░░▒▓██▓▒░
               </div>
 
-              {/* Dialogue Transcript */}
-              <div className="space-y-2 text-xs bg-black p-4 border border-[#222222]">
+              {/* Dialogue Transcript in Boxed Frame */}
+              <div className="space-y-3 text-xs bg-[#070707] p-4 border border-[#222222]">
                 {dialogueStep >= 1 && (
-                  <div>
-                    <span className="text-primary font-bold">AI:</span> {activeScenario.opening}
+                  <div className="flex items-start gap-2">
+                    <span className="text-primary font-bold text-[10px] px-1.5 py-0.2 border border-primary/40 bg-primary/10 flex-shrink-0">
+                      AI RECEPTIONIST
+                    </span>
+                    <p className="text-white leading-relaxed">{activeScenario.opening}</p>
                   </div>
                 )}
                 {dialogueStep >= 2 && (
-                  <div className="text-muted">
-                    <span className="text-slate-400 font-bold">CALLER:</span> {activeScenario.callerReply}
+                  <div className="flex items-start gap-2">
+                    <span className="text-muted font-bold text-[10px] px-1.5 py-0.2 border border-[#333333] bg-black flex-shrink-0">
+                      INBOUND CALLER
+                    </span>
+                    <p className="text-[#aaaaaa] leading-relaxed">{activeScenario.callerReply}</p>
                   </div>
                 )}
                 {dialogueStep >= 3 && (
-                  <div>
-                    <span className="text-primary font-bold">AI:</span> {activeScenario.closing}
+                  <div className="flex items-start gap-2">
+                    <span className="text-primary font-bold text-[10px] px-1.5 py-0.2 border border-primary/40 bg-primary/10 flex-shrink-0">
+                      AI RECEPTIONIST
+                    </span>
+                    <p className="text-white leading-relaxed">{activeScenario.closing}</p>
                   </div>
                 )}
               </div>
@@ -197,27 +252,31 @@ export default function VoiceTerminal() {
           )}
         </div>
 
-        {/* Call Action Button */}
-        <div>
+        {/* Action Button Strip */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
           {callState === 'idle' ? (
             <button
               type="button"
               onClick={startCall}
-              className="w-full sm:w-auto px-6 py-3 border border-white hover:bg-white hover:text-black transition-colors uppercase font-bold flex items-center justify-center gap-2"
+              className="px-6 py-3 bg-white text-black hover:bg-primary transition-colors uppercase font-bold text-xs flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>INITIATE VOICE SIMULATION</span>
-              <span className="text-primary text-[10px]">■</span>
+              <span className="text-[8px]">■</span>
               <span>-&gt;</span>
             </button>
           ) : (
             <button
               type="button"
               onClick={endCall}
-              className="w-full sm:w-auto px-6 py-3 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors uppercase font-bold flex items-center justify-center gap-2"
+              className="px-6 py-3 border border-red-500 text-red-400 hover:bg-red-500 hover:text-white transition-colors uppercase font-bold text-xs flex items-center justify-center gap-2 cursor-pointer"
             >
-              <span>TERMINATE CALL SESSION -&gt;</span>
+              <span>TERMINATE CALL SESSION [ESC] -&gt;</span>
             </button>
           )}
+
+          <span className="text-[10px] text-muted">
+            CARRIER CERTIFIED • WEBRTC V2.1 • ZERO CLOUD DROP RATE
+          </span>
         </div>
 
       </div>

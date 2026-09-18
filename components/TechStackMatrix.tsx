@@ -15,58 +15,58 @@ const tools: TechTool[] = [
   {
     name: 'N8N CLUSTERS',
     category: 'ORCHESTRATION',
-    role: 'Deterministic Workflow Engine',
-    sla: '99.98% Uptime',
-    spec: 'Self-hosted air-gapped runtimes for billing, contract generation, and multi-system synchronization.',
+    role: 'DETERMINISTIC WORKFLOW ENGINE',
+    sla: '99.98% UPTIME',
+    spec: 'SELF-HOSTED AIR-GAPPED RUNTIMES FOR BILLING, CONTRACT GENERATION, AND MULTI-SYSTEM SYNCHRONIZATION.',
   },
   {
     name: 'CLAUDE 3.5 SONNET',
     category: 'AI & VOICE',
-    role: 'Cognitive Reasoning Core',
-    sla: '<500ms TTFT',
-    spec: 'Evaluates structured JSON schemas, enforces compliance guidelines, and dispatches deterministic tool calls.',
+    role: 'COGNITIVE REASONING CORE',
+    sla: '<500MS TTFT',
+    spec: 'EVALUATES STRUCTURED JSON SCHEMAS, ENFORCES COMPLIANCE GUIDELINES, AND DISPATCHES DETERMINISTIC TOOL CALLS.',
   },
   {
     name: 'VAPI & TWILIO SIP',
     category: 'AI & VOICE',
-    role: 'Conversational Telephony',
-    sla: '<280ms Latency',
-    spec: 'Direct carrier trunking with bi-directional audio streaming and instant calendar reservation.',
+    role: 'CONVERSATIONAL TELEPHONY',
+    sla: '<280MS LATENCY',
+    spec: 'DIRECT CARRIER TRUNKING WITH BI-DIRECTIONAL AUDIO STREAMING AND INSTANT CALENDAR RESERVATION.',
   },
   {
     name: 'SUPABASE & PGVECTOR',
     category: 'DATA & STORAGE',
-    role: 'Knowledge Vector Store & Auth',
-    sla: '99.99% Reliability',
-    spec: 'Hybrid dense/sparse embedding retrieval paired with Postgres row-level security for enterprise data.',
+    role: 'KNOWLEDGE VECTOR STORE & AUTH',
+    sla: '99.99% RELIABILITY',
+    spec: 'HYBRID DENSE/SPARSE EMBEDDING RETRIEVAL PAIRED WITH POSTGRES ROW-LEVEL SECURITY FOR ENTERPRISE DATA.',
   },
   {
     name: 'REDIS STREAMS',
     category: 'DATA & STORAGE',
-    role: 'Event Buffer & Priority Queues',
-    sla: '100k events/sec',
-    spec: 'Sub-millisecond job broker isolating webhooks from downstream rate limits and network spikes.',
+    role: 'EVENT BUFFER & PRIORITY QUEUES',
+    sla: '100K EVENTS/SEC',
+    spec: 'SUB-MILLISECOND JOB BROKER ISOLATING WEBHOOKS FROM DOWNSTREAM RATE LIMITS AND NETWORK SPIKES.',
   },
   {
     name: 'DEEPGRAM NOVA-2',
     category: 'AI & VOICE',
-    role: 'Live Audio Transcription',
-    sla: '<180ms STT',
-    spec: 'Domain-tuned speech recognition capable of transcribing complex medical, legal, and HVAC terminology.',
+    role: 'LIVE AUDIO TRANSCRIPTION',
+    sla: '<180MS STT',
+    spec: 'DOMAIN-TUNED SPEECH RECOGNITION CAPABLE OF TRANSCRIBING COMPLEX MEDICAL, LEGAL, AND HVAC TERMINOLOGY.',
   },
   {
     name: 'HUBSPOT & SFDC APIS',
     category: 'ORCHESTRATION',
-    role: 'Enterprise Revenue Sync',
-    sla: 'Real-time REST',
-    spec: 'Zero-loss attribution and lead routing with automatic field normalization and deduplication.',
+    role: 'ENTERPRISE REVENUE SYNC',
+    sla: 'REAL-TIME REST',
+    spec: 'ZERO-LOSS ATTRIBUTION AND LEAD ROUTING WITH AUTOMATIC FIELD NORMALIZATION AND DEDUPLICATION.',
   },
   {
     name: 'DOCKER ON HARDENED LINUX',
     category: 'INFRASTRUCTURE',
-    role: 'Isolated Execution Pods',
-    sla: 'Zero-Trust Architecture',
-    spec: 'Containerized workloads running within your cloud perimeter with automatic health restarts.',
+    role: 'ISOLATED EXECUTION PODS',
+    sla: 'ZERO-TRUST ARCHITECTURE',
+    spec: 'CONTAINERIZED WORKLOADS RUNNING WITHIN YOUR CLOUD PERIMETER WITH AUTOMATIC HEALTH RESTARTS.',
   },
 ]
 
@@ -122,7 +122,7 @@ export default function TechStackMatrix() {
         })}
       </div>
 
-      {/* Tech Stack Grid */}
+      {/* Tech Stack Box Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {filteredTools.map((tool) => (
           <div
@@ -131,24 +131,24 @@ export default function TechStackMatrix() {
           >
             <div>
               <div className="flex items-center justify-between text-[9px] mb-2">
-                <span className="text-primary font-bold">{tool.category}</span>
-                <span className="text-muted border border-[#333333] px-1 py-0.2">
+                <span className="text-primary font-bold">[{tool.category}]</span>
+                <span className="text-muted border border-[#333333] px-1 py-0.2 bg-black">
                   {tool.sla}
                 </span>
               </div>
               <h4 className="font-bold text-sm text-white tracking-wide mb-1 group-hover:text-primary transition-colors">
                 {tool.name}
               </h4>
-              <div className="text-[10px] text-slate-300 font-bold mb-2">
+              <div className="text-[10px] text-white font-bold mb-2">
                 {tool.role}
               </div>
-              <p className="text-[11px] text-muted leading-relaxed">
+              <p className="text-[11px] text-[#aaaaaa] leading-relaxed">
                 {tool.spec}
               </p>
             </div>
 
             <div className="pt-3 mt-3 border-t border-[#1a1a1a] flex items-center justify-between text-[9px] text-[#555555]">
-              <span>DEPLOYED & TESTED</span>
+              <span>DEPLOYED & AUDITED</span>
               <span className="text-primary">VERIFIED ■</span>
             </div>
           </div>
