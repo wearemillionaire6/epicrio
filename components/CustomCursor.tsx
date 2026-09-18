@@ -71,10 +71,10 @@ export default function CustomCursor() {
           d="M0 0V17H4V14H7V20H10V18H12V15H9V12H14V9H11V6H8V3H5V0H0Z"
           fill="#000000"
         />
-        {/* Stark white interior with terminal red click feedback */}
+        {/* Classic stark white interior - cursor color remains purely retro white */}
         <path
           d="M1 1V15H3V12H6V11H7V17H9V16H10V14H7V9H12V8H9V5H6V2H3V1H1Z"
-          fill={isClicked ? '#FF3333' : '#FFFFFF'}
+          fill="#FFFFFF"
         />
       </svg>
     </div>

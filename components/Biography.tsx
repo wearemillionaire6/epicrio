@@ -15,34 +15,34 @@ const principles: PrincipleBox[] = [
   {
     code: 'PRIN.01',
     title: 'CALM OVER CHAOS',
-    subhead: 'ASYNC ARCHITECTURE',
+    subhead: 'KARPATHY LLM-WIKI SPEC',
     status: 'DETERMINISTIC',
-    body: 'ZERO FRANTIC SLACK ESCALATIONS. ASYNCHRONOUS PRIORITY QUEUES BUFFER TRAFFIC WHILE MULTI-STEP TRANSACTIONS COMMIT WITH ATOMIC IDEMPOTENCY.',
-    metric: '100% IDEMPOTENT EXECUTION',
+    body: 'ZERO FRANTIC SLACK ESCALATIONS. IMPLEMENTING THE 3-LAYER KARPATHY AGENT MEMORY PATTERN: IMMUTABLE RAW INGESTION, APPEND-ONLY CITATION WIKIS, AND MACHINE-VERIFIED SCHEMA LINTING.',
+    metric: '3-LAYER LLM-WIKI PATTERN',
   },
   {
     code: 'PRIN.02',
-    title: 'DETERMINISTIC OVER MANUAL',
-    subhead: 'ELIMINATE HUMAN LEAKAGE',
-    status: 'ZERO COPY-PASTE',
-    body: 'HUMAN WORKERS SHOULD NEVER RETYPE DATA BETWEEN HUBSPOT, STRIPE, AND INVOICES. IF AN ACTION REPEATS TWICE, WE CODIFY IT INTO AN IMMUTABLE PIPELINE.',
-    metric: '0.00% DATA RE-ENTRY',
+    title: 'ZERO DOUBLE-REASONING LATENCY',
+    subhead: 'ADR-005 TELEPHONY STANDARD',
+    status: '<260MS TTFT',
+    body: 'STRICTLY NO LLMS INSIDE THE SYNCHRONOUS CALL PATH. VOICE AGENTS LIVE IN VAPI/RETELL WHILE TOOL CALLS EXECUTE AS RIGID PYTHON/PYDANTIC SYNC HANDLERS IN A PAPERCLIP WORKER POOL. ELIMINATES 3-5 SECONDS OF DEAD AIR.',
+    metric: 'SUB-300MS LATENCY BUDGET',
   },
   {
     code: 'PRIN.03',
-    title: 'SYSTEMS FOCUSED AUTONOMOUS',
-    subhead: 'CODE-FIRST RESILIENCE',
-    status: 'AIR-GAPPED',
-    body: 'BESPOKE AUTOMATION RUNTIMES ENGINEERED DIRECTLY AROUND YOUR REVENUE MECHANICS. ZERO FRAGILE NO-CODE CHAINS, ZERO RANDOM SILENT FAILURES.',
-    metric: 'HARDENED LINUX PODS',
+    title: '12-FACTOR AGENT FABRIC',
+    subhead: 'TYPED REDUCER ARCHITECTURE',
+    status: 'ZERO RUNAWAY LOOPS',
+    body: 'STRICT ADHERENCE TO 12-FACTOR AGENT LAWS: TYPED TOOL CALLS (FACTOR 4), SELF-OWNED CONTROL FLOW (FACTOR 8), AND STATELESS REDUCER RUNTIMES (FACTOR 12). RESILIENT AGAINST EXPENSIVE TOKEN RE-DERIVATIONS.',
+    metric: '12-FACTOR SPECIFICATION',
   },
   {
     code: 'PRIN.04',
-    title: 'PIPELINES OVER SLACK',
-    subhead: '24/7/365 OPERATIONAL TRUTH',
-    status: 'HIGH-AVAILABILITY',
-    body: 'SELF-HEALING WORKFLOW FABRIC OPERATING 24/7/365 WITH AUTOMATIC EXPONENTIAL RETRIES, DEAD-LETTER QUEUE ALERTING, AND TWO-WAY CRM HARMONIZATION.',
-    metric: '99.98% RUNTIME SLA',
+    title: 'SPEED-TO-LEAD 100X MULTIPLIER',
+    subhead: '24/7 AUTONOMOUS INTAKE',
+    status: '100% CALL CAPTURE',
+    body: 'MIT BENCHMARKS CONFIRM CONTACTING INBOUND LEADS WITHIN 5 MINUTES YIELDS 100X HIGHER CONVERSIONS VS 30-MINUTE DELAYS. OUR SYSTEMS ANSWER WITHIN 1 RING, RESOLVE FAQS, AND DIRECTLY COMMIT BOOKINGS.',
+    metric: '100X SPEED-TO-LEAD CONVERSION',
   },
 ]
 
@@ -135,32 +135,32 @@ export default function Biography() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs mb-5">
           <div className="p-3 border border-[#222222] bg-black">
             <span className="text-[9px] text-muted block mb-1">LEAD ARCHITECT</span>
-            <span className="font-bold text-white block">BHAVESH WAGHMARE</span>
-            <span className="text-[10px] text-primary block mt-0.5">FOUNDER HVACEQ.COM</span>
+            <span className="font-bold text-white block">BHAVESH ASHOK WAGHMARE</span>
+            <span className="text-[10px] text-primary block mt-0.5">AGENT OS & HVACEQ FOUNDER</span>
           </div>
 
           <div className="p-3 border border-[#222222] bg-black">
-            <span className="text-[9px] text-muted block mb-1">CORE DISCIPLINE</span>
-            <span className="font-bold text-white block">CRM & TELEPHONY</span>
-            <span className="text-[10px] text-muted block mt-0.5">AUTONOMOUS DISPATCH</span>
+            <span className="text-[9px] text-muted block mb-1">SPECIALIZATION</span>
+            <span className="font-bold text-white block">VOICE AGENTS & PIPELINES</span>
+            <span className="text-[10px] text-muted block mt-0.5">24/7 AUTONOMOUS DISPATCH</span>
           </div>
 
           <div className="p-3 border border-[#222222] bg-black">
-            <span className="text-[9px] text-muted block mb-1">PRODUCTION STACK</span>
-            <span className="font-bold text-white block">N8N • TWILIO • VAPI</span>
-            <span className="text-[10px] text-muted block mt-0.5">POSTGRES • CLAUDE 3.5</span>
+            <span className="text-[9px] text-muted block mb-1">CORE TECH STACK</span>
+            <span className="font-bold text-white block">RETELL • VAPI • PAPERCLIP</span>
+            <span className="text-[10px] text-muted block mt-0.5">SUPABASE • N8N • LITELLM</span>
           </div>
 
           <div className="p-3 border border-[#222222] bg-black">
-            <span className="text-[9px] text-muted block mb-1">DELIVERY GUARANTEE</span>
-            <span className="font-bold text-primary block">30-DAY CUTOVER</span>
-            <span className="text-[10px] text-muted block mt-0.5">ZERO REVENUE LEAKAGE</span>
+            <span className="text-[9px] text-muted block mb-1">DELIVERY CONTRACT</span>
+            <span className="font-bold text-primary block">$2,000 LIFETIME / $2.5K SETUP</span>
+            <span className="text-[10px] text-muted block mt-0.5">30-DAY CUTOVER SLA</span>
           </div>
         </div>
 
         <div className="p-3 bg-black border border-[#222222] text-[11px] text-[#cccccc] leading-relaxed">
           <span className="text-primary font-bold mr-2">&gt;</span>
-          WE BUILD THE CONNECTED NERVOUS SYSTEM BEHIND HIGH-VALUATION ENTERPRISES. CRM PIPELINES, SUB-300MS AI VOICE RECEPTIONISTS, AND HARDENED WORKFLOW ENGINES ENGINEERED INTO ONE IMMUTABLE OPERATING SYSTEM.
+          WE ARCHITECT HARDENED NERVOUS SYSTEMS FOR HIGH-VALUATION ENTERPRISES. REPLACING BLOATED $4,000/MO AGENCY RETAINERS WITH DETERMINISTIC VOICE DISPATCHERS, ZERO-DOUBLE-REASONING TELEPHONY, AND HIGH-THROUGHPUT PIPELINES ANCHORED IN KARPATHY LLM-WIKI MEMORY SPECIFICATIONS.
         </div>
       </div>
     </section>

@@ -11,11 +11,11 @@ interface CommandLog {
 }
 
 const presets = [
+  { cmd: 'vault.status', label: 'VAULT.STATUS', desc: 'Inspect Bhavesh Agent OS Obsidian knowledge structure' },
   { cmd: 'sys.health', label: 'SYS.HEALTH', desc: 'Cluster diagnostics across all 6 pods' },
   { cmd: 'voice.benchmark', label: 'VOICE.BENCHMARK', desc: 'Sub-300ms audio pipeline latency breakdown' },
-  { cmd: 'crm.sync', label: 'CRM.SYNC', desc: 'Simulate HubSpot/Salesforce two-way commit' },
   { cmd: 'hvac.emergency', label: 'HVAC.EMERGENCY', desc: 'Simulate RTU commercial breakdown dispatch' },
-  { cmd: 'roi.audit', label: 'ROI.AUDIT', desc: 'Run financial hours-saved yield calculation' },
+  { cmd: 'aas.benchmark', label: 'AAS.BENCHMARK', desc: 'AI Appointment Setter containment & pricing specs' },
   { cmd: 'clear', label: 'CLEAR', desc: 'Reset console session' },
 ]
 
@@ -58,12 +58,55 @@ export default function InteractiveCliSandbox() {
       outputContent = (
         <div className="space-y-1 text-slate-300">
           <div className="text-primary font-bold">AVAILABLE TERMINAL COMMANDS:</div>
+          <div>• <span className="text-white font-bold">vault.status</span> — Inspect Bhavesh Agent OS Obsidian knowledge structure &amp; ADRs</div>
           <div>• <span className="text-white font-bold">sys.health</span> — Run diagnostics on n8n, Twilio, Redis, Supabase, Claude 3.5</div>
-          <div>• <span className="text-white font-bold">voice.benchmark</span> — Measure Deepgram STT, Claude LLM & Cartesia TTS TTFT</div>
-          <div>• <span className="text-white font-bold">crm.sync</span> — Simulate bi-directional lead routing and revenue attribution</div>
-          <div>• <span className="text-white font-bold">hvac.emergency</span> — Simulate commercial HVAC chiller alarm and technician dispatch</div>
-          <div>• <span className="text-white font-bold">roi.audit</span> — Calculate labor hours saved and annual revenue capture</div>
+          <div>• <span className="text-white font-bold">voice.benchmark</span> — Measure Deepgram STT, Claude LLM &amp; Cartesia TTS TTFT</div>
+          <div>• <span className="text-white font-bold">hvac.emergency</span> — Simulate commercial HVAC chiller alarm and 30-sec dispatch</div>
+          <div>• <span className="text-white font-bold">aas.benchmark</span> — AI Appointment Setter containment &amp; pricing specs</div>
           <div>• <span className="text-white font-bold">clear</span> — Reset terminal output screen</div>
+        </div>
+      )
+    } else if (trimmed === 'vault.status' || trimmed === 'obsidian' || trimmed === 'vault') {
+      outputContent = (
+        <div className="space-y-1 text-xs">
+          <div className="text-primary font-bold">[OBSIDIAN VAULT KNOWLEDGE GRAPH // 17 NUMBERED DOMAINS]</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2.5 bg-black border border-[#222222] my-1 text-[11px]">
+            <div>• FOUNDER: <span className="text-white font-bold">BHAVESH ASHOK WAGHMARE</span></div>
+            <div>• PATTERN: <span className="text-primary font-bold">KARPATHY 3-LAYER WIKI</span></div>
+            <div>• ACTIVE PROJECTS: <span className="text-white font-bold">HVAC-AI, AAS, AETHERSCRAPE</span></div>
+            <div>• ARCHITECTURE DECISIONS: <span className="text-primary font-bold">ADR-001 TO ADR-005 VALIDATED</span></div>
+            <div>• MEMORY LAYERS: <span className="text-white">RAW INGESTION • CITATIONS WIKI</span></div>
+            <div>• LINT STATUS: <span className="text-primary font-bold">00_META/LINT.PY &gt; EXIT 0</span></div>
+          </div>
+          <div className="text-muted text-[10px]">VAULT MEMORY INTEGRITY: 100% IDEMPOTENT // CITATION-BACKED SPECIFICATIONS</div>
+        </div>
+      )
+    } else if (trimmed === 'aas.benchmark' || trimmed === 'aas') {
+      outputContent = (
+        <div className="space-y-1 text-xs">
+          <div className="text-primary font-bold">[AI APPOINTMENT SETTER // PRODUCTIZED SERVICE SPEC]</div>
+          <div className="p-2.5 bg-black border border-[#222222] my-1 text-[11px] font-mono space-y-1">
+            <div className="flex justify-between border-b border-[#1A1A1A] pb-1">
+              <span>CONTAINMENT RATE:</span>
+              <span className="text-primary font-bold">74% (65-75% TARGET RANGE)</span>
+            </div>
+            <div className="flex justify-between border-b border-[#1A1A1A] pb-1">
+              <span>TARGET VERTICALS:</span>
+              <span className="text-white font-bold">MED SPAS • DENTAL • HVAC • SALONS</span>
+            </div>
+            <div className="flex justify-between border-b border-[#1A1A1A] pb-1">
+              <span>SETUP FEES:</span>
+              <span className="text-primary font-bold">$1,500 (STARTER) • $2,500 (GROWTH)</span>
+            </div>
+            <div className="flex justify-between border-b border-[#1A1A1A] pb-1">
+              <span>MONTHLY RETAINER:</span>
+              <span className="text-primary font-bold">$397 - $597/MO (NET MARGIN: $477/MO)</span>
+            </div>
+            <div className="flex justify-between">
+              <span>RECOVERED REVENUE:</span>
+              <span className="text-primary font-bold">$9,000 - $12,000/MO (MISSED CALLS)</span>
+            </div>
+          </div>
         </div>
       )
     } else if (trimmed === 'sys.health') {
@@ -220,9 +263,9 @@ export default function InteractiveCliSandbox() {
         {/* Terminal Titlebar */}
         <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#222222] text-xs">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-500/80 inline-block" />
-            <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 inline-block" />
-            <span className="w-2.5 h-2.5 rounded-full bg-green-500/80 inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#333333] inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#555555] inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-primary inline-block" />
             <span className="text-muted ml-2 text-[10px]">
               AGENCY.CO // INTERACTIVE ARCHITECTURE PLAYGROUND
             </span>
