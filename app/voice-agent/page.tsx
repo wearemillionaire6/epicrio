@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import CustomCursor from '@/components/CustomCursor'
+import DynamicIslandNavbar from '@/components/DynamicIslandNavbar'
+import TerminalFooter from '@/components/TerminalFooter'
+import { sound } from '@/lib/sound'
 
 interface VoiceStudioScenario {
   id: string
@@ -16,40 +19,40 @@ interface VoiceStudioScenario {
 
 const studioScenarios: VoiceStudioScenario[] = [
   {
+    id: 'hvac',
+    name: 'COMMERCIAL HVAC & REFRIGERATION EMERGENCY',
+    intent: 'CRITICAL RTU BREAKDOWN & ROOFTOP CHILLER ALARM',
+    opening: 'METRO MECHANICAL 24/7 DISPATCH. ARE YOU REPORTING AN ACTIVE SYSTEM FAULT OR SCHEDULING ROUTINE CHILLER SERVICE?',
+    callerReply: 'CRITICAL HEAD PRESSURE ALARM ON OUR 50-TON ROOFTOP UNIT. SERVERS ARE OVERHEATING.',
+    closing: 'PRIORITY 1 ESCALATION LOGGED. SENIOR TECHNICIAN DEREK IS 11 MINUTES AWAY WITH OEM SENSORS. SMS DISPATCH SENT.',
+    latencyTarget: '230MS'
+  },
+  {
     id: 'legal',
     name: 'LEGAL INTAKE & CONFLICT CHECK',
-    intent: 'Commercial litigation & lease dispute',
-    opening: 'Good morning, thank you for calling Sterling & Vance Law. Are you calling regarding an existing case or scheduling an initial partner consultation?',
-    callerReply: 'Hi, we are dealing with an urgent commercial lease dispute and need senior representation this week.',
-    closing: 'Understood. Attorney Vance has availability tomorrow at 2:00 PM or Thursday at 10:00 AM EST. Shall I secure the 2:00 PM slot for you?',
-    latencyTarget: '240ms'
+    intent: 'COMMERCIAL LITIGATION & LEASE DISPUTE',
+    opening: 'GOOD MORNING, THANK YOU FOR CALLING STERLING & VANCE LAW. ARE YOU CALLING REGARDING AN EXISTING CASE OR SCHEDULING AN INITIAL PARTNER CONSULTATION?',
+    callerReply: 'HI, WE ARE DEALING WITH AN URGENT COMMERCIAL LEASE DISPUTE AND NEED SENIOR REPRESENTATION THIS WEEK.',
+    closing: 'UNDERSTOOD. ATTORNEY VANCE HAS AVAILABILITY TOMORROW AT 2:00 PM OR THURSDAY AT 10:00 AM EST. SHALL I SECURE THE 2:00 PM SLOT FOR YOU?',
+    latencyTarget: '240MS'
   },
   {
     id: 'clinic',
     name: 'SPECIALTY CLINIC TRIAGE',
-    intent: 'Emergency post-operative appointment',
-    opening: 'Beacon Health Partners, this is Aria. Are you calling to book a regular checkup or do you require immediate clinical assistance?',
-    callerReply: 'I had knee surgery 3 days ago and developed sudden acute swelling and pain.',
-    closing: 'I am immediately notifying our triage team. Dr. Chen has a priority postoperative opening at 3:15 PM today. I have reserved this for you.',
-    latencyTarget: '210ms'
+    intent: 'EMERGENCY POST-OPERATIVE APPOINTMENT',
+    opening: 'BEACON HEALTH PARTNERS, THIS IS ARIA. ARE YOU CALLING TO BOOK A REGULAR CHECKUP OR DO YOU REQUIRE IMMEDIATE CLINICAL ASSISTANCE?',
+    callerReply: 'I HAD KNEE SURGERY 3 DAYS AGO AND DEVELOPED SUDDEN ACUTE SWELLING AND PAIN.',
+    closing: 'I AM IMMEDIATELY NOTIFYING OUR TRIAGE TEAM. DR. CHEN HAS A PRIORITY POSTOPERATIVE OPENING AT 3:15 PM TODAY. I HAVE RESERVED THIS FOR YOU.',
+    latencyTarget: '210MS'
   },
   {
     id: 'realestate',
     name: 'COMMERCIAL REAL ESTATE BROKERAGE',
-    intent: 'Industrial warehouse acquisition tour',
-    opening: 'Welcome to Skyline Commercial Realty. Are you inquiring about property acquisitions, industrial leasing, or scheduling an asset walkthrough?',
-    callerReply: 'We are reviewing the 25,000 square foot logistics facility on Airport Road.',
-    closing: 'That asset features 4 dock-high loading bays and 30ft clear height. Our broker David is hosting tours this Thursday at 11 AM. Shall I register your team?',
-    latencyTarget: '250ms'
-  },
-  {
-    id: 'saas',
-    name: 'B2B SAAS DEMO QUALIFICATION',
-    intent: 'Enterprise software tier inquiry',
-    opening: 'Thanks for calling HyperScale Cloud. Are you looking to schedule a live product architecture demo or discuss custom enterprise pricing?',
-    callerReply: 'We have 400 engineering seats and want to discuss custom SSO and data residency guarantees.',
-    closing: 'Perfect. For enterprise deployments over 250 seats, our VP of Solutions, Sarah, conducts the deep-dive. How does Wednesday at 3 PM EST look?',
-    latencyTarget: '220ms'
+    intent: 'INDUSTRIAL WAREHOUSE ACQUISITION TOUR',
+    opening: 'WELCOME TO SKYLINE COMMERCIAL REALTY. ARE YOU INQUIRING ABOUT PROPERTY ACQUISITIONS, INDUSTRIAL LEASING, OR SCHEDULING AN ASSET WALKTHROUGH?',
+    callerReply: 'WE ARE REVIEWING THE 25,000 SQUARE FOOT LOGISTICS FACILITY ON AIRPORT ROAD.',
+    closing: 'THAT ASSET FEATURES 4 DOCK-HIGH LOADING BAYS AND 30FT CLEAR HEIGHT. OUR BROKER DAVID IS HOSTING TOURS THIS THURSDAY AT 11 AM. SHALL I REGISTER YOUR TEAM?',
+    latencyTarget: '250MS'
   }
 ]
 
@@ -58,7 +61,17 @@ export default function VoiceAgentStudioPage() {
   const [callState, setCallState] = useState<'idle' | 'calling' | 'connected'>('idle')
   const [dialogueIndex, setDialogueIndex] = useState(0)
   const [timer, setTimer] = useState(0)
-  const [customPrompt, setCustomPrompt] = useState('')
+  const [inverted, setInverted] = useState(false)
+  const [soundEnabled, setSoundEnabled] = useState(true)
+
+  const toggleInvert = () => {
+    if (soundEnabled) sound.beep()
+    setInverted((prev) => !prev)
+  }
+
+  const toggleSound = () => {
+    setSoundEnabled((prev) => !prev)
+  }
 
   useEffect(() => {
     let interval: any
@@ -84,6 +97,7 @@ export default function VoiceAgentStudioPage() {
   }
 
   const startCall = () => {
+    sound.beep()
     setCallState('calling')
     setDialogueIndex(0)
     setTimeout(() => {
@@ -102,6 +116,7 @@ export default function VoiceAgentStudioPage() {
   }
 
   const endCall = () => {
+    sound.click()
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel()
     }
@@ -110,105 +125,91 @@ export default function VoiceAgentStudioPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-primary selection:text-black font-mono">
+    <div className={`min-h-screen selection:bg-primary selection:text-black font-mono uppercase transition-colors ${
+      inverted ? 'inverted bg-white text-black' : 'bg-black text-white'
+    }`}>
       <CustomCursor />
+
+      {/* Floating Glassmorphic Dynamic Island Navigation */}
+      <DynamicIslandNavbar
+        onToggleInvert={toggleInvert}
+        inverted={inverted}
+        soundEnabled={soundEnabled}
+        onToggleSound={toggleSound}
+      />
       
-      <div className="max-w-5xl mx-auto px-6 sm:px-10 py-10">
-        
-        {/* Top Header */}
-        <div className="flex items-center justify-between pb-8 border-b border-[#222222] mb-12">
-          <Link href="/" className="font-pixel text-xl sm:text-2xl text-white hover:text-primary transition-colors">
-            AGENCY CO // VOICE STUDIO
+      <div className="pt-24 max-w-6xl mx-auto px-4 sm:px-8 py-10">
+        {/* Breadcrumb Navigation */}
+        <div className="flex items-center gap-2 text-xs text-muted mb-8 border-b border-[#222222] pb-3">
+          <Link href="/" className="hover:text-primary transition-colors">
+            HOME
           </Link>
-          <Link
-            href="/"
-            className="border border-[#333333] hover:border-white px-3 py-1 text-xs text-muted hover:text-white transition-colors"
-          >
-            [ ^H BACK TO HOME ]
-          </Link>
+          <span>/</span>
+          <span className="text-white font-bold">VOICE TELEPHONY LAB</span>
         </div>
 
-        {/* Hero */}
-        <div className="mb-14 space-y-4">
-          <div className="text-muted text-xs">
-            [/&gt; INTERACTIVE TELEPHONY SUITE // PRD § 15 AUDIO ENGINE ]
+        {/* Hero Section */}
+        <div className="mb-12 space-y-3">
+          <div className="text-primary text-xs tracking-widest flex items-center gap-2">
+            <span className="w-2 h-2 bg-primary inline-block" />
+            <span>[TELEPHONY_STUDIO // &lt;300MS FIRST-TOKEN LATENCY]</span>
           </div>
           <h1 className="font-pixel text-3xl sm:text-5xl md:text-6xl text-white tracking-wider">
-            VOICE AGENT TESTING STUDIO
+            VOICE LAB
           </h1>
-          <p className="text-slate-400 text-xs sm:text-sm max-w-3xl leading-relaxed">
-            EXPERIENCE ULTRA-LOW LATENCY CONVERSATIONAL SIP TELEPHONY.
-            BENCHMARKED AT &lt;260MS TIME-TO-FIRST-TOKEN (TTFT) WITH NATURAL VOICE REASONING AND DIRECT CALENDAR RESERVATION.
+          <p className="text-[#aaaaaa] text-xs sm:text-sm max-w-3xl leading-relaxed">
+            INTERACTIVE VOICE TESTING STATION. TEST HUMAN-GRADE INBOUND CONVERSATIONAL TELEPHONY POWERED BY DEEPGRAM NOVA-2, CLAUDE 3.5 SONNET, AND CARTESIA SONIC.
           </p>
         </div>
 
-        {/* Console Container */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Studio Workspace Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-12">
           
-          {/* Left: Presets & Telemetry */}
-          <div className="lg:col-span-5 space-y-4 text-xs">
-            <span className="text-muted block text-[10px] uppercase tracking-wider">SELECT INDUSTRY TELEPHONY PRESET:</span>
-            
-            <div className="space-y-2">
-              {studioScenarios.map((sc) => {
-                const isSel = activeScenario.id === sc.id
-                return (
-                  <button
-                    key={sc.id}
-                    onClick={() => {
-                      endCall()
-                      setActiveScenario(sc)
-                    }}
-                    className={`w-full p-3.5 border text-left transition-colors uppercase ${
-                      isSel
-                        ? 'border-white bg-white text-black font-bold'
-                        : 'border-[#222222] text-muted hover:border-slate-500 hover:text-white'
-                    }`}
-                  >
-                    <div className="flex justify-between items-center text-[10px] mb-1">
-                      <span>{sc.latencyTarget} TTFT</span>
-                      <span className="text-primary font-bold">ACTIVE</span>
-                    </div>
-                    <div className="text-xs">{sc.name}</div>
-                  </button>
-                )
-              })}
-            </div>
-
-            {/* Architecture Telemetry */}
-            <div className="border border-[#222222] p-4 bg-[#0A0A0A] space-y-2 text-[11px] text-slate-400">
-              <div className="text-white font-bold pb-2 border-b border-[#222222]">
-                // TELEPHONY PIPELINE BENCHMARKS
-              </div>
-              <div className="flex justify-between">
-                <span>SIP Provider:</span> <span className="text-white">Twilio Media Streams</span>
-              </div>
-              <div className="flex justify-between">
-                <span>ASR Model:</span> <span className="text-white">Deepgram Nova-2 (Streaming)</span>
-              </div>
-              <div className="flex justify-between">
-                <span>LLM Engine:</span> <span className="text-white">Claude 3.5 Sonnet</span>
-              </div>
-              <div className="flex justify-between">
-                <span>TTS Model:</span> <span className="text-white">Cartesia Sonic (48kHz)</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Total Latency:</span> <span className="text-primary font-bold">242ms Roundtrip</span>
-              </div>
-            </div>
+          {/* Left: Scenarios Selector */}
+          <div className="lg:col-span-5 space-y-2">
+            <span className="text-muted text-[10px] uppercase font-bold block mb-2 tracking-wider">
+              SELECT BENCHMARK SCENARIO:
+            </span>
+            {studioScenarios.map((sc) => {
+              const isSelected = activeScenario.id === sc.id
+              return (
+                <button
+                  key={sc.id}
+                  onClick={() => {
+                    sound.click()
+                    endCall()
+                    setActiveScenario(sc)
+                  }}
+                  className={`w-full p-4 border text-left transition-all cursor-pointer ${
+                    isSelected
+                      ? 'border-primary bg-primary/10 text-white shadow-[0_0_10px_rgba(0,255,136,0.15)]'
+                      : 'border-[#222222] bg-[#070707] text-muted hover:border-white hover:text-white'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-[10px] mb-1">
+                    <span className="text-primary font-bold">LATENCY TARGET: {sc.latencyTarget}</span>
+                    {isSelected && <span className="text-primary">■</span>}
+                  </div>
+                  <h3 className="font-bold text-xs sm:text-sm text-white tracking-wide mb-1">
+                    {sc.name}
+                  </h3>
+                  <div className="text-[10px] text-[#888888] truncate">
+                    {sc.intent}
+                  </div>
+                </button>
+              )
+            })}
           </div>
 
           {/* Right: Studio Console */}
-          <div className="lg:col-span-7 border border-[#333333] bg-[#0A0A0A] p-6 space-y-6">
-            
-            {/* Top Status */}
-            <div className="flex items-center justify-between pb-4 border-b border-[#222222] text-xs">
+          <div className="lg:col-span-7 border border-white/20 bg-[#070707] p-6 sm:p-7 space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-[#222222] text-xs">
               <div className="flex items-center gap-2">
-                <span className={`w-2 h-2 rounded-full ${callState === 'connected' ? 'bg-primary animate-pulse' : 'bg-slate-600'}`} />
+                <span className={`w-2 h-2 rounded-full ${callState === 'connected' ? 'bg-primary animate-pulse' : 'bg-[#444444]'}`} />
                 <span className="text-white font-bold">{activeScenario.name}</span>
               </div>
-              <span className="text-muted">
-                {callState === 'connected' ? `SESSION: ${timer}S` : 'STATUS: STANDBY'}
+              <span className="text-muted text-[11px]">
+                {callState === 'connected' ? `SESSION: ${timer}S` : 'STANDBY'}
               </span>
             </div>
 
@@ -216,33 +217,33 @@ export default function VoiceAgentStudioPage() {
             <div className="py-8 border border-[#222222] bg-black text-center font-mono">
               {callState === 'idle' && (
                 <div className="text-muted text-xs space-y-2">
-                  <div className="tracking-widest">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</div>
-                  <p className="text-white">CLICK BELOW TO TEST CALL FLOW</p>
+                  <div className="tracking-widest text-[#444444]">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</div>
+                  <p className="text-white font-bold">CLICK BELOW TO TEST CALL FLOW</p>
                 </div>
               )}
 
               {callState === 'calling' && (
-                <div className="text-primary text-xs animate-pulse">
+                <div className="text-primary text-xs animate-pulse font-bold">
                   ░▒▓█ CONNECTING LOW-LATENCY SIP TRUNK... █▓▒░
                 </div>
               )}
 
               {callState === 'connected' && (
                 <div className="space-y-4 px-4 text-left">
-                  <div className="text-primary text-center text-sm tracking-widest overflow-hidden">
+                  <div className="text-primary text-center text-sm tracking-widest overflow-hidden animate-pulse">
                     ░▒▓██▓▒░░▒▓████▓▒░░▒▓██▓▒░░▒▓████▓▒░░▒▓██▓▒░
                   </div>
 
                   {/* Dialogue Stream */}
-                  <div className="space-y-2 text-xs bg-[#0A0A0A] p-3 border border-[#222222]">
+                  <div className="space-y-2.5 text-xs bg-[#0A0A0A] p-3.5 border border-[#222222]">
                     {dialogueIndex >= 1 && (
-                      <p><span className="text-primary font-bold">AI AGENT:</span> {activeScenario.opening}</p>
+                      <p><span className="text-primary font-bold">[AI AGENT]:</span> {activeScenario.opening}</p>
                     )}
                     {dialogueIndex >= 2 && (
-                      <p className="text-muted"><span className="text-slate-400 font-bold">INBOUND CALLER:</span> {activeScenario.callerReply}</p>
+                      <p className="text-[#aaaaaa]"><span className="text-muted font-bold">[INBOUND CALLER]:</span> {activeScenario.callerReply}</p>
                     )}
                     {dialogueIndex >= 3 && (
-                      <p><span className="text-primary font-bold">AI AGENT:</span> {activeScenario.closing}</p>
+                      <p><span className="text-primary font-bold">[AI AGENT]:</span> {activeScenario.closing}</p>
                     )}
                   </div>
                 </div>
@@ -254,34 +255,57 @@ export default function VoiceAgentStudioPage() {
               {callState === 'idle' ? (
                 <button
                   onClick={startCall}
-                  className="w-full py-3.5 border border-white hover:bg-white hover:text-black font-bold uppercase text-xs transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3.5 bg-white text-black hover:bg-primary font-bold uppercase text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>TEST VOICE TELEPHONY AGENT</span>
-                  <span className="text-primary text-[10px]">■</span>
+                  <span className="text-black text-[8px]">■</span>
                   <span>-&gt;</span>
                 </button>
               ) : (
                 <button
                   onClick={endCall}
-                  className="w-full py-3.5 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white font-bold uppercase text-xs transition-colors"
+                  className="w-full py-3.5 border border-red-500 text-red-400 hover:bg-red-500 hover:text-white font-bold uppercase text-xs transition-colors cursor-pointer"
                 >
                   TERMINATE CALL SESSION -&gt;
                 </button>
               )}
             </div>
 
-            {/* Custom Intent Field */}
-            <div className="pt-4 border-t border-[#222222] text-xs space-y-2">
-              <span className="text-muted block text-[10px]">DEPLOY WITH YOUR OWN BACKEND:</span>
-              <p className="text-slate-400 text-[11px] leading-relaxed">
-                Compatible with Vapi, Bland.ai, Retell AI, or direct custom WebSockets. Includes pre-built cal.com hooks and CRM webhook dispatches.
-              </p>
+            <div className="pt-3 border-t border-[#222222] text-[10px] text-muted flex items-center justify-between">
+              <span>TWILIO SIP CARRIER • WEBRTC V2.1</span>
+              <span className="text-primary font-bold">&lt;300MS GUARANTEE</span>
             </div>
-
           </div>
 
         </div>
 
+        {/* Multi-Page Jump Strip */}
+        <div className="py-8 border-b border-[#222222] grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <Link
+            href="/solutions"
+            className="p-3.5 border border-[#222222] bg-[#070707] hover:border-primary text-white flex items-center justify-between"
+          >
+            <span>SOLUTIONS MATRIX</span>
+            <span className="text-primary">-&gt;</span>
+          </Link>
+          <Link
+            href="/sectors"
+            className="p-3.5 border border-[#222222] bg-[#070707] hover:border-primary text-white flex items-center justify-between"
+          >
+            <span>VERTICAL BLUEPRINTS</span>
+            <span className="text-primary">-&gt;</span>
+          </Link>
+          <Link
+            href="/audit"
+            className="p-3.5 border border-primary/40 bg-primary/10 text-primary hover:bg-primary hover:text-black flex items-center justify-between font-bold"
+          >
+            <span>COMMISSION VOICE AGENT</span>
+            <span>■</span>
+          </Link>
+        </div>
+
+        {/* Footer */}
+        <TerminalFooter onToggleInvert={toggleInvert} />
       </div>
     </div>
   )

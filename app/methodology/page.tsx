@@ -1,7 +1,11 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import CustomCursor from '@/components/CustomCursor'
+import DynamicIslandNavbar from '@/components/DynamicIslandNavbar'
+import TerminalFooter from '@/components/TerminalFooter'
+import { sound } from '@/lib/sound'
 
 const sprintPhases = [
   {
@@ -9,10 +13,10 @@ const sprintPhases = [
     phase: 'STAGE 01 // AUDIT, METRIC DIAGNOSTICS & SYSTEM SCHEMATIC',
     focus: 'MAPPING THE FAILURE SURFACE',
     items: [
-      'Comprehensive inventory of all active SaaS subscriptions, tools, spreadsheets, and manual handoffs.',
-      'Analysis of lead loss points, inbound response lag, and rep administrative burden.',
-      'Creation of full entity-relationship diagram (ERD) and webhook architecture schema.',
-      'Definition of Sprint Milestones, SLA benchmarks, and staging sandbox isolation.'
+      'COMPREHENSIVE INVENTORY OF ALL ACTIVE SAAS SUBSCRIPTIONS, TOOLS, SPREADSHEETS, AND MANUAL HANDOFFS.',
+      'ANALYSIS OF LEAD LOSS POINTS, INBOUND RESPONSE LAG, AND REP ADMINISTRATIVE BURDEN.',
+      'CREATION OF FULL ENTITY-RELATIONSHIP DIAGRAM (ERD) AND WEBHOOK ARCHITECTURE SCHEMA.',
+      'DEFINITION OF SPRINT MILESTONES, SLA BENCHMARKS, AND STAGING SANDBOX ISOLATION.'
     ],
     deliverable: 'IMMUTABLE ARCHITECTURE SCHEMATIC + EXECUTION BACKLOG'
   },
@@ -21,10 +25,10 @@ const sprintPhases = [
     phase: 'STAGE 02 // MODULAR ENGINEERING & RECURSIVE BUILD SPRINT',
     focus: 'INFRASTRUCTURE CONSTRUCTION',
     items: [
-      'Central CRM custom field schemas, deal pipelines, and automatic lead assignment rules.',
-      'Sub-300ms conversational voice agent prompt engineering, SIP trunking, and tool-calling hooks.',
-      'Deployment of self-hosted n8n / Python Celery workers with dead-letter queue (DLQ) automated replay.',
-      'WhatsApp Business Cloud API integration for instant two-way messaging and calendar confirmations.'
+      'CENTRAL CRM CUSTOM FIELD SCHEMAS, DEAL PIPELINES, AND AUTOMATIC LEAD ASSIGNMENT RULES.',
+      'SUB-300MS CONVERSATIONAL VOICE AGENT PROMPT ENGINEERING, SIP TRUNKING, AND TOOL-CALLING HOOKS.',
+      'DEPLOYMENT OF SELF-HOSTED N8N / PYTHON WORKERS WITH DEAD-LETTER QUEUE (DLQ) AUTOMATED REPLAY.',
+      'WHATSAPP BUSINESS CLOUD API INTEGRATION FOR INSTANT TWO-WAY MESSAGING AND CALENDAR CONFIRMATIONS.'
     ],
     deliverable: 'FULLY CONFIGURED STAGING ENVIRONMENT WITH VIDEO WALKTHROUGHS'
   },
@@ -33,10 +37,10 @@ const sprintPhases = [
     phase: 'STAGE 03 // STRESS SIMULATION, INTEGRATION TESTING & CUTOVER',
     focus: 'BULLETPROOFING & ZERO-DOWNTIME LAUNCH',
     items: [
-      'Simulated load bursts: concurrent inbound calls, webhook floods, and network drop recovery.',
-      'Edge-case testing: invalid lead payloads, duplicate phone numbers, and time-zone routing.',
-      'Staff operational training: video SOPs, exception handling guidelines, and admin dashboard access.',
-      'Seamless production cutover with zero downtime on live lead channels.'
+      'SIMULATED LOAD BURSTS: CONCURRENT INBOUND CALLS, WEBHOOK FLOODS, AND NETWORK DROP RECOVERY.',
+      'EDGE-CASE TESTING: INVALID LEAD PAYLOADS, DUPLICATE PHONE NUMBERS, AND TIME-ZONE ROUTING.',
+      'STAFF OPERATIONAL TRAINING: VIDEO SOPS, EXCEPTION HANDLING GUIDELINES, AND ADMIN CONSOLE ACCESS.',
+      'SEAMLESS PRODUCTION CUTOVER WITH ZERO DOWNTIME ON LIVE REVENUE CHANNELS.'
     ],
     deliverable: 'PRODUCTION DEPLOYMENT + STAFF TRAINING DOCUMENTATION'
   },
@@ -45,102 +49,133 @@ const sprintPhases = [
     phase: 'STAGE 04 // REAL-TIME TELEMETRY & AUTONOMOUS SCALING',
     focus: 'ONGOING RELIABILITY & EXPANSION',
     items: [
-      '24/7 automated telemetry monitoring for API rate-limit alerts, webhook failures, and DLQ spikes.',
-      'Monthly architectural sprint to expand capabilities as your business launches new service lines.',
-      'Direct Slack channel access to senior systems architects for real-time adjustments.',
-      'Quarterly review of software cost optimization to eliminate redundant SaaS subscriptions.'
+      '24/7 AUTOMATED TELEMETRY MONITORING FOR API RATE-LIMIT ALERTS, WEBHOOK FAILURES, AND DLQ SPIKES.',
+      'MONTHLY ARCHITECTURAL SPRINT TO EXPAND CAPABILITIES AS YOUR BUSINESS LAUNCHES NEW SERVICE LINES.',
+      'DIRECT SLACK CHANNEL ACCESS TO SENIOR SYSTEMS ARCHITECTS FOR REAL-TIME ADJUSTMENTS.',
+      'QUARTERLY REVIEW OF SOFTWARE COST OPTIMIZATION TO ELIMINATE REDUNDANT SAAS SUBSCRIPTIONS.'
     ],
     deliverable: '99.98% UPTIME GUARANTEE + PROACTIVE MONTHLY UPGRADES'
   }
 ]
 
 export default function MethodologyPage() {
+  const [inverted, setInverted] = useState(false)
+  const [soundEnabled, setSoundEnabled] = useState(true)
+
+  const toggleInvert = () => {
+    if (soundEnabled) sound.beep()
+    setInverted((prev) => !prev)
+  }
+
+  const toggleSound = () => {
+    setSoundEnabled((prev) => !prev)
+  }
+
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-primary selection:text-black font-mono">
+    <div className={`min-h-screen selection:bg-primary selection:text-black font-mono uppercase transition-colors ${
+      inverted ? 'inverted bg-white text-black' : 'bg-black text-white'
+    }`}>
       <CustomCursor />
 
-      <div className="max-w-5xl mx-auto px-6 sm:px-10 py-10">
-        {/* Top Header */}
-        <div className="flex items-center justify-between pb-8 border-b border-[#222222] mb-12">
-          <Link href="/" className="font-pixel text-xl sm:text-2xl text-white hover:text-primary transition-colors">
-            AGENCY CO // METHODOLOGY
+      {/* Floating Glassmorphic Dynamic Island Navigation */}
+      <DynamicIslandNavbar
+        onToggleInvert={toggleInvert}
+        inverted={inverted}
+        soundEnabled={soundEnabled}
+        onToggleSound={toggleSound}
+      />
+      
+      <div className="pt-24 max-w-6xl mx-auto px-4 sm:px-8 py-10">
+        {/* Breadcrumb Navigation */}
+        <div className="flex items-center gap-2 text-xs text-muted mb-8 border-b border-[#222222] pb-3">
+          <Link href="/" className="hover:text-primary transition-colors">
+            HOME
           </Link>
-          <Link
-            href="/"
-            className="border border-[#333333] hover:border-white px-3 py-1 text-xs text-muted hover:text-white transition-colors"
-          >
-            [ ^H BACK TO HOME ]
-          </Link>
+          <span>/</span>
+          <span className="text-white font-bold">30-DAY CUTOVER METHODOLOGY</span>
         </div>
 
-        {/* Hero */}
-        <div className="mb-14 space-y-4">
-          <div className="text-muted text-xs">
-            [/&gt; AGILE DELIVERY FRAMEWORK // 30-DAY PRODUCTION CUTOVER ]
+        {/* Hero Section */}
+        <div className="mb-12 space-y-3">
+          <div className="text-primary text-xs tracking-widest flex items-center gap-2">
+            <span className="w-2 h-2 bg-primary inline-block" />
+            <span>[EXECUTION_METHODOLOGY // 30-DAY TIMELINE]</span>
           </div>
           <h1 className="font-pixel text-3xl sm:text-5xl md:text-6xl text-white tracking-wider">
-            HOW WE ENGINEER SYSTEMS
+            30-DAY SPRINT
           </h1>
-          <p className="text-slate-400 text-xs sm:text-sm max-w-3xl leading-relaxed">
-            A BATTLE-TESTED FOUR-STAGE SPRINT METHODOLOGY DESIGNED TO TAKE ENTERPRISES FROM DISCONNECTED CHAOS
-            TO A UNIFIED, AUTONOMOUS OPERATING SYSTEM IN 30 DAYS.
+          <p className="text-[#aaaaaa] text-xs sm:text-sm max-w-3xl leading-relaxed">
+            DETERMINISTIC TIMELINES OVER ENDLESS CONSULTING RETREATS. WE AUDIT, CONSTRUCT, LOAD-TEST, AND CUT OVER YOUR PRODUCTION OPERATING SYSTEM IN 30 DAYS FLAT.
           </p>
         </div>
 
-        {/* Sprint Timeline List */}
-        <div className="space-y-10">
-          {sprintPhases.map((s, idx) => (
-            <div key={idx} className="border border-[#222222] bg-[#0A0A0A] p-6 sm:p-8 space-y-4">
+        {/* Phase Breakdown */}
+        <div className="space-y-6 mb-12">
+          {sprintPhases.map((phase) => (
+            <div key={phase.week} className="border border-white/20 bg-[#070707] p-6 sm:p-8 space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[#222222] gap-2">
-                <span className="font-pixel text-lg sm:text-xl text-white">
-                  {s.phase}
-                </span>
-                <span className="text-primary font-bold text-xs bg-black px-3 py-1 border border-primary/30">
-                  {s.week}
+                <span className="text-primary font-bold text-xs">{phase.phase}</span>
+                <span className="text-white font-bold text-xs px-2.5 py-0.5 border border-[#333333] bg-black">
+                  {phase.week}
                 </span>
               </div>
 
-              <div className="text-[11px] text-muted font-bold">
-                FOCUS: {s.focus}
+              <div className="text-xs text-white font-bold tracking-wide">
+                &gt; FOCUS: {phase.focus}
               </div>
 
-              <div className="space-y-2 text-xs text-slate-300">
-                {s.items.map((item, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <span className="text-primary font-bold">_</span>
-                    <span>{item}</span>
+              <div className="space-y-2">
+                {phase.items.map((item, iIdx) => (
+                  <div key={iIdx} className="p-3 bg-black border border-[#1E1E1E] text-xs text-[#cccccc] flex items-start gap-2">
+                    <span className="text-primary font-bold">0{iIdx + 1}.</span>
+                    <span className="leading-relaxed">{item}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="pt-3 border-t border-[#222222] text-[11px]">
-                <span className="text-muted uppercase">DELIVERABLE: </span>
-                <span className="text-white font-bold">{s.deliverable}</span>
+              <div className="pt-3 border-t border-[#222222] flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-2">
+                <div>
+                  <span className="text-muted text-[10px] block">VERIFIED OUTPUT DELIVERABLE:</span>
+                  <span className="text-primary font-bold">{phase.deliverable}</span>
+                </div>
+                <Link
+                  href="/audit"
+                  className="px-3 py-1.5 border border-white hover:bg-white hover:text-black transition-colors text-[11px] font-bold self-start sm:self-auto"
+                >
+                  START THIS SPRINT -&gt;
+                </Link>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Bottom CTA */}
-        <div className="mt-14 p-8 border border-[#333333] text-center space-y-4">
-          <h3 className="font-pixel text-xl sm:text-2xl text-white">
-            READY TO INITIATE STAGE 01?
-          </h3>
-          <p className="text-muted text-xs max-w-lg mx-auto">
-            SCHEDULE A SYSTEM AUDIT TO BEGIN YOUR 30-DAY INFRASTRUCTURE SPRINT.
-          </p>
-          <div className="pt-2">
-            <Link
-              href="/#contact"
-              className="inline-flex items-center gap-2 px-6 py-3 border border-white hover:bg-white hover:text-black font-bold text-xs uppercase transition-colors"
-            >
-              <span>DISPATCH AUDIT REQUEST</span>
-              <span className="text-primary text-[10px]">■</span>
-              <span>-&gt;</span>
-            </Link>
-          </div>
+        {/* Multi-Page Jump Strip */}
+        <div className="py-8 border-b border-[#222222] grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <Link
+            href="/solutions"
+            className="p-3.5 border border-[#222222] bg-[#070707] hover:border-primary text-white flex items-center justify-between"
+          >
+            <span>SOLUTIONS MATRIX</span>
+            <span className="text-primary">-&gt;</span>
+          </Link>
+          <Link
+            href="/architecture"
+            className="p-3.5 border border-[#222222] bg-[#070707] hover:border-primary text-white flex items-center justify-between"
+          >
+            <span>ARCHITECTURE SPEC</span>
+            <span className="text-primary">-&gt;</span>
+          </Link>
+          <Link
+            href="/audit"
+            className="p-3.5 border border-primary/40 bg-primary/10 text-primary hover:bg-primary hover:text-black flex items-center justify-between font-bold"
+          >
+            <span>COMMISSION AUDIT</span>
+            <span>■</span>
+          </Link>
         </div>
 
+        {/* Footer */}
+        <TerminalFooter onToggleInvert={toggleInvert} />
       </div>
     </div>
   )
