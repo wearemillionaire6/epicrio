@@ -61,7 +61,7 @@ export default function CustomCursor() {
         viewBox="0 0 20 22"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className={`filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] transition-transform duration-75 ${
+        className={`transition-transform duration-75 ${
           isClicked ? 'scale-90' : 'scale-100'
         }`}
         style={{ imageRendering: 'pixelated' }}

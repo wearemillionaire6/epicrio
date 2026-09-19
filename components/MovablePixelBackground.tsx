@@ -1,357 +1,235 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 interface MovablePixelBackgroundProps {
-  interactive?: boolean
   opacity?: number
   inverted?: boolean
+  interactive?: boolean
   standalone?: boolean
 }
 
-interface PixelNode {
+interface MiniSquare {
+  baseX: number
+  baseY: number
   x: number
   y: number
-  origX: number
-  origY: number
   vx: number
   vy: number
   size: number
+  isAccent: boolean
   baseAlpha: number
-  isAccent?: boolean
+  pulseSpeed: number
+  pulseOffset: number
 }
 
 export default function MovablePixelBackground({
-  interactive = true,
-  opacity = 0.35,
+  opacity = 0.25,
   inverted = false,
+  interactive = true,
   standalone = false,
 }: MovablePixelBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const containerRef = useRef<HTMLDivElement | null>(null)
-  const [isLoaded, setIsLoaded] = useState(false)
-  const isDragging = useRef(false)
-  const dragStart = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const ctx = canvas.getContext('2d')
+    const ctx = canvas.getContext('2d', { alpha: true })
     if (!ctx) return
 
-    let animationId: number
-    let nodes: PixelNode[] = []
-    let imgW = 500
-    let imgH = 344
+    let animId: number
+    let width = 0
+    let height = 0
+    const squares: MiniSquare[] = []
 
-    // Pan & parallax state with spring damping
     const state = {
-      mouseX: -2000,
-      mouseY: -2000,
+      mouseX: -1000,
+      mouseY: -1000,
       targetOffsetX: 0,
       targetOffsetY: 0,
       currentOffsetX: 0,
       currentOffsetY: 0,
-      dragOffsetX: 0,
-      dragOffsetY: 0,
-      targetDragX: 0,
-      targetDragY: 0,
     }
 
-    // Set canvas dimensions with high-DPI support
-    const handleResize = () => {
-      if (!canvas) return
-      const rect = canvas.getBoundingClientRect()
+    const initGrid = () => {
+      squares.length = 0
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
-      canvas.width = rect.width * dpr
-      canvas.height = rect.height * dpr
-      ctx.scale(dpr, dpr)
-    }
-    handleResize()
-    window.addEventListener('resize', handleResize)
+      width = canvas.parentElement?.clientWidth || window.innerWidth
+      height = canvas.parentElement?.clientHeight || window.innerHeight
 
-    // Load and parse the user's uploaded retro pixel photo
-    const img = new Image()
-    img.crossOrigin = 'anonymous'
-    img.src = '/retro-pixel-bg.png'
+      canvas.width = Math.floor(width * dpr)
+      canvas.height = Math.floor(height * dpr)
+      canvas.style.width = `${width}px`
+      canvas.style.height = `${height}px`
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-    img.onload = () => {
-      imgW = img.width || 500
-      imgH = img.height || 344
+      // Spacing for mini square pixel effect (subtle geometric micro-grid)
+      const step = standalone ? 16 : 28
+      const cols = Math.ceil(width / step) + 4
+      const rows = Math.ceil(height / step) + 4
 
-      // Sample pixels on an offscreen canvas
-      const offscreen = document.createElement('canvas')
-      offscreen.width = imgW
-      offscreen.height = imgH
-      const offCtx = offscreen.getContext('2d')
-      if (!offCtx) return
+      for (let r = -2; r < rows; r++) {
+        for (let c = -2; c < cols; c++) {
+          // Density variation: create elegant cyber clusters
+          const hash = Math.sin(c * 12.9898 + r * 78.233) * 43758.5453
+          const rand = hash - Math.floor(hash)
 
-      offCtx.drawImage(img, 0, 0, imgW, imgH)
-      const imgData = offCtx.getImageData(0, 0, imgW, imgH).data
+          // Filter to roughly ~28% visible squares for clean negative space
+          if (rand > 0.32) continue
 
-      // Step interval to extract clean retro 8-bit blocks
-      const step = 8
-      const parsedNodes: PixelNode[] = []
+          const baseX = c * step + (rand * 6 - 3)
+          const baseY = r * step + ((rand * 13) % 6 - 3)
 
-      for (let y = 0; y < imgH; y += step) {
-        for (let x = 0; x < imgW; x += step) {
-          const idx = (y * imgW + x) * 4
-          const r = imgData[idx]
-          const g = imgData[idx + 1]
-          const b = imgData[idx + 2]
-          const brightness = (r + g + b) / 3
+          const isAccent = rand < 0.08
+          const size = isAccent ? 4 : rand < 0.2 ? 3 : 2
 
-          // Only keep the white/bright pixel blocks
-          if (brightness > 90) {
-            const isAcc = (x * 13 + y * 7) % 23 === 0
-            parsedNodes.push({
-              x: x,
-              y: y,
-              origX: x,
-              origY: y,
-              vx: 0,
-              vy: 0,
-              size: step - 1.5,
-              baseAlpha: Math.min(brightness / 255, 1),
-              isAccent: isAcc,
-            })
-          }
+          squares.push({
+            baseX,
+            baseY,
+            x: baseX,
+            y: baseY,
+            vx: 0,
+            vy: 0,
+            size,
+            isAccent,
+            baseAlpha: isAccent ? 0.75 : 0.18 + rand * 0.25,
+            pulseSpeed: 1.2 + rand * 2.5,
+            pulseOffset: rand * Math.PI * 2,
+          })
         }
       }
-
-      nodes = parsedNodes
-      setIsLoaded(true)
     }
 
-    // Fallback if image load fails
-    img.onerror = () => {
-      const fallbackNodes: PixelNode[] = []
-      for (let y = 20; y < 320; y += 12) {
-        for (let x = 20; x < 480; x += 12) {
-          const dist1 = Math.hypot(x - 180, y - 160)
-          const dist2 = Math.hypot(x - 340, y - 180)
-          if (dist1 < 80 || dist2 < 70) {
-            fallbackNodes.push({
-              x,
-              y,
-              origX: x,
-              origY: y,
-              vx: 0,
-              vy: 0,
-              size: 7,
-              baseAlpha: 0.9,
-              isAccent: (x + y) % 24 === 0,
-            })
-          }
-        }
-      }
-      nodes = fallbackNodes
-      setIsLoaded(true)
-    }
+    initGrid()
 
-    // Interactive mouse tracking
+    // Mouse movement tracking
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect()
       state.mouseX = e.clientX - rect.left
       state.mouseY = e.clientY - rect.top
 
-      // Smooth parallax tilt based on screen position
-      const centerX = window.innerWidth / 2
-      const centerY = window.innerHeight / 2
-      state.targetOffsetX = ((e.clientX - centerX) / centerX) * 45
-      state.targetOffsetY = ((e.clientY - centerY) / centerY) * 35
-
-      if (isDragging.current) {
-        const deltaX = e.clientX - dragStart.current.x
-        const deltaY = e.clientY - dragStart.current.y
-        state.targetDragX += deltaX * 0.8
-        state.targetDragY += deltaY * 0.8
-        dragStart.current = { x: e.clientX, y: e.clientY }
-      }
+      const centerX = width / 2
+      const centerY = height / 2
+      state.targetOffsetX = ((e.clientX - centerX) / width) * 20
+      state.targetOffsetY = ((e.clientY - centerY) / height) * 20
     }
 
-    const handleMouseDown = (e: MouseEvent) => {
-      if (!interactive) return
-      isDragging.current = true
-      dragStart.current = { x: e.clientX, y: e.clientY }
+    const handleMouseLeave = () => {
+      state.mouseX = -1000
+      state.mouseY = -1000
+      state.targetOffsetX = 0
+      state.targetOffsetY = 0
     }
 
-    const handleMouseUp = () => {
-      isDragging.current = false
-    }
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!e.touches[0]) return
-      const touch = e.touches[0]
-      const rect = canvas.getBoundingClientRect()
-      state.mouseX = touch.clientX - rect.left
-      state.mouseY = touch.clientY - rect.top
-
-      const centerX = window.innerWidth / 2
-      const centerY = window.innerHeight / 2
-      state.targetOffsetX = ((touch.clientX - centerX) / centerX) * 45
-      state.targetOffsetY = ((touch.clientY - centerY) / centerY) * 35
-    }
-
-    const handleScroll = () => {
-      state.targetOffsetY = Math.sin(window.scrollY * 0.003) * 25
+    const handleResize = () => {
+      initGrid()
     }
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true })
-    window.addEventListener('mousedown', handleMouseDown)
-    window.addEventListener('mouseup', handleMouseUp)
-    window.addEventListener('touchmove', handleTouchMove, { passive: true })
-    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('mouseleave', handleMouseLeave)
+    window.addEventListener('resize', handleResize)
 
-    // Animation & Physics Loop
-    let time = 0
-    const render = () => {
-      time += 0.02
-      const rect = canvas.getBoundingClientRect()
-      const w = rect.width
-      const h = rect.height
+    let startTime = performance.now()
 
-      ctx.clearRect(0, 0, w, h)
+    const render = (now: number) => {
+      const elapsed = (now - startTime) * 0.001
 
-      // Lerp smooth parallax
-      state.currentOffsetX += (state.targetOffsetX - state.currentOffsetX) * 0.05
-      state.currentOffsetY += (state.targetOffsetY - state.currentOffsetY) * 0.05
+      // 60FPS Damped lerp for silky smooth parallax
+      state.currentOffsetX += (state.targetOffsetX - state.currentOffsetX) * 0.06
+      state.currentOffsetY += (state.targetOffsetY - state.currentOffsetY) * 0.06
 
-      // Lerp drag offset
-      state.dragOffsetX += (state.targetDragX - state.dragOffsetX) * 0.08
-      state.dragOffsetY += (state.targetDragY - state.dragOffsetY) * 0.08
+      ctx.clearRect(0, 0, width, height)
 
-      // Gentle organic ambient drift
-      const ambientX = Math.sin(time * 0.4) * 18
-      const ambientY = Math.cos(time * 0.3) * 14
+      // Ambient organic drift
+      const driftX = Math.sin(elapsed * 0.5) * 4
+      const driftY = Math.cos(elapsed * 0.4) * 4
 
-      // Center the constellation on canvas
-      const scale = standalone
-        ? Math.min(w / (imgW * 1.1), h / (imgH * 1.1))
-        : Math.max(w / (imgW * 1.6), h / (imgH * 1.6), 1.2)
+      const totalOffsetX = state.currentOffsetX + driftX
+      const totalOffsetY = state.currentOffsetY + driftY
 
-      const originX = (w - imgW * scale) / 2 + state.currentOffsetX + state.dragOffsetX + ambientX
-      const originY = (h - imgH * scale) / 2 + state.currentOffsetY + state.dragOffsetY + ambientY
+      const accentColor = inverted ? '#008744' : '#00FF88'
+      const baseColorRgb = inverted ? '15, 23, 42' : '255, 255, 255'
 
-      // Pulse color values
-      const pulse = 0.5 + Math.sin(time * 2) * 0.5
-      const whiteColor = inverted ? '#000000' : '#FFFFFF'
-      const accentColor = inverted ? '#00A859' : '#00FF88'
+      // Render mini squares
+      for (let i = 0; i < squares.length; i++) {
+        const sq = squares[i]
 
-      // Render connecting circuit lines between adjacent nodes
-      if (nodes.length > 0) {
-        ctx.lineWidth = 1
-        ctx.strokeStyle = inverted
-          ? `rgba(0, 168, 89, ${0.1 + pulse * 0.1})`
-          : `rgba(0, 255, 136, ${0.12 + pulse * 0.08})`
+        // Target anchor with parallax and drift
+        const targetX = sq.baseX + totalOffsetX
+        const targetY = sq.baseY + totalOffsetY
 
-        // Draw horizontal & vertical circuit paths
-        ctx.beginPath()
-        for (let i = 0; i < nodes.length; i += 18) {
-          const n1 = nodes[i]
-          const x1 = originX + n1.x * scale
-          const y1 = originY + n1.y * scale
-
-          if (i + 1 < nodes.length) {
-            const n2 = nodes[i + 1]
-            const x2 = originX + n2.x * scale
-            const y2 = originY + n2.y * scale
-            if (Math.hypot(n1.x - n2.x, n1.y - n2.y) < 28) {
-              ctx.moveTo(x1, y1)
-              ctx.lineTo(x2, y2)
-            }
-          }
-        }
-        ctx.stroke()
-      }
-
-      // Update & Draw each pixel node with spring physics
-      for (let i = 0; i < nodes.length; i++) {
-        const node = nodes[i]
-
-        // Node position on screen
-        const screenX = originX + node.x * scale
-        const screenY = originY + node.y * scale
-
-        // Cursor distance for interactive magnetic repulsion
-        if (interactive) {
-          const dx = screenX - state.mouseX
-          const dy = screenY - state.mouseY
+        // Interactive cursor repulsion
+        if (interactive && state.mouseX > 0 && state.mouseY > 0) {
+          const dx = sq.x - state.mouseX
+          const dy = sq.y - state.mouseY
           const dist = Math.hypot(dx, dy)
-          const maxDist = 130
+          const maxDist = 95
 
           if (dist < maxDist && dist > 0) {
-            const force = (1 - dist / maxDist) * 14
-            node.vx += (dx / dist) * force
-            node.vy += (dy / dist) * force
+            const force = (1 - dist / maxDist) * 8
+            sq.vx += (dx / dist) * force
+            sq.vy += (dy / dist) * force
           }
         }
 
-        // Spring force pulling back to original anchor
-        node.vx += (node.origX - node.x) * 0.09
-        node.vy += (node.origY - node.y) * 0.09
+        // Spring force returning to anchor
+        sq.vx += (targetX - sq.x) * 0.08
+        sq.vy += (targetY - sq.y) * 0.08
 
-        // Velocity damping for butter-smooth fluidity
-        node.vx *= 0.82
-        node.vy *= 0.82
+        // Damping
+        sq.vx *= 0.84
+        sq.vy *= 0.84
 
-        node.x += node.vx
-        node.y += node.vy
+        sq.x += sq.vx
+        sq.y += sq.vy
 
-        // Draw pixel block
-        const finalX = originX + node.x * scale
-        const finalY = originY + node.y * scale
-        const finalSize = node.size * scale
+        // Pulse calculation
+        const pulse = 0.5 + Math.sin(elapsed * sq.pulseSpeed + sq.pulseOffset) * 0.5
+        const isPerturbed = Math.hypot(sq.vx, sq.vy) > 0.3
 
-        // Color selection: Cyber green for accent nodes or when perturbed, else Stark White
-        const isPerturbed = Math.hypot(node.vx, node.vy) > 0.4
-        if (node.isAccent || isPerturbed) {
+        let alpha = sq.baseAlpha * (0.6 + pulse * 0.4)
+        if (isPerturbed) alpha = Math.min(1, alpha + 0.45)
+
+        // Draw mini square pixel
+        if (sq.isAccent || isPerturbed) {
           ctx.fillStyle = accentColor
           ctx.shadowColor = accentColor
-          ctx.shadowBlur = isPerturbed ? 12 : 6
+          ctx.shadowBlur = isPerturbed ? 8 : 4
         } else {
-          ctx.fillStyle = whiteColor
+          ctx.fillStyle = `rgba(${baseColorRgb}, ${alpha})`
           ctx.shadowColor = 'transparent'
           ctx.shadowBlur = 0
         }
 
         ctx.fillRect(
-          Math.round(finalX),
-          Math.round(finalY),
-          Math.max(2, Math.round(finalSize)),
-          Math.max(2, Math.round(finalSize))
+          Math.round(sq.x),
+          Math.round(sq.y),
+          sq.size,
+          sq.size
         )
       }
 
-      animationId = requestAnimationFrame(render)
+      animId = requestAnimationFrame(render)
     }
 
-    render()
+    animId = requestAnimationFrame(render)
 
     return () => {
-      cancelAnimationFrame(animationId)
-      window.removeEventListener('resize', handleResize)
+      cancelAnimationFrame(animId)
       window.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('mousedown', handleMouseDown)
-      window.removeEventListener('mouseup', handleMouseUp)
-      window.removeEventListener('touchmove', handleTouchMove)
-      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('mouseleave', handleMouseLeave)
+      window.removeEventListener('resize', handleResize)
     }
-  }, [interactive, inverted, standalone])
+  }, [inverted, interactive, standalone])
 
   return (
-    <div
-      ref={containerRef}
-      className={`relative w-full h-full select-none overflow-hidden ${
-        standalone ? 'cursor-grab active:cursor-grabbing' : 'pointer-events-none'
-      }`}
-      style={{ opacity }}
-    >
-      <canvas
-        ref={canvasRef}
-        className="w-full h-full block will-change-transform"
-        style={{ imageRendering: 'pixelated' }}
-      />
-    </div>
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{
+        opacity,
+        imageRendering: 'pixelated',
+      }}
+    />
   )
 }

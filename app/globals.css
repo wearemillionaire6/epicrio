@@ -9,6 +9,7 @@
   --text-color: #FFFFFF;
   --border-color: #222222;
   --accent-color: #00FF88;
+  --primary: #00FF88;
 }
 
 html.light, body.light, .inverted {
@@ -16,6 +17,27 @@ html.light, body.light, .inverted {
   --text-color: #0A0A0A;
   --border-color: #DDDDDD;
   --accent-color: #008744;
+  --primary: #008744;
+}
+
+/* Bulletproof enforcement: guarantee primary is always cyber green */
+.text-primary {
+  color: #00FF88 !important;
+}
+.bg-primary {
+  background-color: #00FF88 !important;
+}
+.border-primary {
+  border-color: #00FF88 !important;
+}
+html.light .text-primary, .inverted .text-primary {
+  color: #008744 !important;
+}
+html.light .bg-primary, .inverted .bg-primary {
+  background-color: #008744 !important;
+}
+html.light .border-primary, .inverted .border-primary {
+  border-color: #008744 !important;
 }
 
 /* Remove original OS cursors completely */

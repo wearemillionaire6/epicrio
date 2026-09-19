@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { sound } from '@/lib/sound'
-import MovablePixelBackground from '@/components/MovablePixelBackground'
 
 interface PixelHeaderProps {
   onToggleInvert: () => void
@@ -12,87 +11,134 @@ interface PixelHeaderProps {
 export default function PixelHeader({ onToggleInvert, inverted }: PixelHeaderProps) {
   return (
     <header className="pt-8 pb-10 border-b border-[#222222]">
+      {/* Header Top Bar: Status Telemetry */}
+      <div className="flex items-center justify-between pb-3 mb-6 border-b border-[#222222] text-[10px]">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 bg-primary rounded-none animate-ping" />
+          <span className="text-primary font-bold tracking-wider">
+            [ENTERPRISE AUTOMATION INFRASTRUCTURE // HIGH-IMPACT ARCHITECTURE]
+          </span>
+        </div>
+        <div className="flex items-center gap-3 text-muted">
+          <span>LATENCY: &lt;300MS SLA</span>
+          <span>•</span>
+          <span className="text-white font-bold">24/7/365 ZERO-DOWNTIME</span>
+        </div>
+      </div>
+
       {/* Giant Pixelated Wordmark */}
-      <div className="mb-10 overflow-hidden">
+      <div className="mb-8 overflow-hidden">
         <h1 className="font-pixel text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-widest text-white leading-none">
           AGENCY CO
         </h1>
       </div>
 
-      {/* Hero Body: Left Dithered Graphic + Right Meta Copy */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start mb-10">
-        
-        {/* Left Dithered Graphic: Interactive Movable Constellation */}
-        <div className="md:col-span-5 flex flex-col justify-start">
-          <div className="border border-[#333333] hover:border-primary/60 p-1.5 bg-black transition-colors shadow-2xl relative">
-            {/* Top Telemetry Header */}
-            <div className="flex items-center justify-between px-2 py-1 border-b border-[#222222] text-[9px] text-muted mb-1 bg-[#050505]">
-              <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 bg-primary animate-pulse" />
-                <span className="text-primary font-bold">[KINETIC CONSTELLATION]</span>
-              </div>
-              <span className="text-[8px] border border-primary/30 px-1 py-0.2 text-primary font-bold">
-                DRAG / TILT
-              </span>
-            </div>
-
-            {/* Smooth Movable Canvas Viewport */}
-            <div className="w-full h-[180px] sm:h-[210px] relative overflow-hidden bg-black border border-[#1A1A1A]">
-              <MovablePixelBackground
-                interactive={true}
-                opacity={1}
-                inverted={inverted}
-                standalone={true}
-              />
-            </div>
-
-            {/* Bottom Telemetry Footer */}
-            <div className="flex items-center justify-between px-2 py-1 border-t border-[#222222] text-[9px] text-muted mt-1 bg-[#050505]">
-              <span>60FPS DAMPED LERP</span>
-              <span className="text-white font-bold">500x344 MATRIX</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Editorial Copy */}
-        <div className={`md:col-span-7 space-y-4 text-xs sm:text-sm font-mono leading-relaxed backdrop-blur-[2px] p-5 sm:p-6 border shadow-xl ${
-          inverted ? 'bg-white/90 border-[#E2E8F0] text-black' : 'bg-black/70 border-[#222222] text-white'
+      {/* Hero Body: Clean 3-Column Brutalist Matrix */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+        {/* Card 1: Mandate */}
+        <div className={`p-5 sm:p-6 border shadow-xl flex flex-col justify-between ${
+          inverted ? 'bg-white/95 border-[#E2E8F0] text-black' : 'bg-black/80 border-[#222222] text-white'
         }`}>
           <div>
-            <span className="text-muted block mb-1">/ SYSTEM ARCHITECT &amp; AUTOMATION INFRASTRUCTURE</span>
-            <p className={`font-bold text-sm sm:text-base ${inverted ? 'text-black' : 'text-white'}`}>
+            <span className="text-primary text-[10px] font-bold block mb-2 tracking-wider">
+              [01 // OPERATIONAL MANDATE]
+            </span>
+            <p className={`font-bold text-xs sm:text-sm leading-relaxed ${inverted ? 'text-black' : 'text-white'}`}>
               WE BUILD THE CONNECTED SYSTEMS BEHIND HIGH-STAKES MODERN BUSINESS.
             </p>
           </div>
-
-          <div>
-            <span className="text-muted block mb-1">/ OPERATIONAL DOMAINS</span>
-            <p className={inverted ? 'text-slate-700 font-bold' : 'text-slate-300'}>
-              CRM • SUB-300MS VOICE AI • RECURSIVE WORKFLOWS • KNOWLEDGE RAG
-            </p>
-          </div>
-
-          <div className="pt-1 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
-            <span className="text-muted">/ EXTENDED DOSSIERS:</span>
-            <Link href="/architecture" className={`${inverted ? 'text-black font-bold' : 'text-white'} hover:text-primary underline`}>
-              ARCHITECTURE SPEC -&gt;
-            </Link>
-            <Link href="/solutions" className={`${inverted ? 'text-black font-bold' : 'text-white'} hover:text-primary underline`}>
-              SOLUTIONS CATALOG -&gt;
-            </Link>
-            <Link href="/voice-agent" className={`${inverted ? 'text-black font-bold' : 'text-white'} hover:text-primary underline`}>
-              VOICE STUDIO -&gt;
-            </Link>
-            <Link href="/methodology" className={`${inverted ? 'text-black font-bold' : 'text-white'} hover:text-primary underline`}>
-              METHODOLOGY -&gt;
-            </Link>
-          </div>
-
-          <div className="text-[11px] text-muted">
-            / USE YOUR KEYBOARD TO NAVIGATE (H, B, A, S, V, C, I) .
-          </div>
+          <p className="text-xs text-muted leading-relaxed mt-4">
+            REPLACING BLOATED RETAINERS WITH DETERMINISTIC REASONING, LOW-LATENCY VOICE DISPATCHERS, AND HARDENED REDIS QUEUES.
+          </p>
         </div>
 
+        {/* Card 2: 4 Core Domains */}
+        <div className={`p-5 sm:p-6 border shadow-xl flex flex-col justify-between ${
+          inverted ? 'bg-white/95 border-[#E2E8F0] text-black' : 'bg-black/80 border-[#222222] text-white'
+        }`}>
+          <div>
+            <span className="text-primary text-[10px] font-bold block mb-2 tracking-wider">
+              [02 // OPERATIONAL CAPABILITIES]
+            </span>
+            <div className="space-y-1.5 text-xs">
+              <div className="flex items-center gap-2">
+                <span className="text-primary font-bold">01.</span>
+                <span className={inverted ? 'text-slate-800 font-bold' : 'text-slate-200'}>CENTRAL CRM PIPELINE ARCHITECTURE</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-primary font-bold">02.</span>
+                <span className={inverted ? 'text-slate-800 font-bold' : 'text-slate-200'}>SUB-300MS CONVERSATIONAL VOICE AI</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-primary font-bold">03.</span>
+                <span className={inverted ? 'text-slate-800 font-bold' : 'text-slate-200'}>RECURSIVE AUTONOMOUS WORKFLOWS</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-primary font-bold">04.</span>
+                <span className={inverted ? 'text-slate-800 font-bold' : 'text-slate-200'}>ENTERPRISE KNOWLEDGE RAG AGENTS</span>
+              </div>
+            </div>
+          </div>
+          <span className="text-[10px] text-muted block mt-4">
+            STANDARDS: TWILIO SIP • DEEPGRAM NOVA-2 • CLAUDE 3.5 SONNET
+          </span>
+        </div>
+
+        {/* Card 3: Dossiers & Fast Routes */}
+        <div className={`p-5 sm:p-6 border shadow-xl flex flex-col justify-between ${
+          inverted ? 'bg-white/95 border-[#E2E8F0] text-black' : 'bg-black/80 border-[#222222] text-white'
+        }`}>
+          <div>
+            <span className="text-primary text-[10px] font-bold block mb-2 tracking-wider">
+              [03 // EXTENDED DOSSIERS]
+            </span>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <Link
+                href="/architecture"
+                onClick={() => sound.click()}
+                className={`p-2.5 border border-[#333333] hover:border-primary transition-colors flex items-center justify-between ${
+                  inverted ? 'bg-[#F4F4F6] text-black' : 'bg-[#080808] text-white'
+                }`}
+              >
+                <span>SYS FABRIC</span>
+                <span className="text-primary">-&gt;</span>
+              </Link>
+              <Link
+                href="/solutions"
+                onClick={() => sound.click()}
+                className={`p-2.5 border border-[#333333] hover:border-primary transition-colors flex items-center justify-between ${
+                  inverted ? 'bg-[#F4F4F6] text-black' : 'bg-[#080808] text-white'
+                }`}
+              >
+                <span>SOLUTIONS</span>
+                <span className="text-primary">-&gt;</span>
+              </Link>
+              <Link
+                href="/voice-agent"
+                onClick={() => sound.click()}
+                className={`p-2.5 border border-[#333333] hover:border-primary transition-colors flex items-center justify-between ${
+                  inverted ? 'bg-[#F4F4F6] text-black' : 'bg-[#080808] text-white'
+                }`}
+              >
+                <span>VOICE LAB</span>
+                <span className="text-primary">-&gt;</span>
+              </Link>
+              <Link
+                href="/sectors"
+                onClick={() => sound.click()}
+                className={`p-2.5 border border-[#333333] hover:border-primary transition-colors flex items-center justify-between ${
+                  inverted ? 'bg-[#F4F4F6] text-black' : 'bg-[#080808] text-white'
+                }`}
+              >
+                <span>SECTORS</span>
+                <span className="text-primary">-&gt;</span>
+              </Link>
+            </div>
+          </div>
+          <div className="text-[10px] text-muted mt-4">
+            / USE KEYBOARD SHORTCUTS (H, B, A, S, V, C, T) TO JUMP INSTANTLY.
+          </div>
+        </div>
       </div>
 
       {/* Keyboard Shortcuts Nav Bar */}
