@@ -18,6 +18,7 @@ import TechStackMatrix from '@/components/TechStackMatrix'
 import ContactTerminal from '@/components/ContactTerminal'
 import TerminalFooter from '@/components/TerminalFooter'
 import CustomCursor from '@/components/CustomCursor'
+import MovablePixelBackground from '@/components/MovablePixelBackground'
 import { sound } from '@/lib/sound'
 
 export default function Home() {
@@ -79,6 +80,11 @@ export default function Home() {
     >
       <CustomCursor />
 
+      {/* Ambient Moving Retro Pixel Background Theme */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <MovablePixelBackground opacity={inverted ? 0.12 : 0.22} inverted={inverted} />
+      </div>
+
       {/* Floating Luxury Glassmorphic Navigation with Dynamic Island in the Middle */}
       <DynamicIslandNavbar
         onToggleInvert={toggleInvert}
@@ -88,11 +94,11 @@ export default function Home() {
       />
 
       {/* Spacing compensation for floating dynamic island navbar */}
-      <div className="pt-20">
+      <div className="pt-20 relative z-10">
         {/* Real-time Streaming Telemetry Ticker */}
         <LiveTelemetryTicker />
 
-        <main className="max-w-6xl mx-auto px-4 sm:px-8">
+        <main className="max-w-6xl mx-auto px-4 sm:px-8 relative z-10">
           {/* Top Pixel Header & Key Navigation */}
           <PixelHeader onToggleInvert={toggleInvert} inverted={inverted} />
 

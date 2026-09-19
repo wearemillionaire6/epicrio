@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { sound } from '@/lib/sound'
+import MovablePixelBackground from '@/components/MovablePixelBackground'
 
 interface PixelHeaderProps {
   onToggleInvert: () => void
@@ -10,43 +10,6 @@ interface PixelHeaderProps {
 }
 
 export default function PixelHeader({ onToggleInvert, inverted }: PixelHeaderProps) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null)
-
-  // Draw dithered silhouette / matrix graphic in the hero
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    const width = canvas.width
-    const height = canvas.height
-    ctx.clearRect(0, 0, width, height)
-
-    // Generate dithering halftone pattern
-    const cols = 48
-    const rows = 32
-    const cellW = width / cols
-    const cellH = height / rows
-
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-        const dx = x - cols / 2
-        const dy = y - rows / 2
-        const dist = Math.sqrt(dx * dx + dy * dy)
-        const val = Math.sin(x * 0.25) * Math.cos(y * 0.25) + (1 - dist / (cols * 0.6))
-        
-        if (val > 0.45) {
-          ctx.fillStyle = inverted ? '#000000' : '#FFFFFF'
-          const dither = (x % 2 === 0 && y % 2 === 0) || (val > 0.75)
-          if (dither) {
-            ctx.fillRect(x * cellW, y * cellH, cellW * 0.85, cellH * 0.85)
-          }
-        }
-      }
-    }
-  }, [inverted])
-
   return (
     <header className="pt-8 pb-10 border-b border-[#222222]">
       {/* Giant Pixelated Wordmark */}
@@ -59,23 +22,43 @@ export default function PixelHeader({ onToggleInvert, inverted }: PixelHeaderPro
       {/* Hero Body: Left Dithered Graphic + Right Meta Copy */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start mb-10">
         
-        {/* Left Dithered Graphic */}
-        <div className="md:col-span-4 flex justify-start">
-          <div className="border border-[#333333] p-1 bg-black inline-block">
-            <canvas
-              ref={canvasRef}
-              width={240}
-              height={160}
-              className="w-full max-w-[240px] h-auto block"
-            />
+        {/* Left Dithered Graphic: Interactive Movable Constellation */}
+        <div className="md:col-span-5 flex flex-col justify-start">
+          <div className="border border-[#333333] hover:border-primary/60 p-1.5 bg-black transition-colors shadow-2xl relative">
+            {/* Top Telemetry Header */}
+            <div className="flex items-center justify-between px-2 py-1 border-b border-[#222222] text-[9px] text-muted mb-1 bg-[#050505]">
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 bg-primary animate-pulse" />
+                <span className="text-primary font-bold">[KINETIC CONSTELLATION]</span>
+              </div>
+              <span className="text-[8px] border border-primary/30 px-1 py-0.2 text-primary font-bold">
+                DRAG / TILT
+              </span>
+            </div>
+
+            {/* Smooth Movable Canvas Viewport */}
+            <div className="w-full h-[180px] sm:h-[210px] relative overflow-hidden bg-black border border-[#1A1A1A]">
+              <MovablePixelBackground
+                interactive={true}
+                opacity={1}
+                inverted={inverted}
+                standalone={true}
+              />
+            </div>
+
+            {/* Bottom Telemetry Footer */}
+            <div className="flex items-center justify-between px-2 py-1 border-t border-[#222222] text-[9px] text-muted mt-1 bg-[#050505]">
+              <span>60FPS DAMPED LERP</span>
+              <span className="text-white font-bold">500x344 MATRIX</span>
+            </div>
           </div>
         </div>
 
         {/* Right Editorial Copy */}
-        <div className="md:col-span-8 space-y-5 text-xs sm:text-sm font-mono leading-relaxed">
+        <div className="md:col-span-7 space-y-4 text-xs sm:text-sm font-mono leading-relaxed bg-black/70 backdrop-blur-[2px] p-5 sm:p-6 border border-[#222222] shadow-xl">
           <div>
-            <span className="text-muted block mb-1">/ SYSTEM ARCHITECT & AUTOMATION INFRASTRUCTURE</span>
-            <p className="text-white font-bold">
+            <span className="text-muted block mb-1">/ SYSTEM ARCHITECT &amp; AUTOMATION INFRASTRUCTURE</span>
+            <p className="text-white font-bold text-sm sm:text-base">
               WE BUILD THE CONNECTED SYSTEMS BEHIND HIGH-STAKES MODERN BUSINESS.
             </p>
           </div>
