@@ -88,20 +88,6 @@ export default function TerminalFooter({ onToggleInvert }: TerminalFooterProps) 
               <span className="text-muted">^PAGE DOWN</span>
             </button>
           </div>
-          <div>
-            <button
-              type="button"
-              onClick={() => {
-                sound.click()
-                window.dispatchEvent(new CustomEvent('replay-loader'))
-                window.scrollTo({ top: 0, behavior: 'smooth' })
-              }}
-              className="hover:text-primary transition-colors flex items-center gap-2 w-full text-left cursor-pointer"
-            >
-              <span className="text-muted">^R</span>
-              <span className="text-primary font-bold">PAC-MAN INTRO</span>
-            </button>
-          </div>
         </div>
 
         {/* Col 4 */}

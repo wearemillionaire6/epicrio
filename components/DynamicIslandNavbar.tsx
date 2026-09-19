@@ -265,17 +265,6 @@ export default function DynamicIslandNavbar({
                         INVERT [^I]
                       </button>
                     )}
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsExpanded(false)
-                        window.dispatchEvent(new CustomEvent('replay-loader'))
-                      }}
-                      className="px-2 py-1 border border-primary/40 hover:border-primary rounded text-primary hover:bg-primary/10 text-[10px] cursor-pointer"
-                    >
-                      PAC-MAN INTRO
-                    </button>
                   </div>
 
                   <span className="text-[9px] text-muted">

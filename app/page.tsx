@@ -18,7 +18,6 @@ import TechStackMatrix from '@/components/TechStackMatrix'
 import ContactTerminal from '@/components/ContactTerminal'
 import TerminalFooter from '@/components/TerminalFooter'
 import CustomCursor from '@/components/CustomCursor'
-import PacmanNetflixLoader from '@/components/PacmanNetflixLoader'
 import { sound } from '@/lib/sound'
 
 export default function Home() {
@@ -79,7 +78,6 @@ export default function Home() {
       }`}
     >
       <CustomCursor />
-      <PacmanNetflixLoader />
 
       {/* Floating Luxury Glassmorphic Navigation with Dynamic Island in the Middle */}
       <DynamicIslandNavbar
