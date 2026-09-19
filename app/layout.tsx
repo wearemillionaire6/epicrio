@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -29,8 +30,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className="font-mono antialiased bg-black text-white min-h-screen selection:bg-[#FF3333] selection:text-black uppercase">
-        {children}
+      <body className="font-mono antialiased bg-black text-white min-h-screen selection:bg-primary selection:text-black uppercase">
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

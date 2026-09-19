@@ -20,15 +20,11 @@ import TerminalFooter from '@/components/TerminalFooter'
 import CustomCursor from '@/components/CustomCursor'
 import MovablePixelBackground from '@/components/MovablePixelBackground'
 import { sound } from '@/lib/sound'
+import { useTheme } from '@/components/ThemeProvider'
 
 export default function Home() {
-  const [inverted, setInverted] = useState(false)
+  const { isDark, toggleTheme } = useTheme()
   const [soundEnabled, setSoundEnabled] = useState(true)
-
-  const toggleInvert = () => {
-    if (soundEnabled) sound.beep()
-    setInverted((prev) => !prev)
-  }
 
   const toggleSound = () => {
     setSoundEnabled((prev) => !prev)
@@ -62,33 +58,33 @@ export default function Home() {
       } else if (key === 'c') {
         if (soundEnabled) sound.click()
         document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
-      } else if (key === 'i') {
-        toggleInvert()
+      } else if (key === 'i' || key === 't') {
+        toggleTheme()
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [soundEnabled, inverted])
+  }, [soundEnabled, toggleTheme])
 
   return (
     <div
       id="home"
-      className={`min-h-screen transition-colors duration-200 selection:bg-[#FF3333] selection:text-black font-mono uppercase ${
-        inverted ? 'inverted bg-white text-black' : 'bg-black text-white'
+      className={`min-h-screen transition-colors duration-200 selection:bg-primary selection:text-black font-mono uppercase ${
+        !isDark ? 'inverted bg-white text-black' : 'bg-black text-white'
       }`}
     >
       <CustomCursor />
 
       {/* Ambient Moving Retro Pixel Background Theme */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <MovablePixelBackground opacity={inverted ? 0.12 : 0.22} inverted={inverted} />
+        <MovablePixelBackground opacity={!isDark ? 0.12 : 0.22} inverted={!isDark} />
       </div>
 
       {/* Floating Luxury Glassmorphic Navigation with Dynamic Island in the Middle */}
       <DynamicIslandNavbar
-        onToggleInvert={toggleInvert}
-        inverted={inverted}
+        onToggleInvert={toggleTheme}
+        inverted={!isDark}
         soundEnabled={soundEnabled}
         onToggleSound={toggleSound}
       />
@@ -100,7 +96,7 @@ export default function Home() {
 
         <main className="max-w-6xl mx-auto px-4 sm:px-8 relative z-10">
           {/* Top Pixel Header & Key Navigation */}
-          <PixelHeader onToggleInvert={toggleInvert} inverted={inverted} />
+          <PixelHeader onToggleInvert={toggleTheme} inverted={!isDark} />
 
           {/* Multi-Page Portals Gateway Strip */}
           <div className="my-8 p-4 border border-white/20 bg-[#070707]">
@@ -194,7 +190,7 @@ export default function Home() {
           <ContactTerminal />
 
           {/* Keycaps Footer */}
-          <TerminalFooter onToggleInvert={toggleInvert} />
+          <TerminalFooter onToggleInvert={toggleTheme} />
         </main>
       </div>
     </div>

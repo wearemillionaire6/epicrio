@@ -152,7 +152,7 @@ export default function InteractiveCliSandbox() {
       outputContent = (
         <div className="space-y-1.5 text-xs">
           <div className="text-primary font-bold">[SIMULATING INBOUND LEAD COMMITTING TO HUBSPOT / SALESFORCE]</div>
-          <pre className="p-2.5 bg-black border border-[#222222] text-[10px] text-[#FF3333] font-mono overflow-x-auto leading-relaxed">
+          <pre className="p-2.5 bg-black border border-[#222222] text-[10px] text-[#00FF88] font-mono overflow-x-auto leading-relaxed">
 {`{
   "event_id": "evt_pipe_98241",
   "source": "inbound_voice_triage",

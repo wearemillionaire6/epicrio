@@ -55,33 +55,35 @@ export default function PixelHeader({ onToggleInvert, inverted }: PixelHeaderPro
         </div>
 
         {/* Right Editorial Copy */}
-        <div className="md:col-span-7 space-y-4 text-xs sm:text-sm font-mono leading-relaxed bg-black/70 backdrop-blur-[2px] p-5 sm:p-6 border border-[#222222] shadow-xl">
+        <div className={`md:col-span-7 space-y-4 text-xs sm:text-sm font-mono leading-relaxed backdrop-blur-[2px] p-5 sm:p-6 border shadow-xl ${
+          inverted ? 'bg-white/90 border-[#E2E8F0] text-black' : 'bg-black/70 border-[#222222] text-white'
+        }`}>
           <div>
             <span className="text-muted block mb-1">/ SYSTEM ARCHITECT &amp; AUTOMATION INFRASTRUCTURE</span>
-            <p className="text-white font-bold text-sm sm:text-base">
+            <p className={`font-bold text-sm sm:text-base ${inverted ? 'text-black' : 'text-white'}`}>
               WE BUILD THE CONNECTED SYSTEMS BEHIND HIGH-STAKES MODERN BUSINESS.
             </p>
           </div>
 
           <div>
             <span className="text-muted block mb-1">/ OPERATIONAL DOMAINS</span>
-            <p className="text-slate-300">
+            <p className={inverted ? 'text-slate-700 font-bold' : 'text-slate-300'}>
               CRM • SUB-300MS VOICE AI • RECURSIVE WORKFLOWS • KNOWLEDGE RAG
             </p>
           </div>
 
           <div className="pt-1 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
             <span className="text-muted">/ EXTENDED DOSSIERS:</span>
-            <Link href="/architecture" className="text-white hover:text-primary underline">
+            <Link href="/architecture" className={`${inverted ? 'text-black font-bold' : 'text-white'} hover:text-primary underline`}>
               ARCHITECTURE SPEC -&gt;
             </Link>
-            <Link href="/solutions" className="text-white hover:text-primary underline">
+            <Link href="/solutions" className={`${inverted ? 'text-black font-bold' : 'text-white'} hover:text-primary underline`}>
               SOLUTIONS CATALOG -&gt;
             </Link>
-            <Link href="/voice-agent" className="text-white hover:text-primary underline">
+            <Link href="/voice-agent" className={`${inverted ? 'text-black font-bold' : 'text-white'} hover:text-primary underline`}>
               VOICE STUDIO -&gt;
             </Link>
-            <Link href="/methodology" className="text-white hover:text-primary underline">
+            <Link href="/methodology" className={`${inverted ? 'text-black font-bold' : 'text-white'} hover:text-primary underline`}>
               METHODOLOGY -&gt;
             </Link>
           </div>
@@ -155,10 +157,10 @@ export default function PixelHeader({ onToggleInvert, inverted }: PixelHeaderPro
             sound.beep()
             onToggleInvert()
           }}
-          className="border border-[#333333] hover:border-white p-2 flex flex-col justify-between transition-colors text-left"
+          className="border border-[#333333] hover:border-white p-2 flex flex-col justify-between transition-colors text-left cursor-pointer"
         >
-          <span className="text-muted">^I</span>
-          <span className="text-primary font-bold">INVERT</span>
+          <span className="text-muted">^T</span>
+          <span className="text-primary font-bold">{inverted ? 'MODE: LIGHT' : 'MODE: DARK'}</span>
         </button>
       </nav>
     </header>

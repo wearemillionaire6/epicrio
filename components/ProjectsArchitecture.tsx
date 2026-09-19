@@ -122,7 +122,7 @@ export default function ProjectsArchitecture() {
               }}
               className={`p-3 border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[85px] ${
                 isActive
-                  ? 'border-primary bg-primary/10 text-white shadow-[0_0_12px_rgba(255,51,51,0.2)]'
+                  ? 'border-primary bg-primary/10 text-white shadow-[0_0_12px_rgba(0,255,136,0.2)]'
                   : 'border-[#222222] bg-[#070707] text-muted hover:border-white hover:text-white'
               }`}
             >
@@ -220,7 +220,7 @@ export default function ProjectsArchitecture() {
             <span className="text-muted">[SAMPLE JSON WIRE TRANSMISSION // RUNTIME SCHEMA]</span>
             <span className="text-primary font-bold">200 OK • ATOMIC COMMIT</span>
           </div>
-          <pre className="text-xs text-[#FF3333] font-mono leading-relaxed overflow-x-auto p-1">
+          <pre className="text-xs text-[#00FF88] font-mono leading-relaxed overflow-x-auto p-1">
             {currentProject.schema}
           </pre>
         </div>

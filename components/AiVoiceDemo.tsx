@@ -323,7 +323,7 @@ export default function AiVoiceDemo() {
                     <button
                       type="button"
                       onClick={endCall}
-                      className="py-3 bg-red-600/90 hover:bg-red-600 text-white rounded-lg font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all font-semibold"
+                      className="py-3 bg-primary/90 hover:bg-primary text-black rounded-lg font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all font-bold"
                     >
                       <PhoneOff className="w-4 h-4" />
                       <span>Terminate Call</span>

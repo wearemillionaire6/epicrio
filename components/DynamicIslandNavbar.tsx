@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { sound } from '@/lib/sound'
+import { useTheme } from '@/components/ThemeProvider'
 
 interface DynamicIslandNavbarProps {
   onToggleInvert?: () => void
@@ -35,6 +36,10 @@ export default function DynamicIslandNavbar({
   onToggleSound,
 }: DynamicIslandNavbarProps) {
   const pathname = usePathname()
+  const themeContext = useTheme()
+  const isDark = themeContext ? themeContext.isDark : !inverted
+  const toggleTheme = themeContext ? themeContext.toggleTheme : (onToggleInvert || (() => {}))
+
   const [telemetryIdx, setTelemetryIdx] = useState(0)
   const [isExpanded, setIsExpanded] = useState(false)
   const [timeStr, setTimeStr] = useState('')
@@ -78,7 +83,9 @@ export default function DynamicIslandNavbar({
   return (
     <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-3 sm:px-6 pointer-events-none font-mono text-xs select-none">
       {/* Outer Floating Glassmorphism Pill Container */}
-      <nav className="pointer-events-auto w-full max-w-5xl bg-black/75 backdrop-blur-2xl border border-white/15 rounded-full px-4 py-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_25px_rgba(255,255,255,0.06)] flex items-center justify-between gap-2 sm:gap-4 transition-colors">
+      <nav className={`pointer-events-auto w-full max-w-5xl backdrop-blur-2xl border rounded-full px-4 py-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_25px_rgba(0,255,136,0.06)] flex items-center justify-between gap-2 sm:gap-4 transition-colors ${
+        isDark ? 'bg-black/80 border-white/15' : 'bg-white/85 border-black/15 shadow-xl text-black'
+      }`}>
         
         {/* Left: Brand Identity */}
         <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
@@ -104,7 +111,7 @@ export default function DynamicIslandNavbar({
             onClick={handleIslandToggle}
             className={`px-3 sm:px-4 py-1.5 rounded-full border transition-all duration-200 flex items-center justify-between gap-2.5 cursor-pointer max-w-full overflow-hidden ${
               isExpanded
-                ? 'border-primary bg-primary/10 shadow-[0_0_15px_rgba(255,51,51,0.3)]'
+                ? 'border-primary bg-primary/10 shadow-[0_0_15px_rgba(0,255,136,0.3)]'
                 : 'border-white/20 bg-black/80 hover:border-primary/60 hover:bg-black'
             }`}
           >
@@ -146,7 +153,7 @@ export default function DynamicIslandNavbar({
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.96 }}
                 transition={{ duration: 0.18, ease: 'easeOut' }}
-                className="absolute top-12 left-1/2 -translate-x-1/2 w-[92vw] sm:w-[480px] bg-black/95 backdrop-blur-3xl border border-primary/50 rounded-2xl p-5 shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_30px_rgba(255,51,51,0.15)] z-50 text-white font-mono space-y-4"
+                className="absolute top-12 left-1/2 -translate-x-1/2 w-[92vw] sm:w-[480px] bg-black/95 backdrop-blur-3xl border border-primary/50 rounded-2xl p-5 shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_30px_rgba(0,255,136,0.18)] z-50 text-white font-mono space-y-4"
               >
                 {/* HUD Header */}
                 <div className="flex items-center justify-between pb-3 border-b border-[#222222] text-[10px]">
@@ -256,15 +263,14 @@ export default function DynamicIslandNavbar({
                       </button>
                     )}
 
-                    {onToggleInvert && (
-                      <button
-                        type="button"
-                        onClick={onToggleInvert}
-                        className="px-2 py-1 border border-[#333333] hover:border-white rounded text-muted hover:text-white cursor-pointer"
-                      >
-                        INVERT [^I]
-                      </button>
-                    )}
+                    <button
+                      type="button"
+                      onClick={toggleTheme}
+                      className="px-2.5 py-1 border border-[#333333] hover:border-primary rounded text-[10px] text-white hover:text-primary transition-colors cursor-pointer flex items-center gap-1.5"
+                    >
+                      <span className="text-primary font-bold">{isDark ? '☾' : '☼'}</span>
+                      <span>MODE: {isDark ? 'DARK' : 'LIGHT'} [^T]</span>
+                    </button>
                   </div>
 
                   <span className="text-[9px] text-muted">
@@ -276,7 +282,7 @@ export default function DynamicIslandNavbar({
           </AnimatePresence>
         </div>
 
-        {/* Right: Multi-Page Links & Action CTA */}
+        {/* Right: Multi-Page Links, Theme Toggle & Action CTA */}
         <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
           <div className="hidden lg:flex items-center gap-2 text-[11px]">
             {mainNavLinks.slice(0, 4).map((link) => {
@@ -297,6 +303,21 @@ export default function DynamicIslandNavbar({
               )
             })}
           </div>
+
+          {/* Dark / Light Mode Toggle Button */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            title={`Toggle Theme Mode [^T] (Current: ${isDark ? 'Dark' : 'Light'})`}
+            className={`px-2.5 sm:px-3 py-1.5 rounded-full border text-[10px] sm:text-[11px] font-bold transition-all flex items-center gap-1.5 cursor-pointer flex-shrink-0 select-none ${
+              isDark
+                ? 'border-white/20 bg-black/60 text-white hover:border-primary hover:text-primary'
+                : 'border-black/20 bg-white/90 text-black hover:border-primary hover:text-primary shadow-sm'
+            }`}
+          >
+            <span className="text-primary text-xs">{isDark ? '☾' : '☼'}</span>
+            <span className="hidden sm:inline">{isDark ? 'DARK' : 'LIGHT'}</span>
+          </button>
 
           {/* Primary Audit CTA Button */}
           <Link

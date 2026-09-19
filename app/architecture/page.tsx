@@ -6,6 +6,7 @@ import CustomCursor from '@/components/CustomCursor'
 import DynamicIslandNavbar from '@/components/DynamicIslandNavbar'
 import TerminalFooter from '@/components/TerminalFooter'
 import { sound } from '@/lib/sound'
+import { useTheme } from '@/components/ThemeProvider'
 
 const architectureLayers = [
   {
@@ -61,13 +62,8 @@ const architectureLayers = [
 
 export default function ArchitecturePage() {
   const [selectedIdx, setSelectedIdx] = useState(0)
-  const [inverted, setInverted] = useState(false)
+  const { isDark, toggleTheme } = useTheme()
   const [soundEnabled, setSoundEnabled] = useState(true)
-
-  const toggleInvert = () => {
-    if (soundEnabled) sound.beep()
-    setInverted((prev) => !prev)
-  }
 
   const toggleSound = () => {
     setSoundEnabled((prev) => !prev)
@@ -77,14 +73,14 @@ export default function ArchitecturePage() {
 
   return (
     <div className={`min-h-screen selection:bg-primary selection:text-black font-mono uppercase transition-colors ${
-      inverted ? 'inverted bg-white text-black' : 'bg-black text-white'
+      !isDark ? 'inverted bg-white text-black' : 'bg-black text-white'
     }`}>
       <CustomCursor />
 
       {/* Floating Glassmorphic Dynamic Island Navigation */}
       <DynamicIslandNavbar
-        onToggleInvert={toggleInvert}
-        inverted={inverted}
+        onToggleInvert={toggleTheme}
+        inverted={!isDark}
         soundEnabled={soundEnabled}
         onToggleSound={toggleSound}
       />
@@ -125,7 +121,7 @@ export default function ArchitecturePage() {
               }}
               className={`p-3 border text-left transition-colors uppercase cursor-pointer ${
                 selectedIdx === i
-                  ? 'border-primary bg-primary/10 text-white font-bold shadow-[0_0_10px_rgba(255,51,51,0.15)]'
+                  ? 'border-primary bg-primary/10 text-white font-bold shadow-[0_0_10px_rgba(0,255,136,0.15)]'
                   : 'border-[#222222] bg-[#070707] text-muted hover:border-white hover:text-white'
               }`}
             >
@@ -168,7 +164,7 @@ export default function ArchitecturePage() {
               <span>WIRE PAYLOAD RECONCILIATION</span>
               <span className="text-primary font-bold">200 OK • VERIFIED ATOMIC COMMIT</span>
             </div>
-            <pre className="p-4 bg-black border border-[#222222] text-xs text-[#FF3333] font-mono overflow-x-auto leading-relaxed">
+            <pre className="p-4 bg-black border border-[#222222] text-xs text-[#00FF88] font-mono overflow-x-auto leading-relaxed">
               {activeLayer.payload}
             </pre>
           </div>
@@ -216,7 +212,7 @@ export default function ArchitecturePage() {
         </div>
 
         {/* Footer */}
-        <TerminalFooter onToggleInvert={toggleInvert} />
+        <TerminalFooter onToggleInvert={toggleTheme} />
       </div>
     </div>
   )

@@ -12,7 +12,7 @@ const config: Config = {
         background: '#000000',
         foreground: '#FFFFFF',
         surface: '#0A0A0A',
-        primary: '#FF3333', // Terminal crimson red accent
+        primary: '#00FF88', // Terminal cyber green accent
         muted: '#777777',
         borderMuted: '#222222',
       },

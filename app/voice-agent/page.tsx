@@ -6,6 +6,7 @@ import CustomCursor from '@/components/CustomCursor'
 import DynamicIslandNavbar from '@/components/DynamicIslandNavbar'
 import TerminalFooter from '@/components/TerminalFooter'
 import { sound } from '@/lib/sound'
+import { useTheme } from '@/components/ThemeProvider'
 
 interface VoiceStudioScenario {
   id: string
@@ -61,13 +62,8 @@ export default function VoiceAgentStudioPage() {
   const [callState, setCallState] = useState<'idle' | 'calling' | 'connected'>('idle')
   const [dialogueIndex, setDialogueIndex] = useState(0)
   const [timer, setTimer] = useState(0)
-  const [inverted, setInverted] = useState(false)
+  const { isDark, toggleTheme } = useTheme()
   const [soundEnabled, setSoundEnabled] = useState(true)
-
-  const toggleInvert = () => {
-    if (soundEnabled) sound.beep()
-    setInverted((prev) => !prev)
-  }
 
   const toggleSound = () => {
     setSoundEnabled((prev) => !prev)
@@ -126,14 +122,14 @@ export default function VoiceAgentStudioPage() {
 
   return (
     <div className={`min-h-screen selection:bg-primary selection:text-black font-mono uppercase transition-colors ${
-      inverted ? 'inverted bg-white text-black' : 'bg-black text-white'
+      !isDark ? 'inverted bg-white text-black' : 'bg-black text-white'
     }`}>
       <CustomCursor />
 
       {/* Floating Glassmorphic Dynamic Island Navigation */}
       <DynamicIslandNavbar
-        onToggleInvert={toggleInvert}
-        inverted={inverted}
+        onToggleInvert={toggleTheme}
+        inverted={!isDark}
         soundEnabled={soundEnabled}
         onToggleSound={toggleSound}
       />
@@ -182,7 +178,7 @@ export default function VoiceAgentStudioPage() {
                   }}
                   className={`w-full p-4 border text-left transition-all cursor-pointer ${
                     isSelected
-                      ? 'border-primary bg-primary/10 text-white shadow-[0_0_10px_rgba(255,51,51,0.15)]'
+                      ? 'border-primary bg-primary/10 text-white shadow-[0_0_10px_rgba(0,255,136,0.15)]'
                       : 'border-[#222222] bg-[#070707] text-muted hover:border-white hover:text-white'
                   }`}
                 >
@@ -264,7 +260,7 @@ export default function VoiceAgentStudioPage() {
               ) : (
                 <button
                   onClick={endCall}
-                  className="w-full py-3.5 border border-red-500 text-red-400 hover:bg-red-500 hover:text-white font-bold uppercase text-xs transition-colors cursor-pointer"
+                  className="w-full py-3.5 border border-primary text-primary hover:bg-primary hover:text-black font-bold uppercase text-xs transition-colors cursor-pointer"
                 >
                   TERMINATE CALL SESSION -&gt;
                 </button>
@@ -305,7 +301,7 @@ export default function VoiceAgentStudioPage() {
         </div>
 
         {/* Footer */}
-        <TerminalFooter onToggleInvert={toggleInvert} />
+        <TerminalFooter onToggleInvert={toggleTheme} />
       </div>
     </div>
   )

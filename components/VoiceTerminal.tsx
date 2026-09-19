@@ -153,7 +153,7 @@ export default function VoiceTerminal() {
                 }}
                 className={`p-3 border text-left text-xs transition-all cursor-pointer flex items-center justify-between ${
                   isSel
-                    ? 'border-primary bg-primary/10 text-white shadow-[0_0_10px_rgba(255,51,51,0.15)]'
+                    ? 'border-primary bg-primary/10 text-white shadow-[0_0_10px_rgba(0,255,136,0.15)]'
                     : 'border-[#222222] bg-black text-muted hover:border-white hover:text-white'
                 }`}
               >
@@ -268,7 +268,7 @@ export default function VoiceTerminal() {
             <button
               type="button"
               onClick={endCall}
-              className="px-6 py-3 border border-red-500 text-red-400 hover:bg-red-500 hover:text-white transition-colors uppercase font-bold text-xs flex items-center justify-center gap-2 cursor-pointer"
+              className="px-6 py-3 border border-primary text-primary hover:bg-primary hover:text-black transition-colors uppercase font-bold text-xs flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>TERMINATE CALL SESSION [ESC] -&gt;</span>
             </button>

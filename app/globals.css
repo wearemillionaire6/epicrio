@@ -8,14 +8,14 @@
   --bg-color: #000000;
   --text-color: #FFFFFF;
   --border-color: #222222;
-  --accent-color: #FF3333;
+  --accent-color: #00FF88;
 }
 
-.inverted {
-  --bg-color: #FFFFFF;
-  --text-color: #000000;
+html.light, body.light, .inverted {
+  --bg-color: #F8F9FA;
+  --text-color: #0A0A0A;
   --border-color: #DDDDDD;
-  --accent-color: #CC1111;
+  --accent-color: #008744;
 }
 
 /* Remove original OS cursors completely */
@@ -44,6 +44,47 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+/* Light mode overrides for brutalist cards and surfaces */
+html.light body, .inverted body, html.light .bg-black, .inverted .bg-black {
+  background-color: #FFFFFF !important;
+  color: #0A0A0A !important;
+}
+
+html.light .bg-\[\#050505\], .inverted .bg-\[\#050505\],
+html.light .bg-\[\#070707\], .inverted .bg-\[\#070707\],
+html.light .bg-\[\#080808\], .inverted .bg-\[\#080808\],
+html.light .bg-\[\#0A0A0A\], .inverted .bg-\[\#0A0A0A\],
+html.light .bg-\[\#0c0c0c\], .inverted .bg-\[\#0c0c0c\] {
+  background-color: #F4F4F6 !important;
+  color: #0A0A0A !important;
+}
+
+html.light .border-\[\#1A1A1A\], .inverted .border-\[\#1A1A1A\],
+html.light .border-\[\#1E1E1E\], .inverted .border-\[\#1E1E1E\],
+html.light .border-\[\#222222\], .inverted .border-\[\#222222\],
+html.light .border-\[\#333333\], .inverted .border-\[\#333333\] {
+  border-color: #E2E8F0 !important;
+}
+
+html.light .text-white, .inverted .text-white {
+  color: #0A0A0A !important;
+}
+
+html.light .text-muted, .inverted .text-muted {
+  color: #555555 !important;
+}
+
+html.light .text-slate-300, .inverted .text-slate-300,
+html.light .text-slate-400, .inverted .text-slate-400 {
+  color: #334155 !important;
+}
+
+html.light pre, .inverted pre {
+  background-color: #F1F5F9 !important;
+  border-color: #CBD5E1 !important;
+  color: #007A3D !important;
+}
+
 /* Force unified typography styling on all headings and elements */
 h1, h2, h3, h4, h5, h6, .font-pixel, .font-doto, .font-terminal {
   font-family: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
@@ -65,7 +106,7 @@ h1, h2, h3, h4, h5, h6, .font-pixel, .font-doto, .font-terminal {
 
 .box-info-active {
   border: 1px solid var(--accent-color);
-  background-color: rgba(255, 51, 51, 0.06);
+  background-color: rgba(0, 255, 136, 0.08);
 }
 
 /* Brutalist borders */

@@ -236,14 +236,14 @@ export default function MovablePixelBackground({
       // Pulse color values
       const pulse = 0.5 + Math.sin(time * 2) * 0.5
       const whiteColor = inverted ? '#000000' : '#FFFFFF'
-      const accentColor = '#FF3333'
+      const accentColor = inverted ? '#00A859' : '#00FF88'
 
       // Render connecting circuit lines between adjacent nodes
       if (nodes.length > 0) {
         ctx.lineWidth = 1
         ctx.strokeStyle = inverted
-          ? `rgba(200, 20, 20, ${0.1 + pulse * 0.1})`
-          : `rgba(255, 51, 51, ${0.12 + pulse * 0.08})`
+          ? `rgba(0, 168, 89, ${0.1 + pulse * 0.1})`
+          : `rgba(0, 255, 136, ${0.12 + pulse * 0.08})`
 
         // Draw horizontal & vertical circuit paths
         ctx.beginPath()
@@ -303,7 +303,7 @@ export default function MovablePixelBackground({
         const finalY = originY + node.y * scale
         const finalSize = node.size * scale
 
-        // Color selection: Crimson red for accent nodes or when perturbed, else Stark White
+        // Color selection: Cyber green for accent nodes or when perturbed, else Stark White
         const isPerturbed = Math.hypot(node.vx, node.vy) > 0.4
         if (node.isAccent || isPerturbed) {
           ctx.fillStyle = accentColor

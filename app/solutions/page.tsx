@@ -6,6 +6,7 @@ import CustomCursor from '@/components/CustomCursor'
 import DynamicIslandNavbar from '@/components/DynamicIslandNavbar'
 import TerminalFooter from '@/components/TerminalFooter'
 import { sound } from '@/lib/sound'
+import { useTheme } from '@/components/ThemeProvider'
 
 const solutionsDetail = [
   {
@@ -66,13 +67,8 @@ const solutionsDetail = [
 
 export default function SolutionsPage() {
   const [selectedIdx, setSelectedIdx] = useState(0)
-  const [inverted, setInverted] = useState(false)
+  const { isDark, toggleTheme } = useTheme()
   const [soundEnabled, setSoundEnabled] = useState(true)
-
-  const toggleInvert = () => {
-    if (soundEnabled) sound.beep()
-    setInverted((prev) => !prev)
-  }
 
   const toggleSound = () => {
     setSoundEnabled((prev) => !prev)
@@ -82,14 +78,14 @@ export default function SolutionsPage() {
 
   return (
     <div className={`min-h-screen selection:bg-primary selection:text-black font-mono uppercase transition-colors ${
-      inverted ? 'inverted bg-white text-black' : 'bg-black text-white'
+      !isDark ? 'inverted bg-white text-black' : 'bg-black text-white'
     }`}>
       <CustomCursor />
 
       {/* Floating Glassmorphic Dynamic Island Navigation */}
       <DynamicIslandNavbar
-        onToggleInvert={toggleInvert}
-        inverted={inverted}
+        onToggleInvert={toggleTheme}
+        inverted={!isDark}
         soundEnabled={soundEnabled}
         onToggleSound={toggleSound}
       />
@@ -130,7 +126,7 @@ export default function SolutionsPage() {
               }}
               className={`p-3 border text-left transition-colors uppercase cursor-pointer ${
                 selectedIdx === i
-                  ? 'border-primary bg-primary/10 text-white font-bold shadow-[0_0_10px_rgba(255,51,51,0.15)]'
+                  ? 'border-primary bg-primary/10 text-white font-bold shadow-[0_0_10px_rgba(0,255,136,0.15)]'
                   : 'border-[#222222] bg-[#070707] text-muted hover:border-white hover:text-white'
               }`}
             >
@@ -154,7 +150,7 @@ export default function SolutionsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-4 border border-[#222222] bg-black">
-              <span className="text-red-400 font-bold text-[10px] uppercase block mb-1">
+              <span className="text-zinc-400 font-bold text-[10px] uppercase block mb-1">
                 [X] THE OPERATIONAL FRICTION
               </span>
               <p className="text-xs text-[#aaaaaa] leading-relaxed">
@@ -240,7 +236,7 @@ export default function SolutionsPage() {
         </div>
 
         {/* Footer */}
-        <TerminalFooter onToggleInvert={toggleInvert} />
+        <TerminalFooter onToggleInvert={toggleTheme} />
       </div>
     </div>
   )

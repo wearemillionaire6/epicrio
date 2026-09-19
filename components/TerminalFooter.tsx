@@ -1,12 +1,25 @@
 'use client'
 
 import { sound } from '@/lib/sound'
+import { useTheme } from '@/components/ThemeProvider'
 
 interface TerminalFooterProps {
-  onToggleInvert: () => void
+  onToggleInvert?: () => void
 }
 
 export default function TerminalFooter({ onToggleInvert }: TerminalFooterProps) {
+  const themeContext = useTheme()
+  const isDark = themeContext ? themeContext.isDark : true
+
+  const handleToggle = () => {
+    sound.beep()
+    if (themeContext) {
+      themeContext.toggleTheme()
+    } else if (onToggleInvert) {
+      onToggleInvert()
+    }
+  }
+
   const scrollToTop = () => {
     sound.click()
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -105,14 +118,11 @@ export default function TerminalFooter({ onToggleInvert }: TerminalFooterProps) 
           <div>
             <button
               type="button"
-              onClick={() => {
-                sound.beep()
-                onToggleInvert()
-              }}
-              className="hover:text-primary transition-colors flex items-center gap-2 w-full text-left"
+              onClick={handleToggle}
+              className="hover:text-primary transition-colors flex items-center gap-2 w-full text-left cursor-pointer"
             >
-              <span className="text-muted">^I</span>
-              <span className="text-primary font-bold">INVERT</span>
+              <span className="text-muted">^T</span>
+              <span className="text-primary font-bold">THEME: {isDark ? 'DARK' : 'LIGHT'}</span>
             </button>
           </div>
         </div>

@@ -194,7 +194,7 @@ export default function Sectors() {
               onClick={() => handleSelectTab(idx)}
               className={`p-2.5 sm:p-3 text-left border transition-all text-xs cursor-pointer flex flex-col justify-between min-h-[75px] ${
                 isActive
-                  ? 'border-primary bg-primary/10 text-white shadow-[0_0_12px_rgba(255,51,51,0.2)]'
+                  ? 'border-primary bg-primary/10 text-white shadow-[0_0_12px_rgba(0,255,136,0.2)]'
                   : 'border-[#222222] bg-black text-muted hover:border-white hover:text-white'
               }`}
             >
@@ -240,7 +240,7 @@ export default function Sectors() {
         {/* Operational Friction vs Solution Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div className="p-4 border border-[#262626] bg-black">
-            <div className="text-red-400 text-[10px] font-bold tracking-widest uppercase mb-2 flex items-center gap-1.5">
+            <div className="text-zinc-400 text-[10px] font-bold tracking-widest uppercase mb-2 flex items-center gap-1.5">
               <span>[X]</span>
               <span>CURRENT OPERATIONAL BOTTLENECK</span>
             </div>
@@ -340,7 +340,7 @@ export default function Sectors() {
                 step="25"
                 value={monthlyLeads}
                 onChange={(e) => setMonthlyLeads(Number(e.target.value))}
-                className="w-full accent-[#FF3333] cursor-pointer"
+                className="w-full accent-[#00FF88] cursor-pointer"
               />
               <div className="flex justify-between text-[9px] text-[#555555] mt-1">
                 <span>50</span>
@@ -363,7 +363,7 @@ export default function Sectors() {
                 step="500"
                 value={avgTicket}
                 onChange={(e) => setAvgTicket(Number(e.target.value))}
-                className="w-full accent-[#FF3333] cursor-pointer"
+                className="w-full accent-[#00FF88] cursor-pointer"
               />
               <div className="flex justify-between text-[9px] text-[#555555] mt-1">
                 <span>$1,000</span>
