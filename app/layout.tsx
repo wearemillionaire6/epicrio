@@ -1,13 +1,28 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from 'next/font/google';
+import { Outfit, Plus_Jakarta_Sans, DM_Mono } from 'next/font/google';
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
-const inter = Inter({
+const outfit = Outfit({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
-})
+  variable: '--font-outfit',
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-sans',
+  weight: ['400', '500', '600', '700', '800'],
+});
+
+const dmMono = DM_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-mono',
+  weight: ['400', '500'],
+});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -35,8 +50,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`scroll-smooth bg-[#FAFAF8] ${inter.variable}`}>
-      <body className="antialiased min-h-screen bg-[#FAFAF8] text-[#1A1A1E] selection:bg-zinc-950 selection:text-white">
+    <html lang="en" className={`scroll-smooth bg-[#FAFAF8] ${outfit.variable} ${plusJakartaSans.variable} ${dmMono.variable}`}>
+      <body className="antialiased min-h-screen bg-[#FAFAF8] text-[#1A1A1E] font-sans selection:bg-zinc-950 selection:text-white">
         <ThemeProvider>
           {children}
         </ThemeProvider>

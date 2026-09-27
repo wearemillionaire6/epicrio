@@ -17,8 +17,10 @@ const config: Config = {
         borderMuted: '#222222',
       },
       fontFamily: {
-        pixel: ['Space Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
-        mono: ['Space Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+        sans: ['var(--font-sans)', 'var(--font-outfit)', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['var(--font-outfit)', 'var(--font-sans)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+        pixel: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
     },
   },

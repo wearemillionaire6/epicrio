@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,6 +8,21 @@
   --border-color: #E5E5E5;
   --accent-color: #09090B;
   --primary: #09090B;
+}
+
+/* Luxury UI/UX Typography Stack */
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-outfit), var(--font-sans), sans-serif;
+  letter-spacing: -0.025em;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+body, p, span, button, input, select, textarea {
+  font-family: var(--font-sans), var(--font-outfit), system-ui, sans-serif;
+}
+
+code, kbd, samp, pre, .font-mono {
+  font-family: var(--font-mono), monospace;
 }
 
 html.light, body.light, .inverted {

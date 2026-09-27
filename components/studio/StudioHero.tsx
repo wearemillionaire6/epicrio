@@ -25,7 +25,7 @@ export default function StudioHero({ isDark = false }: StudioHeroProps) {
           </div>
 
           {/* Primary Statement */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.1] text-slate-900 font-sans">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-[-0.03em] leading-[1.1] text-slate-900 font-display">
             We automate the work your team shouldn't be doing manually.
           </h1>
 

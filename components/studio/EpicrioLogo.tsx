@@ -56,7 +56,7 @@ export default function EpicrioLogo({
       {showWordmark && !markOnly && (
         <div className="flex items-baseline gap-0.5 select-none">
           <span
-            className="font-bold tracking-[-0.035em] text-zinc-950 font-sans"
+            className="font-bold tracking-[-0.035em] text-zinc-950 font-display"
             style={{ fontSize: Math.max(14, Math.round(size * 0.58)) }}
           >
             Epicrio
