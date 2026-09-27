@@ -3,420 +3,249 @@
 import { useState } from 'react'
 import { sound } from '@/lib/sound'
 
-interface SectorData {
+interface ICPProfile {
   id: string
   code: string
-  name: string
-  shortTitle: string
-  metric: string
-  metricLabel: string
-  friction: string
-  solution: string
-  agentsDeployed: string[]
-  workflowNodes: string[]
+  title: string
+  headline: string
+  corePain: string
+  ourSolution: string
+  sampleHook: string
   defaultMonthlyVolume: number
-  avgDealSize: number
-  sampleTranscript: {
-    speaker: string
-    text: string
-  }[]
+  defaultDealSize: number
 }
 
-const sectorData: SectorData[] = [
+const targetICPs: ICPProfile[] = [
   {
-    id: 'hvac',
-    code: '01',
-    name: 'COMMERCIAL HVAC & MECHANICAL CONTRACTORS',
-    shortTitle: 'HVAC & FIELD SERVICES',
-    metric: '18+ HRS',
-    metricLabel: 'SAVED PER ESTIMATOR / WEEK',
-    friction: 'EMERGENCY AFTER-HOURS EQUIPMENT FAILURES GO TO VOICEMAIL; FIELD TECHNICIANS AND ESTIMATORS WASTE 35% OF THEIR DAY MANUALLY TRANSCRIBING EQUIPMENT SERIALS AND RETYPING QUOTES.',
-    solution: 'SUB-300MS VOICE TRIAGE FOR EMERGENCY BREAKDOWNS, AUTOMATED EQUIPMENT CATALOG LOOKUP (HVACEQ PIPELINES), INSTANT TECHNICIAN DISPATCH, AND AUTOMATED QUOTE FOLLOW-UPS.',
-    agentsDeployed: ['EMERGENCY VOICE TRIAGE AGENT', 'EQUIPMENT SPEC OCR WORKER', 'SERVICETITAN / PROCORE BRIDGE', 'AUTO-REVIEW GENERATOR'],
-    workflowNodes: ['[INBOUND EMERGENCY CALL]', '[EQUIPMENT MODEL PARSE]', '[AVAILABILITY & GEO-ROUTING]', '[DISPATCH SMS & CALENDAR]'],
-    defaultMonthlyVolume: 350,
-    avgDealSize: 4200,
-    sampleTranscript: [
-      { speaker: 'CALLER', text: 'OUR 40-TON ROOFTOP UNIT ON BUILDING B JUST THREW A CRITICAL HEAD PRESSURE CODE AND OUR FREEZER ROOM IS HEATING UP.' },
-      { speaker: 'VOICE AGENT', text: 'UNDERSTOOD. FLAGGED AS PRIORITY 1 COMMERCIAL REFRIGERATION EMERGENCY. ROUTING LOCATION AND CARRIER RTU SERIAL TO SENIOR TECH MARCUS WHO IS 12 MINUTES AWAY.' },
-    ],
+    id: 'b2b-saas',
+    code: 'ICP.01',
+    title: 'B2B SAAS FOUNDERS ($500K - $3M ARR)',
+    headline: 'REPLACE SDR TURNOVER WITH AN ALWAYS-ON INBOX ENGINE.',
+    corePain: 'Founders have strong product-market fit but lack scalable outbound. Hiring an SDR costs $77K/year, takes 3 months to ramp, and 68% leave within 12 months. Single-inbox attempts quickly get flagged as spam by Google.',
+    ourSolution: 'We deploy 15 secondary domains, trigger-monitor competitor tech stacks on BuiltWith, verify verified VP/Director direct emails via Clay waterfall, and book 15-25 qualified demos directly onto your sales calendar.',
+    sampleHook: 'Saw you just launched your SOC-2 compliance badge and noticed 3 open enterprise AE roles on your Careers page.',
+    defaultMonthlyVolume: 3000,
+    defaultDealSize: 8000,
   },
   {
-    id: 'legal',
-    code: '02',
-    name: 'LEGAL & HIGH-STAKES LAW FIRMS',
-    shortTitle: 'LEGAL & LAW FIRMS',
-    metric: '+48%',
-    metricLabel: 'RETAINERS SIGNED SAME-DAY',
-    friction: 'PROSPECTIVE CLIENTS IN HIGH-INTENT DISTRESS CALL AFTER 5 PM AND HANG UP DURING LONG WEB QUESTIONNAIRES; STAFF SPEND HOURS ON MANUAL CONFLICT-OF-INTEREST CHECKS.',
-    solution: '24/7 EMPATHETIC CONVERSATIONAL INTAKE, IMMEDIATE MULTI-DATABASE CONFLICT CHECKS AGAINST INTERNAL FIRM LEDGERS, AND AUTOMATED RETAINER AGREEMENT DISPATCH VIA DOCUSIGN.',
-    agentsDeployed: ['INBOUND RETAINER VOICE AGENT', 'CONFLICT CHECK MICROSERVICE', 'CLIO / CLIO GROW SYNC', 'DOCUSIGN AUTOMATED PIPELINE'],
-    workflowNodes: ['[AFTER-HOURS CALL]', '[JURISDICTION / CONFLICT CHECK]', '[CASE QUALIFICATION SCORE]', '[INSTANT PARTNER CALENDAR BOOK]'],
-    defaultMonthlyVolume: 180,
-    avgDealSize: 6500,
-    sampleTranscript: [
-      { speaker: 'CALLER', text: 'I WAS JUST SERVED WITH A FEDERAL IP INJUNCTION AND I NEED AN EMERGENCY CONSULTATION BEFORE THE MORNING FILING DEADLINE.' },
-      { speaker: 'VOICE AGENT', text: 'LOGGING UNDER EMERGENCY CIVIL DEFENSE. CONFLICT CHECK AGAINST OPPOSING COUNSEL HAS CLEARED. I HAVE RESERVED SENIOR PARTNER DAVID VANCE FOR 8:15 AM TOMORROW.' },
-    ],
+    id: 'marketing-agencies',
+    code: 'ICP.02',
+    title: 'DIGITAL & GROWTH AGENCIES (5 - 25 STAFF)',
+    headline: 'CONSISTENT HIGH-TICKET CLIENT INTAKE WITHOUT FOUNDER BURNOUT.',
+    corePain: 'Agencies live on a feast-or-famine referral rollercoaster. Senior partners and founders have zero time for manual prospecting, and generic cold email agencies burn their reputation with cringe AI templates.',
+    ourSolution: 'We identify e-commerce brands, high-growth startups, and local multi-location brands seeking redesigns, paid media, or growth partners. We send humanized, hyper-relevant peer-to-peer audits that command respect.',
+    sampleHook: 'Audited your mobile PDP checkout flow and noticed 2 friction points that usually cost Shopify Plus brands 14% in conversion.',
+    defaultMonthlyVolume: 2500,
+    defaultDealSize: 4500,
   },
   {
-    id: 'medical',
-    code: '03',
-    name: 'MEDICAL, SURGICAL & AESTHETIC PRACTICES',
-    shortTitle: 'HEALTHCARE & MED SPAS',
-    metric: '-62%',
-    metricLabel: 'REDUCTION IN NO-SHOW LOSS',
-    friction: 'OVERBURDENED FRONT DESKS MISS HIGH-TICKET SURGICAL CONSULTATION CALLS; PATIENTS CANCEL LAST MINUTE LEAVING EXPENSIVE OR SLOTS IDLE WITH ZERO AUTOMATED BACKFILL.',
-    solution: 'HIPAA-COMPLIANT CONVERSATIONAL VOICE BOOKING, SMART 2-WAY SMS CONFIRMATION LOOPS, AND AUTOMATED STANDBY LIST BACKFILL THAT FILLS CANCELLED SLOTS IN UNDER 4 MINUTES.',
-    agentsDeployed: ['HIPAA VOICE SCHEDULER', 'WAITLIST AUTO-FILL ENGINE', 'EHR / NEXTECH CONDUIT', 'POST-OP FOLLOW-UP BOT'],
-    workflowNodes: ['[CONSULTATION INQUIRY]', '[INSURANCE & PROCEDURE TRIAGE]', '[EHR SLOT RESERVATION]', '[2-WAY SMS CADENCE]'],
-    defaultMonthlyVolume: 420,
-    avgDealSize: 2800,
-    sampleTranscript: [
-      { speaker: 'CALLER', text: 'HI, I NEED TO RESCHEDULE MY CONSULTATION WITH DR. REYES NEXT TUESDAY, DO YOU HAVE ANYTHING OPEN ON THURSDAY AFTERNOON?' },
-      { speaker: 'VOICE AGENT', text: 'YES, DR. REYES HAS AN OPENING AT 2:30 PM ON THURSDAY. I HAVE UPDATED YOUR CHART AND TEXTED YOU THE UPDATED PREP GUIDELINES.' },
-    ],
-  },
-  {
-    id: 'realestate',
-    code: '04',
-    name: 'COMMERCIAL REAL ESTATE & ASSET MGMT',
-    shortTitle: 'COMMERCIAL REAL ESTATE',
-    metric: '10X',
-    metricLabel: 'SPEED-TO-LEAD ON ASSET TOURS',
-    friction: 'INSTITUTIONAL BROKERS MISS TENANT INQUIRIES DURING MULTI-HOUR PROPERTY TOURS; PROSPECTIVE TENANTS MOVE ON TO COMPETING PROPERTIES BEFORE RECEIVING ASSET PITCH DECKS.',
-    solution: 'SUB-60S INSTANT QUALIFICATION, AUTOMATED WHATSAPP & EMAIL BROCHURE DELIVERY WITH NDAS, AND LIVE AGENT-GUIDED TOUR BOOKING SYNCHRONIZED ACROSS THE BROKERAGE.',
-    agentsDeployed: ['ASSET BROCHURE DISPATCHER', 'TENANT KYC PRE-FILTER', 'WHATSAPP BUSINESS ENGINE', 'BUILDOUT / SALESFORCE SYNC'],
-    workflowNodes: ['[PORTAL INQUIRY]', '[TENANT SQUARE-FOOTAGE PARSE]', '[INSTANT BROCHURE & NDA]', '[CALENDLY / CRM LOCK]'],
-    defaultMonthlyVolume: 240,
-    avgDealSize: 12000,
-    sampleTranscript: [
-      { speaker: 'INVESTOR', text: 'LOOKING AT THE 25,000 SQ FT INDUSTRIAL FLEX SPACE ON AIRPORT BLVD. CAN I GET THE TRAILING 12-MONTH CAP RATE AND RENT ROLL?' },
-      { speaker: 'VOICE AGENT', text: 'I HAVE DISPATCHED THE ENCRYPTED OFFERING MEMORANDUM AND NDA TO YOUR EMAIL. I CAN ALSO SCHEDULE A WALKTHROUGH WITH MANAGING DIRECTOR SARAH THIS FRIDAY.' },
-    ],
-  },
-  {
-    id: 'saas',
-    code: '05',
-    name: 'HIGH-TICKET B2B TECH & ADVISORY',
-    shortTitle: 'B2B SAAS & TECH ADVISORY',
-    metric: '3.4X',
-    metricLabel: 'DEMO-TO-CONTRACT VELOCITY',
-    friction: 'SALES REPS WASTE 40% OF THEIR DAY MANUALLY QUALIFYING INBOUND DEMO REQUESTS, UPDATING MESSY CRM PROPERTIES, AND HAND-CRAFTING PROPOSALS IN GOOGLE DOCS.',
-    solution: 'INSTANT CLEARBIT/APOLLO WEBHOOK ENRICHMENT UPON FORM SUBMISSION, AUTONOMOUS DEMO QUALIFICATION, AND AUTOMATED STRIPE/PANDADOC CONTRACT PIPELINES UPON DEAL CLOSE.',
-    agentsDeployed: ['ENRICHMENT & SCORING WORKER', 'AUTONOMOUS CONTRACT GENERATOR', 'STRIPE BILLING RECONCILER', 'SLACK WAR-ROOM BOT'],
-    workflowNodes: ['[DEMO SUBMIT]', '[CLEARBIT DATA ENRICHMENT]', '[ENTERPRISE TIER ROUTE]', '[PROPOSAL AUTO-DISPATCH]'],
-    defaultMonthlyVolume: 300,
-    avgDealSize: 8500,
-    sampleTranscript: [
-      { speaker: 'BUYER', text: 'WE HAVE 250 SEATS AND NEED SOC2 COMPLIANCE VALIDATION BEFORE WE CAN START A 30-DAY PROOF-OF-CONCEPT.' },
-      { speaker: 'VOICE AGENT', text: 'OUR ENTERPRISE TIER COVERS FULL SOC2 TYPE II AND HIPAA COMPLIANCE. I AM GENERATING YOUR CUSTOMIZED POC AGREEMENT AND SECURITY PACKAGE NOW.' },
-    ],
-  },
-  {
-    id: 'wealth',
-    code: '06',
-    name: 'WEALTH & PRIVATE ASSET MANAGEMENT',
-    shortTitle: 'WEALTH MANAGEMENT',
-    metric: '100%',
-    metricLabel: 'COMPLIANCE AUDIT TRAIL ACCURACY',
-    friction: 'HIGH-NET-WORTH CLIENT ONBOARDING REQUIRES BACK-AND-FORTH EMAIL PDF SUBMISSIONS, MANUAL KYC VERIFICATIONS, AND DISJOINTED RISK QUESTIONNAIRES.',
-    solution: 'BESPOKE CLIENT ONBOARDING PORTAL WITH AUTOMATED DOCUMENT EXTRACTION, REAL-TIME RISK PROFILE SCORING, AND DIRECT CUSTODIAL DATABASE INTEGRATION.',
-    agentsDeployed: ['SECURE KYC PORTAL', 'DOCUMENT EXTRACTION OCR', 'CUSTODIAN API BRIDGE', 'ENCRYPTED TELEMETRY LEDGER'],
-    workflowNodes: ['[CLIENT INTAKE PORTAL]', '[KYC / AML IDENTITY CHECK]', '[PORTFOLIO RISK PROFILE]', '[CUSTODIAN ACCT SYNC]'],
-    defaultMonthlyVolume: 80,
-    avgDealSize: 25000,
-    sampleTranscript: [
-      { speaker: 'CLIENT', text: 'I AM ROLLING OVER A FAMILY TRUST PORTFOLIO AND WANT TO ENSURE THE TAX-LOSS HARVESTING STRATEGY ALIGNS WITH OUR STATE ESTATE LAWS.' },
-      { speaker: 'VOICE AGENT', text: 'ALL ESTATE TAX PARAMETERS HAVE BEEN LOGGED AGAINST THE TRUST SCHEDULE. I HAVE SCHEDULED AN INTAKE REVIEW WITH SENIOR WEALTH ADVISOR MILLER FOR TUESDAY.' },
-    ],
+    id: 'b2b-consulting',
+    code: 'ICP.03',
+    title: 'HIGH-TICKET B2B CONSULTING & ADVISORY',
+    headline: 'HIGH-STAKES REVENUE CONVERSATIONS WITH C-SUITE BUYERS.',
+    corePain: 'Every enterprise deal is worth $15K-$50K+, but reaching C-suite leaders (CFOs, CISOs, VP HR) through gatekeepers is notoriously difficult. Blatant sales pitches are immediately blocked or reported.',
+    ourSolution: 'We monitor executive promotions, regulatory shifts, and quarterly 10-K filings to draft ultra-tailored 60-word consultative observation notes. Prospects are engaged on both email and LinkedIn simultaneously.',
+    sampleHook: 'Noticed your Q1 SEC filing highlighted supply chain compliance for your EU operations; wanted to share a 1-page summary of how peer directors handled audit prep.',
+    defaultMonthlyVolume: 1500,
+    defaultDealSize: 18000,
   },
 ]
 
 export default function Sectors() {
   const [activeTab, setActiveTab] = useState<number>(0)
-  const currentSector = sectorData[activeTab]
+  const currentICP = targetICPs[activeTab]
 
-  // Interactive ROI Calculator State
-  const [monthlyLeads, setMonthlyLeads] = useState<number>(currentSector.defaultMonthlyVolume)
-  const [avgTicket, setAvgTicket] = useState<number>(currentSector.avgDealSize)
+  // Interactive Outbound Calculator State
+  const [monthlyVolume, setMonthlyVolume] = useState<number>(currentICP.defaultMonthlyVolume)
+  const [dealSize, setDealSize] = useState<number>(currentICP.defaultDealSize)
 
-  // Calculations
-  const hoursSavedPerMonth = Math.round(monthlyLeads * 0.45)
-  const capturedDealsPerMonth = Math.max(1, Math.round(monthlyLeads * 0.04))
-  const estimatedRevenueGain = Math.round(capturedDealsPerMonth * avgTicket * 12)
+  // Calculations based on 2026 Outbound Benchmarks (PRD § 1.4 & § 2.1)
+  // Reply rate on signal-based outbound: ~3.5% - 4.5%
+  // Meeting conversion rate from positive replies: ~25%
+  const estimatedQualifiedMeetings = Math.max(4, Math.round((monthlyVolume * 0.038) * 0.22))
+  const projectedPipelineValue = Math.round(estimatedQualifiedMeetings * dealSize * 12)
+  const sdrAnnualCost = 77000 + 18000 // Salary + tools/taxes = $95,000
+  const ourAnnualCost = 3500 + (1500 * 12) // $21,500
+  const netAnnualSavings = sdrAnnualCost - ourAnnualCost
 
   const handleSelectTab = (idx: number) => {
     sound.click()
     setActiveTab(idx)
-    setMonthlyLeads(sectorData[idx].defaultMonthlyVolume)
-    setAvgTicket(sectorData[idx].avgDealSize)
+    setMonthlyVolume(targetICPs[idx].defaultMonthlyVolume)
+    setDealSize(targetICPs[idx].defaultDealSize)
   }
 
   return (
-    <section id="sectors" className="py-24 border-b border-[#222222] font-mono">
-      {/* Section Title */}
+    <section id="calculator" className="py-20 border-b border-[#222222] font-mono">
+      {/* Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-[#222222] gap-4">
         <div>
           <div className="text-primary text-xs tracking-widest uppercase mb-1 flex items-center gap-2">
             <span className="inline-block w-2 h-2 bg-primary" />
-            <span>[VERTICAL_INTELLIGENCE // MODULE 05]</span>
+            <span>[TARGET_PROFILES // WHO WE SERVE &amp; ROI]</span>
           </div>
-          <h2 className="font-pixel text-3xl sm:text-5xl md:text-6xl text-white tracking-widest">
-            SECTORS
+          <h2 className="font-pixel text-3xl sm:text-5xl text-white tracking-widest">
+            ICP &amp; CALCULATOR
           </h2>
         </div>
         <div className="text-right text-xs text-muted">
-          <span>VERTICAL SPECIALIZATIONS</span>
+          <span>SURGICAL AUDIENCE TARGETING</span>
           <br />
-          <span className="text-white">SELECT INDUSTRY TO INSPECT BLUEPRINT</span>
+          <span className="text-white">SIMULATE PIPELINE VALUE &amp; SAVINGS</span>
         </div>
       </div>
 
-      {/* Terminal Command Header */}
-      <div className="text-muted text-xs sm:text-sm mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="text-primary">[/&gt; SECTOR_SWITCHER : ]</span>
-          <span className="text-white">SELECT DOMAIN TO RUN SIMULATION</span>
-        </div>
-        <span className="text-[11px] text-primary hidden md:inline">
-          6 PRODUCTION BLUEPRINTS
-        </span>
-      </div>
-
-      {/* Sector Tab Selector Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mb-6">
-        {sectorData.map((sec, idx) => {
+      {/* 3 ICP Tabs */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-6">
+        {targetICPs.map((icp, idx) => {
           const isActive = activeTab === idx
           return (
             <button
-              key={sec.id}
+              key={icp.id}
+              type="button"
               onClick={() => handleSelectTab(idx)}
-              className={`p-2.5 sm:p-3 text-left border transition-all text-xs cursor-pointer flex flex-col justify-between min-h-[75px] ${
+              className={`p-3.5 text-left border transition-all text-xs cursor-pointer ${
                 isActive
-                  ? 'border-primary bg-primary/10 text-white shadow-[0_0_12px_rgba(0,255,136,0.2)]'
-                  : 'border-[#222222] bg-black text-muted hover:border-white hover:text-white'
+                  ? 'border-primary bg-primary/10 text-white shadow-[0_0_15px_rgba(0,255,136,0.15)] font-bold'
+                  : 'border-[#222222] bg-[#070707] text-muted hover:border-white hover:text-white'
               }`}
             >
-              <div className="flex items-center justify-between w-full">
-                <span className="text-[9px] text-primary font-bold">[{sec.code}]</span>
-                {isActive && <span className="w-1.5 h-1.5 bg-primary rounded-full animate-ping" />}
-              </div>
-              <span className="font-bold text-[11px] sm:text-xs tracking-tight line-clamp-2 mt-1">
-                {sec.shortTitle}
+              <span className={`text-[10px] block mb-1 ${isActive ? 'text-primary' : 'text-muted'}`}>
+                {icp.code}
+              </span>
+              <span className="font-bold text-xs block leading-snug">
+                {icp.title}
               </span>
             </button>
           )
         })}
       </div>
 
-      {/* Active Sector Command Hub Showcase */}
-      <div className="border border-white/20 bg-[#070707] p-6 sm:p-8 relative">
-        {/* Hub Header */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 mb-6 border-b border-[#222222]">
+      {/* Active ICP Detail Card */}
+      <div className="border border-white/20 bg-[#070707] p-6 mb-8">
+        <div className="border-b border-[#222222] pb-4 mb-4">
+          <span className="text-primary text-[10px] font-bold block mb-1">
+            TARGET STRATEGY: {currentICP.code}
+          </span>
+          <h3 className="font-bold text-base sm:text-lg text-white mb-2">
+            {currentICP.headline}
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs mt-3">
+            <div className="p-3 bg-black border border-[#222222]">
+              <span className="text-muted text-[10px] block mb-1 uppercase font-bold">THE CORE FRICTION:</span>
+              <p className="text-[#aaaaaa] leading-relaxed">{currentICP.corePain}</p>
+            </div>
+            <div className="p-3 bg-black border border-primary/30 bg-primary/[0.03]">
+              <span className="text-primary text-[10px] block mb-1 uppercase font-bold">OUR AUTOMATED SOLUTION:</span>
+              <p className="text-slate-200 leading-relaxed">{currentICP.ourSolution}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-3 bg-black border border-[#222222] text-xs">
+          <span className="text-muted text-[10px] block mb-1 uppercase font-bold">SAMPLE CONTEXTUAL OPENER HOOK:</span>
+          <p className="text-primary font-mono leading-relaxed">&ldquo;{currentICP.sampleHook}&rdquo;</p>
+        </div>
+      </div>
+
+      {/* Interactive Value & Pipeline Calculator */}
+      <div className="border border-primary/40 bg-[#070707] p-6 sm:p-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-6 border-b border-[#222222] gap-2">
           <div>
-            <div className="flex items-center gap-2 text-[10px] text-primary uppercase tracking-wider mb-1">
-              <span>SECTOR PROTOCOL // {currentSector.code}</span>
-              <span>•</span>
-              <span className="text-white">VERIFIED PRODUCTION BLUEPRINT</span>
+            <span className="text-primary text-[10px] uppercase font-bold tracking-wider">
+              [INTERACTIVE PIPELINE CALCULATOR]
+            </span>
+            <h4 className="text-base font-bold text-white tracking-wide">
+              PROJECTED QUALIFIED MEETINGS &amp; SDR COST SAVINGS
+            </h4>
+          </div>
+          <span className="text-[10px] text-muted">ADJUST SLIDERS TO SIMULATE</span>
+        </div>
+
+        {/* Sliders Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          {/* Slider 1: Monthly Email Volume */}
+          <div>
+            <div className="flex justify-between text-xs mb-2">
+              <span className="text-muted">MONTHLY VERIFIED SENDS:</span>
+              <span className="text-primary font-bold">{monthlyVolume.toLocaleString()} EMAILS / MO</span>
             </div>
-            <h3 className="font-bold text-lg sm:text-2xl text-white tracking-wide">
-              {currentSector.name}
-            </h3>
+            <input
+              type="range"
+              min="1000"
+              max="6000"
+              step="250"
+              value={monthlyVolume}
+              onChange={(e) => setMonthlyVolume(Number(e.target.value))}
+              className="w-full accent-[#00FF88] cursor-pointer"
+            />
+            <div className="flex justify-between text-[9px] text-[#666666] mt-1">
+              <span>1,000 (Starter)</span>
+              <span>3,000 (Growth)</span>
+              <span>6,000+ (Enterprise)</span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-3 bg-black border border-primary/40 px-4 py-3">
-            <div>
-              <span className="text-2xl sm:text-3xl font-pixel font-bold text-primary block leading-none">
-                {currentSector.metric}
-              </span>
-              <span className="text-[9px] text-muted tracking-wider block mt-1">
-                {currentSector.metricLabel}
-              </span>
+          {/* Slider 2: Average Deal / Contract Size */}
+          <div>
+            <div className="flex justify-between text-xs mb-2">
+              <span className="text-muted">AVERAGE DEAL OR RETAINER VALUE:</span>
+              <span className="text-white font-bold">${dealSize.toLocaleString()}</span>
+            </div>
+            <input
+              type="range"
+              min="1000"
+              max="30000"
+              step="500"
+              value={dealSize}
+              onChange={(e) => setDealSize(Number(e.target.value))}
+              className="w-full accent-[#00FF88] cursor-pointer"
+            />
+            <div className="flex justify-between text-[9px] text-[#666666] mt-1">
+              <span>$1,000</span>
+              <span>$10,000</span>
+              <span>$30,000+</span>
             </div>
           </div>
         </div>
 
-        {/* Operational Friction vs Solution Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div className="p-4 border border-[#262626] bg-black">
-            <div className="text-zinc-400 text-[10px] font-bold tracking-widest uppercase mb-2 flex items-center gap-1.5">
-              <span>[X]</span>
-              <span>CURRENT OPERATIONAL BOTTLENECK</span>
-            </div>
-            <p className="text-xs text-[#aaaaaa] leading-relaxed">
-              {currentSector.friction}
-            </p>
+        {/* Output Metrics Trio */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-5 bg-black border border-[#222222] text-center mb-6">
+          <div>
+            <span className="text-[10px] text-muted block mb-1">QUALIFIED MEETINGS BOOKED</span>
+            <span className="text-2xl sm:text-3xl font-bold text-primary font-pixel">
+              ~{estimatedQualifiedMeetings} / MO
+            </span>
+            <span className="text-[9px] text-muted block mt-1">10 to 30 meetings on calendar</span>
           </div>
 
-          <div className="p-4 border border-primary/40 bg-primary/5">
-            <div className="text-primary text-[10px] font-bold tracking-widest uppercase mb-2 flex items-center gap-1.5">
-              <span>[√]</span>
-              <span>ENGINEERED AUTONOMOUS ARCHITECTURE</span>
-            </div>
-            <p className="text-xs text-white leading-relaxed">
-              {currentSector.solution}
-            </p>
+          <div>
+            <span className="text-[10px] text-muted block mb-1">PROJECTED ANNUAL PIPELINE</span>
+            <span className="text-2xl sm:text-3xl font-bold text-white font-pixel">
+              +${projectedPipelineValue.toLocaleString()}
+            </span>
+            <span className="text-[9px] text-muted block mt-1">Calculated across 12-month run</span>
+          </div>
+
+          <div>
+            <span className="text-[10px] text-muted block mb-1">NET SAVINGS VS SDR HIRE</span>
+            <span className="text-2xl sm:text-3xl font-bold text-primary font-pixel">
+              +${netAnnualSavings.toLocaleString()} / YR
+            </span>
+            <span className="text-[9px] text-muted block mt-1">$95K SDR cost vs $21.5K our fee</span>
           </div>
         </div>
 
-        {/* Interactive Architecture Flow Nodes */}
-        <div className="mb-6 p-4 bg-black border border-[#222222]">
-          <div className="text-muted text-[10px] uppercase tracking-wider mb-3 flex items-center justify-between">
-            <span>[REAL-TIME DATA DISPATCH PIPELINE]</span>
-            <span className="text-primary text-[9px]">END-TO-END AUTONOMOUS</span>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs">
-            {currentSector.workflowNodes.map((node, i) => (
-              <div
-                key={node}
-                className="p-2.5 border border-[#333333] bg-[#0c0c0c] text-white flex items-center justify-between group hover:border-primary transition-colors"
-              >
-                <div className="flex items-center gap-2 overflow-hidden">
-                  <span className="text-primary text-[10px] font-bold">0{i + 1}</span>
-                  <span className="text-[11px] truncate font-mono">{node}</span>
-                </div>
-                {i < 3 && <span className="text-muted group-hover:text-primary hidden lg:inline">-&gt;</span>}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Live Audio / Telephony Intake Transcript Sample */}
-        <div className="mb-6 p-4 bg-black border border-[#222222]">
-          <div className="text-muted text-[10px] uppercase tracking-wider mb-3 flex items-center justify-between">
-            <span>[AI VOICE AGENT INTAKE LOG // LIVE AUDIO TRANSCRIPTION]</span>
-            <span className="text-primary text-[9px]">280MS TTFT</span>
-          </div>
-          <div className="space-y-2.5 text-xs">
-            {currentSector.sampleTranscript.map((line, idx) => (
-              <div key={idx} className="flex items-start gap-3">
-                <span
-                  className={`text-[10px] font-bold uppercase px-1.5 py-0.5 border flex-shrink-0 ${
-                    line.speaker === 'VOICE AGENT'
-                      ? 'border-primary text-primary bg-primary/10'
-                      : 'border-[#333333] text-muted bg-black'
-                  }`}
-                >
-                  {line.speaker}
-                </span>
-                <p
-                  className={`text-[11px] leading-relaxed ${
-                    line.speaker === 'VOICE AGENT' ? 'text-white' : 'text-[#aaaaaa]'
-                  }`}
-                >
-                  &ldquo;{line.text}&rdquo;
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Interactive Sector ROI Calculator Widget */}
-        <div className="p-5 sm:p-6 bg-black border border-[#222222] mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-4 border-b border-[#222222] gap-2">
-            <div>
-              <span className="text-[10px] text-primary uppercase font-bold">
-                [INTERACTIVE VALUE CALCULATOR]
-              </span>
-              <h4 className="text-sm font-bold text-white tracking-wide">
-                PROJECTED REVENUE & TIME HARVESTED FOR {currentSector.shortTitle}
-              </h4>
-            </div>
-            <span className="text-[10px] text-muted">ADJUST SLIDERS TO SIMULATE</span>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            {/* Slider 1: Monthly Leads / Inquiries */}
-            <div>
-              <div className="flex justify-between text-xs mb-1.5">
-                <span className="text-muted">MONTHLY INBOUND INQUIRIES:</span>
-                <span className="text-primary font-bold">{monthlyLeads} / MO</span>
-              </div>
-              <input
-                type="range"
-                min="50"
-                max="2000"
-                step="25"
-                value={monthlyLeads}
-                onChange={(e) => setMonthlyLeads(Number(e.target.value))}
-                className="w-full accent-[#00FF88] cursor-pointer"
-              />
-              <div className="flex justify-between text-[9px] text-[#555555] mt-1">
-                <span>50</span>
-                <span>500</span>
-                <span>1,000</span>
-                <span>2,000+</span>
-              </div>
-            </div>
-
-            {/* Slider 2: Average Deal Size */}
-            <div>
-              <div className="flex justify-between text-xs mb-1.5">
-                <span className="text-muted">AVERAGE DEAL / RETAINER VALUE:</span>
-                <span className="text-white font-bold">${avgTicket.toLocaleString()}</span>
-              </div>
-              <input
-                type="range"
-                min="1000"
-                max="50000"
-                step="500"
-                value={avgTicket}
-                onChange={(e) => setAvgTicket(Number(e.target.value))}
-                className="w-full accent-[#00FF88] cursor-pointer"
-              />
-              <div className="flex justify-between text-[9px] text-[#555555] mt-1">
-                <span>$1,000</span>
-                <span>$15,000</span>
-                <span>$30,000</span>
-                <span>$50,000+</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Calculator Output Metrics */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-[#070707] border border-[#222222] text-center">
-            <div>
-              <span className="text-[10px] text-muted block mb-1">SAVED LABOR HOURS</span>
-              <span className="text-lg sm:text-xl font-bold text-white">
-                ~{hoursSavedPerMonth} HRS / MO
-              </span>
-            </div>
-            <div>
-              <span className="text-[10px] text-muted block mb-1">MISSED DEALS RECOVERED</span>
-              <span className="text-lg sm:text-xl font-bold text-primary">
-                +{capturedDealsPerMonth} DEALS / MO
-              </span>
-            </div>
-            <div>
-              <span className="text-[10px] text-muted block mb-1">PROJECTED NET ARR CAPTURED</span>
-              <span className="text-lg sm:text-xl font-bold text-primary font-pixel">
-                +${estimatedRevenueGain.toLocaleString()} / YR
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Footer Actions */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-[#222222]">
-          <div className="flex flex-wrap gap-1.5">
-            {currentSector.agentsDeployed.map((ag) => (
-              <span
-                key={ag}
-                className="text-[9px] px-2 py-0.5 border border-[#333333] text-muted bg-black"
-              >
-                {ag}
-              </span>
-            ))}
-          </div>
-
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <span className="text-muted text-[11px]">
+            Ready to test these numbers on your exact ICP with 100 free sends?
+          </span>
           <a
-            href="#contact"
+            href="#pilot"
             onClick={() => sound.click()}
-            className="px-4 py-2 bg-white text-black font-bold text-xs hover:bg-primary transition-colors flex items-center justify-center gap-2 cursor-pointer flex-shrink-0"
+            className="px-5 py-2.5 bg-primary text-black font-bold text-xs hover:bg-white transition-colors text-center shadow-md flex-shrink-0"
           >
-            <span>DEPLOY FOR {currentSector.shortTitle}</span>
-            <span>-&gt;</span>
+            START 7-DAY PILOT -&gt;
           </a>
         </div>
       </div>

@@ -12,7 +12,6 @@ export default function TerminalFooter({ onToggleInvert }: TerminalFooterProps) 
   const isDark = themeContext ? themeContext.isDark : true
 
   const handleToggle = () => {
-    sound.beep()
     if (themeContext) {
       themeContext.toggleTheme()
     } else if (onToggleInvert) {

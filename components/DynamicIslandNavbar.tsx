@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { sound } from '@/lib/sound'
 import { useTheme } from '@/components/ThemeProvider'
@@ -14,19 +13,19 @@ interface DynamicIslandNavbarProps {
   onToggleSound?: () => void
 }
 
-const telemetryStates = [
-  { label: 'VOICE TTFT: 264MS', icon: '●', color: 'text-primary', extra: 'OPUS 48KHZ' },
-  { label: 'CRM PIPELINE: SYNCED', icon: '⚡', color: 'text-primary', extra: '99.99% SLA' },
-  { label: '6 PODS ONLINE (UTC)', icon: '●', color: 'text-white', extra: 'DOCKER CLUSTER' },
-  { label: 'HVAC EMERGENCY TRIAGE: ACTIVE', icon: '■', color: 'text-primary', extra: '11M DISPATCH' },
+const outboundTelemetryStates = [
+  { label: 'OUTBOUND ENGINE: ACTIVE', icon: '●', color: 'text-primary', extra: '3,000 EMAILS/MO' },
+  { label: 'INBOX PLACEMENT: 98.4%', icon: '⚡', color: 'text-primary', extra: 'PRIMARY INBOX' },
+  { label: 'BOUNCE RATE: 1.1%', icon: '■', color: 'text-primary', extra: 'SPF/DKIM/DMARC' },
+  { label: 'ACTIVE PILOTS: 4 LIVE', icon: '●', color: 'text-primary', extra: '7-DAY TRIAL' },
 ]
 
 const mainNavLinks = [
-  { label: 'SOLUTIONS', href: '/solutions' },
-  { label: 'ARCHITECTURE', href: '/architecture' },
-  { label: 'VOICE LAB', href: '/voice-agent' },
-  { label: 'SECTORS', href: '/sectors' },
-  { label: 'METHODOLOGY', href: '/methodology' },
+  { label: 'INFRASTRUCTURE', href: '#infrastructure' },
+  { label: 'SERVICES', href: '#services' },
+  { label: 'CALCULATOR', href: '#calculator' },
+  { label: 'METHODOLOGY', href: '#methodology' },
+  { label: 'PRICING', href: '#pricing' },
 ]
 
 export default function DynamicIslandNavbar({
@@ -35,7 +34,6 @@ export default function DynamicIslandNavbar({
   soundEnabled = true,
   onToggleSound,
 }: DynamicIslandNavbarProps) {
-  const pathname = usePathname()
   const themeContext = useTheme()
   const isDark = themeContext ? themeContext.isDark : !inverted
   const toggleTheme = themeContext ? themeContext.toggleTheme : (onToggleInvert || (() => {}))
@@ -45,11 +43,11 @@ export default function DynamicIslandNavbar({
   const [timeStr, setTimeStr] = useState('')
   const islandRef = useRef<HTMLDivElement | null>(null)
 
-  // Cycle telemetry
+  // Cycle outbound status
   useEffect(() => {
     const cycleInterval = setInterval(() => {
-      setTelemetryIdx((prev) => (prev + 1) % telemetryStates.length)
-    }, 3500)
+      setTelemetryIdx((prev) => (prev + 1) % outboundTelemetryStates.length)
+    }, 4000)
 
     const clockInterval = setInterval(() => {
       const now = new Date()
@@ -73,7 +71,7 @@ export default function DynamicIslandNavbar({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const currentTelem = telemetryStates[telemetryIdx]
+  const currentTelem = outboundTelemetryStates[telemetryIdx]
 
   const handleIslandToggle = () => {
     if (soundEnabled) sound.click()
@@ -83,36 +81,42 @@ export default function DynamicIslandNavbar({
   return (
     <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-3 sm:px-6 pointer-events-none font-mono text-xs select-none">
       {/* Outer Floating Glassmorphism Pill Container */}
-      <nav className={`pointer-events-auto w-full max-w-5xl backdrop-blur-2xl border rounded-full px-4 py-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_25px_rgba(0,255,136,0.06)] flex items-center justify-between gap-2 sm:gap-4 transition-colors ${
-        isDark ? 'bg-black/80 border-white/15' : 'bg-white/85 border-black/15 shadow-xl text-black'
+      <nav className={`pointer-events-auto w-full max-w-6xl backdrop-blur-2xl border rounded-full px-3 sm:px-5 py-2 sm:py-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_25px_rgba(0,255,136,0.06)] flex items-center justify-between gap-2 sm:gap-4 transition-colors ${
+        isDark ? 'bg-black/85 border-white/15 text-white' : 'bg-white/95 border-black/15 shadow-xl text-black'
       }`}>
         
         {/* Left: Brand Identity */}
-        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-          <Link
-            href="/"
+        <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+          <a
+            href="#home"
             onClick={() => soundEnabled && sound.click()}
-            className="flex items-center gap-2 group cursor-pointer"
+            className="flex items-center gap-1.5 sm:gap-2 group cursor-pointer"
           >
-            <span className="font-pixel text-sm sm:text-base font-extrabold tracking-wider text-white group-hover:text-primary transition-colors">
+            <span className={`font-pixel text-xs sm:text-sm md:text-base font-extrabold tracking-wider group-hover:text-primary transition-colors ${
+              isDark ? 'text-white' : 'text-black'
+            }`}>
               AGENCY.CO
             </span>
-            <span className="text-[9px] text-muted hidden md:inline border border-[#333333] px-1.5 py-0.5 rounded-full bg-black">
-              SYS.01
+            <span className={`text-[8px] sm:text-[9px] px-1.5 py-0.5 rounded-full border hidden sm:inline ${
+              isDark ? 'text-muted border-[#333333] bg-black' : 'text-zinc-600 border-zinc-300 bg-zinc-100'
+            }`}>
+              OUTBOUND
             </span>
-          </Link>
+          </a>
         </div>
 
         {/* Center: THE DYNAMIC ISLAND */}
-        <div ref={islandRef} className="relative flex-1 max-w-md mx-auto flex justify-center">
+        <div ref={islandRef} className="relative flex-1 max-w-[210px] sm:max-w-xs md:max-w-sm mx-auto flex justify-center min-w-0">
           {/* Collapsed Dynamic Island Pill */}
           <button
             type="button"
             onClick={handleIslandToggle}
-            className={`px-3 sm:px-4 py-1.5 rounded-full border transition-all duration-200 flex items-center justify-between gap-2.5 cursor-pointer max-w-full overflow-hidden ${
+            className={`px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full border transition-all duration-200 flex items-center justify-between gap-1.5 sm:gap-2.5 cursor-pointer w-full overflow-hidden ${
               isExpanded
                 ? 'border-primary bg-primary/10 shadow-[0_0_15px_rgba(0,255,136,0.3)]'
-                : 'border-white/20 bg-black/80 hover:border-primary/60 hover:bg-black'
+                : isDark
+                ? 'border-white/20 bg-black/80 hover:border-primary/60 hover:bg-black'
+                : 'border-zinc-300 bg-zinc-100 hover:border-primary hover:bg-white text-black'
             }`}
           >
             {/* Animated Equalizer Waveform */}
@@ -123,11 +127,13 @@ export default function DynamicIslandNavbar({
             </div>
 
             {/* Cycling Telemetry Message */}
-            <div className="flex items-center gap-2 overflow-hidden whitespace-nowrap text-[11px]">
+            <div className="flex items-center gap-1.5 sm:gap-2 overflow-hidden whitespace-nowrap text-[10px] sm:text-[11px]">
               <span className={`font-bold ${currentTelem.color}`}>
                 {currentTelem.icon}
               </span>
-              <span className="text-white font-bold tracking-tight truncate">
+              <span className={`font-bold tracking-tight truncate ${
+                isDark ? 'text-white' : 'text-black'
+              }`}>
                 {currentTelem.label}
               </span>
               <span className="text-[9px] text-muted hidden xl:inline">
@@ -160,86 +166,86 @@ export default function DynamicIslandNavbar({
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-primary rounded-full animate-ping" />
                     <span className="text-primary font-bold tracking-wider">
-                      [DYNAMIC ISLAND // SYSTEM TELEMETRY HUD]
+                      [OUTBOUND INFRASTRUCTURE // LIVE TELEMETRY]
                     </span>
                   </div>
                   <span className="text-muted">{timeStr || 'LIVE UTC'}</span>
                 </div>
 
-                {/* 4 Telemetry Metrics Grid */}
+                {/* 4 Outbound Metrics Grid */}
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="p-2.5 border border-[#222222] bg-[#0c0c0c] rounded-lg">
-                    <span className="text-[9px] text-muted block mb-0.5">VOICE TTFT LATENCY</span>
-                    <span className="text-primary font-bold">264MS [SUB-300MS]</span>
+                    <span className="text-[9px] text-muted block mb-0.5">INBOX PLACEMENT</span>
+                    <span className="text-primary font-bold">98.4% PRIMARY</span>
                   </div>
                   <div className="p-2.5 border border-[#222222] bg-[#0c0c0c] rounded-lg">
-                    <span className="text-[9px] text-muted block mb-0.5">WORKFLOW UPTIME</span>
-                    <span className="text-white font-bold">99.98% AUDITED</span>
+                    <span className="text-[9px] text-muted block mb-0.5">BOUNCE THRESHOLD</span>
+                    <span className="text-white font-bold">&lt; 1.5% GUARANTEED</span>
                   </div>
                   <div className="p-2.5 border border-[#222222] bg-[#0c0c0c] rounded-lg">
-                    <span className="text-[9px] text-muted block mb-0.5">ACTIVE DISPATCH PODS</span>
-                    <span className="text-white font-bold">6 HARDENED PODS</span>
+                    <span className="text-[9px] text-muted block mb-0.5">ACTIVE MAILBOX POOL</span>
+                    <span className="text-white font-bold">45 WARMD DOMAINS</span>
                   </div>
                   <div className="p-2.5 border border-[#222222] bg-[#0c0c0c] rounded-lg">
-                    <span className="text-[9px] text-muted block mb-0.5">MONTHLY OPERATIONS</span>
-                    <span className="text-primary font-bold">182,490 EXECS</span>
+                    <span className="text-[9px] text-muted block mb-0.5">SIGNAL REPLY RATE</span>
+                    <span className="text-primary font-bold">15 - 25% RANGE</span>
                   </div>
                 </div>
 
-                {/* Quick Subpage Routing Matrix */}
+                {/* Quick Section Navigation Matrix */}
                 <div>
                   <span className="text-[9px] text-muted uppercase font-bold block mb-2 tracking-wider">
-                    DEDICATED MODULE PORTALS:
+                    SYSTEM MODULES:
                   </span>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-[11px]">
-                    <Link
-                      href="/solutions"
+                    <a
+                      href="#infrastructure"
                       onClick={() => setIsExpanded(false)}
                       className="p-2 border border-[#222222] hover:border-primary rounded bg-black text-white hover:text-primary transition-colors flex items-center justify-between"
                     >
-                      <span>SOLUTIONS</span>
+                      <span>DOMAINS & DNS</span>
                       <span className="text-[9px] text-muted">-&gt;</span>
-                    </Link>
-                    <Link
-                      href="/architecture"
+                    </a>
+                    <a
+                      href="#services"
                       onClick={() => setIsExpanded(false)}
                       className="p-2 border border-[#222222] hover:border-primary rounded bg-black text-white hover:text-primary transition-colors flex items-center justify-between"
                     >
-                      <span>ARCH SPEC</span>
+                      <span>5 PILLARS</span>
                       <span className="text-[9px] text-muted">-&gt;</span>
-                    </Link>
-                    <Link
-                      href="/voice-agent"
+                    </a>
+                    <a
+                      href="#calculator"
                       onClick={() => setIsExpanded(false)}
                       className="p-2 border border-[#222222] hover:border-primary rounded bg-black text-white hover:text-primary transition-colors flex items-center justify-between"
                     >
-                      <span>VOICE LAB</span>
+                      <span>ROI SIMULATOR</span>
                       <span className="text-[9px] text-muted">-&gt;</span>
-                    </Link>
-                    <Link
-                      href="/sectors"
-                      onClick={() => setIsExpanded(false)}
-                      className="p-2 border border-[#222222] hover:border-primary rounded bg-black text-white hover:text-primary transition-colors flex items-center justify-between"
-                    >
-                      <span>SECTORS</span>
-                      <span className="text-[9px] text-muted">-&gt;</span>
-                    </Link>
-                    <Link
-                      href="/methodology"
+                    </a>
+                    <a
+                      href="#methodology"
                       onClick={() => setIsExpanded(false)}
                       className="p-2 border border-[#222222] hover:border-primary rounded bg-black text-white hover:text-primary transition-colors flex items-center justify-between"
                     >
                       <span>30-DAY CUT</span>
                       <span className="text-[9px] text-muted">-&gt;</span>
-                    </Link>
-                    <Link
-                      href="/audit"
+                    </a>
+                    <a
+                      href="#pricing"
+                      onClick={() => setIsExpanded(false)}
+                      className="p-2 border border-[#222222] hover:border-primary rounded bg-black text-white hover:text-primary transition-colors flex items-center justify-between"
+                    >
+                      <span>PACKAGES</span>
+                      <span className="text-[9px] text-muted">-&gt;</span>
+                    </a>
+                    <a
+                      href="#pilot"
                       onClick={() => setIsExpanded(false)}
                       className="p-2 border border-primary/40 bg-primary/10 rounded text-primary font-bold flex items-center justify-between"
                     >
-                      <span>COMMISSION</span>
+                      <span>7-DAY PILOT</span>
                       <span className="text-[9px]">■</span>
-                    </Link>
+                    </a>
                   </div>
                 </div>
 
@@ -283,25 +289,22 @@ export default function DynamicIslandNavbar({
         </div>
 
         {/* Right: Multi-Page Links, Theme Toggle & Action CTA */}
-        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-          <div className="hidden lg:flex items-center gap-2 text-[11px]">
-            {mainNavLinks.slice(0, 4).map((link) => {
-              const isActive = pathname === link.href
-              return (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => soundEnabled && sound.click()}
-                  className={`px-2.5 py-1 rounded-full transition-all tracking-wider ${
-                    isActive
-                      ? 'bg-white/15 text-white font-bold'
-                      : 'text-muted hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              )
-            })}
+        <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+          <div className="hidden xl:flex items-center gap-1.5 text-[10px]">
+            {mainNavLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={() => soundEnabled && sound.click()}
+                className={`px-2 py-0.5 rounded-full transition-all tracking-wider ${
+                  isDark
+                    ? 'text-muted hover:text-white hover:bg-white/5'
+                    : 'text-zinc-600 hover:text-black hover:bg-black/5'
+                }`}
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
 
           {/* Dark / Light Mode Toggle Button */}
@@ -309,26 +312,30 @@ export default function DynamicIslandNavbar({
             type="button"
             onClick={toggleTheme}
             title={`Toggle Theme Mode [^T] (Current: ${isDark ? 'Dark' : 'Light'})`}
-            className={`px-2.5 sm:px-3 py-1.5 rounded-full border text-[10px] sm:text-[11px] font-bold transition-all flex items-center gap-1.5 cursor-pointer flex-shrink-0 select-none ${
+            className={`px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-full border text-[9px] sm:text-[10px] font-bold transition-all flex items-center gap-1 sm:gap-1.5 cursor-pointer flex-shrink-0 select-none ${
               isDark
                 ? 'border-white/20 bg-black/60 text-white hover:border-primary hover:text-primary'
-                : 'border-black/20 bg-white/90 text-black hover:border-primary hover:text-primary shadow-sm'
+                : 'border-zinc-300 bg-zinc-100 text-zinc-900 hover:border-primary hover:text-primary shadow-sm'
             }`}
           >
-            <span className="text-primary text-xs">{isDark ? '☾' : '☼'}</span>
+            <span className="text-primary text-[11px]">{isDark ? '☾' : '☼'}</span>
             <span className="hidden sm:inline">{isDark ? 'DARK' : 'LIGHT'}</span>
           </button>
 
-          {/* Primary Audit CTA Button */}
-          <Link
-            href="/audit"
+          {/* Primary Pilot CTA Button */}
+          <a
+            href="#pilot"
             onClick={() => soundEnabled && sound.click()}
-            className="px-3 sm:px-4 py-1.5 bg-white text-black font-bold text-[11px] rounded-full hover:bg-primary transition-colors flex items-center gap-1.5 cursor-pointer shadow-md flex-shrink-0"
+            className={`px-2.5 sm:px-3.5 py-1 sm:py-1.5 font-bold text-[10px] sm:text-[11px] rounded-full transition-colors flex items-center gap-1 sm:gap-1.5 cursor-pointer shadow-md flex-shrink-0 ${
+              isDark
+                ? 'bg-white text-black hover:bg-primary'
+                : 'bg-black text-white hover:bg-primary hover:text-black'
+            }`}
           >
-            <span>AUDIT</span>
+            <span>7-DAY PILOT</span>
             <span className="text-[8px]">■</span>
             <span>-&gt;</span>
-          </Link>
+          </a>
         </div>
 
       </nav>

@@ -1,7 +1,5 @@
 'use client'
 
-import { sound } from '@/lib/sound'
-
 interface PrincipleBox {
   code: string
   title: string
@@ -14,35 +12,35 @@ interface PrincipleBox {
 const principles: PrincipleBox[] = [
   {
     code: 'PRIN.01',
-    title: 'CALM OVER CHAOS',
-    subhead: 'KARPATHY LLM-WIKI SPEC',
-    status: 'DETERMINISTIC',
-    body: 'ZERO FRANTIC SLACK ESCALATIONS. IMPLEMENTING THE 3-LAYER KARPATHY AGENT MEMORY PATTERN: IMMUTABLE RAW INGESTION, APPEND-ONLY CITATION WIKIS, AND MACHINE-VERIFIED SCHEMA LINTING.',
-    metric: '3-LAYER LLM-WIKI PATTERN',
+    title: 'PRECISION OVER VOLUME',
+    subhead: '2026 OUTBOUND BENCHMARK',
+    status: '15-25% REPLY RATE',
+    body: 'BLASTING 20,000 GENERIC EMAILS BURNS DOMAINS AND GETS BANNED BY GMAIL. WE RUN SURGICAL, SIGNAL-BASED CAMPAIGNS TARGETING ACCOUNTS WITH ACTIVE HIRING, TECH STACK EXPANSION, OR FUNDING TRIGGERS.',
+    metric: '5X INDUSTRY BENCHMARK',
   },
   {
     code: 'PRIN.02',
-    title: 'ZERO DOUBLE-REASONING LATENCY',
-    subhead: 'ADR-005 TELEPHONY STANDARD',
-    status: '<260MS TTFT',
-    body: 'STRICTLY NO LLMS INSIDE THE SYNCHRONOUS CALL PATH. VOICE AGENTS LIVE IN VAPI/RETELL WHILE TOOL CALLS EXECUTE AS RIGID PYTHON/PYDANTIC SYNC HANDLERS IN A PAPERCLIP WORKER POOL. ELIMINATES 3-5 SECONDS OF DEAD AIR.',
-    metric: 'SUB-300MS LATENCY BUDGET',
+    title: 'DOMAIN ISOLATION & SAFETY',
+    subhead: 'MULTI-INBOX ARCHITECTURE',
+    status: '100% PRIMARY INBOX',
+    body: 'YOUR PRIMARY DOMAIN NEVER TOUCHES COLD OUTBOUND. WE CONFIGURE 5 TO 15 SECONDARY DOMAINS WITH 2048-BIT DKIM, STRICT DMARC REJECTION, AND AUTOMATED 28-DAY REPUTATION WARMUP BEFORE SENDING.',
+    metric: '< 1.5% BOUNCE RATE SLA',
   },
   {
     code: 'PRIN.03',
-    title: '12-FACTOR AGENT FABRIC',
-    subhead: 'TYPED REDUCER ARCHITECTURE',
-    status: 'ZERO RUNAWAY LOOPS',
-    body: 'STRICT ADHERENCE TO 12-FACTOR AGENT LAWS: TYPED TOOL CALLS (FACTOR 4), SELF-OWNED CONTROL FLOW (FACTOR 8), AND STATELESS REDUCER RUNTIMES (FACTOR 12). RESILIENT AGAINST EXPENSIVE TOKEN RE-DERIVATIONS.',
-    metric: '12-FACTOR SPECIFICATION',
+    title: 'ZERO AI SLOP & PEER-TO-PEER COPY',
+    subhead: 'HUMANIZED COPYWRITING',
+    status: '< 80 WORDS / EMAIL',
+    body: '47% OF B2B BUYERS TRASH OBVIOUS AI OUTREACH. WE WRITE PLAIN-TEXT, RESEARCH-ANCHORED SEQUENCES WITH A SINGLE CLEAR CTA. NO CORPORATE BUZZWORDS, NO MARKETING TEMPLATES, NO TRACKING BLOAT.',
+    metric: '100% PLAIN-TEXT ONLY',
   },
   {
     code: 'PRIN.04',
-    title: 'SPEED-TO-LEAD 100X MULTIPLIER',
-    subhead: '24/7 AUTONOMOUS INTAKE',
-    status: '100% CALL CAPTURE',
-    body: 'MIT BENCHMARKS CONFIRM CONTACTING INBOUND LEADS WITHIN 5 MINUTES YIELDS 100X HIGHER CONVERSIONS VS 30-MINUTE DELAYS. OUR SYSTEMS ANSWER WITHIN 1 RING, RESOLVE FAQS, AND DIRECTLY COMMIT BOOKINGS.',
-    metric: '100X SPEED-TO-LEAD CONVERSION',
+    title: 'AUTONOMOUS REPLY TRIAGE',
+    subhead: 'SPEED-TO-LEAD CONVERSION',
+    status: '< 3 MIN TURNAROUND',
+    body: 'WHEN AN INTERESTED PROSPECT REPLIES, N8N WEBHOOKS INSTANTLY PAUSE OUTBOUND CADENCES ACROSS EMAIL AND LINKEDIN, CREATE CRM DEALS IN HUBSPOT, AND ALERT YOUR SALES TEAM IN SLACK WITH CAL.COM LINKS.',
+    metric: 'ZERO MISSED PIPELINE',
   },
 ]
 
@@ -54,113 +52,93 @@ export default function Biography() {
         <div>
           <div className="text-primary text-xs tracking-widest uppercase mb-1 flex items-center gap-2">
             <span className="inline-block w-2 h-2 bg-primary" />
-            <span>[PHILOSOPHY // MODULE 01]</span>
+            <span>[OPERATIONAL_MANIFESTO // PRINCIPLES]</span>
           </div>
           <h2 className="font-pixel text-3xl sm:text-5xl md:text-6xl text-white tracking-widest">
-            BIOGRAPHY
+            MANIFESTO
           </h2>
         </div>
         <div className="text-right text-xs text-muted">
-          <span>SYSTEMS ARCHITECT SPECIFICATION</span>
+          <span>OUTBOUND ARCHITECT SPECIFICATION</span>
           <br />
-          <span className="text-white">BHAVESH WAGHMARE // FOUNDER HVACEQ.COM</span>
+          <span className="text-white">BHAVESH WAGHMARE // CES ARCHITECT</span>
         </div>
       </div>
 
-      {/* Terminal Prompt Header */}
+      {/* Prompt Header */}
       <div className="text-muted text-xs sm:text-sm mb-8 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-primary">[/&gt; OPERATIONAL_POSTULATES : ]</span>
-          <span className="text-white">4 CORE PILLARS OF HIGH-RELIABILITY AUTOMATION</span>
+          <span className="text-white">4 LAWS OF MODERN B2B COLD EMAIL DELIVERABILITY</span>
         </div>
         <span className="text-primary text-[10px] hidden md:inline">
-          STATUS: VERIFIED
+          STATUS: PRODUCTION VALIDATED
         </span>
       </div>
 
-      {/* 4 Box-Style Principle Modules (2x2 Grid) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+      {/* 4 Brutalist Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
         {principles.map((p) => (
           <div
             key={p.code}
-            onMouseEnter={() => sound.click()}
-            className="p-5 border border-[#222222] bg-[#070707] hover:border-primary/60 transition-all group flex flex-col justify-between"
+            className="p-5 sm:p-6 border border-[#222222] bg-[#070707] hover:border-primary/50 transition-colors flex flex-col justify-between"
           >
             <div>
-              {/* Box Top Header Bar */}
-              <div className="flex items-center justify-between text-[10px] pb-3 mb-3 border-b border-[#1A1A1A]">
-                <div className="flex items-center gap-2">
-                  <span className="text-primary font-bold">[{p.code}]</span>
-                  <span className="text-muted">{p.subhead}</span>
-                </div>
-                <span className="text-primary border border-primary/30 px-1.5 py-0.2 bg-primary/5 text-[9px] font-bold">
+              <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#222222] text-[10px]">
+                <span className="text-primary font-bold font-pixel">{p.code}</span>
+                <span className="text-muted">{p.subhead}</span>
+                <span className="text-primary font-bold border border-primary/30 px-1.5 py-0.5 bg-primary/5">
                   {p.status}
                 </span>
               </div>
-
-              {/* Title */}
-              <h3 className="font-bold text-base text-white tracking-wide mb-3 group-hover:text-primary transition-colors">
+              <h3 className="font-bold text-sm sm:text-base text-white tracking-wide mb-2">
                 {p.title}
               </h3>
-
-              {/* Body in Unified Monospace Font */}
-              <p className="text-xs text-[#aaaaaa] leading-relaxed mb-4">
+              <p className="text-xs text-[#aaaaaa] leading-relaxed">
                 {p.body}
               </p>
             </div>
-
-            {/* Box Metric Footer */}
-            <div className="pt-3 border-t border-[#1A1A1A] flex items-center justify-between text-[10px]">
-              <span className="text-muted">DELIVERED STANDARD:</span>
-              <span className="text-white font-bold tracking-wider">{p.metric}</span>
+            <div className="pt-4 border-t border-[#222222] mt-4 flex items-center justify-between text-[10px]">
+              <span className="text-muted">DELIVERED BENCHMARK:</span>
+              <span className="text-white font-bold">{p.metric}</span>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Boxed Architect Profile & Credential Ledger */}
-      <div className="border border-white/20 bg-[#070707] p-6 sm:p-7">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-5 border-b border-[#222222] gap-2">
+      {/* Architect Profile Box */}
+      <div className="border border-[#222222] bg-[#070707] p-5 sm:p-6">
+        <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#222222] text-xs">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-primary rounded-none" />
-            <span className="font-bold text-xs sm:text-sm text-white tracking-wider">
-              [SYSTEMS ARCHITECT LEDGER // PROFILE]
+            <span className="w-2 h-2 bg-primary" />
+            <span className="font-bold text-white tracking-wider">
+              OPERATOR LEDGER: BHAVESH ASHOK WAGHMARE
             </span>
           </div>
-          <span className="text-[10px] text-primary border border-primary/40 px-2 py-0.5 bg-primary/10">
-            ENTERPRISE VERIFIED
-          </span>
+          <span className="text-[10px] text-primary">COLD OUTBOUND SYSTEM (CES)</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs mb-5">
-          <div className="p-3 border border-[#222222] bg-black">
-            <span className="text-[9px] text-muted block mb-1">LEAD ARCHITECT</span>
-            <span className="font-bold text-white block">BHAVESH ASHOK WAGHMARE</span>
-            <span className="text-[10px] text-primary block mt-0.5">AGENT OS & HVACEQ FOUNDER</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+          <div>
+            <span className="text-[10px] text-muted block mb-1">ROLE &amp; FOCUS</span>
+            <span className="text-white font-bold block">Systems Architect</span>
+            <span className="text-[#aaaaaa] text-[11px]">B2B Cold Outbound &amp; Deliverability</span>
           </div>
-
-          <div className="p-3 border border-[#222222] bg-black">
-            <span className="text-[9px] text-muted block mb-1">SPECIALIZATION</span>
-            <span className="font-bold text-white block">VOICE AGENTS & PIPELINES</span>
-            <span className="text-[10px] text-muted block mt-0.5">24/7 AUTONOMOUS DISPATCH</span>
+          <div>
+            <span className="text-[10px] text-muted block mb-1">PROVEN STACK</span>
+            <span className="text-white font-bold block">Smartlead • Clay • Apollo</span>
+            <span className="text-[#aaaaaa] text-[11px]">HeyReach • n8n • Cal.com</span>
           </div>
-
-          <div className="p-3 border border-[#222222] bg-black">
-            <span className="text-[9px] text-muted block mb-1">CORE TECH STACK</span>
-            <span className="font-bold text-white block">RETELL • VAPI • PAPERCLIP</span>
-            <span className="text-[10px] text-muted block mt-0.5">SUPABASE • N8N • LITELLM</span>
+          <div>
+            <span className="text-[10px] text-muted block mb-1">DELIVERABILITY GUARANTEE</span>
+            <span className="text-primary font-bold block">&gt;98% Primary Inbox Placement</span>
+            <span className="text-[#aaaaaa] text-[11px]">&lt;1.5% Bounce Rate SLA</span>
           </div>
-
-          <div className="p-3 border border-[#222222] bg-black">
-            <span className="text-[9px] text-muted block mb-1">DELIVERY CONTRACT</span>
-            <span className="font-bold text-primary block">$2,000 LIFETIME / $2.5K SETUP</span>
-            <span className="text-[10px] text-muted block mt-0.5">30-DAY CUTOVER SLA</span>
+          <div>
+            <span className="text-[10px] text-muted block mb-1">COMMERCIAL MODEL</span>
+            <span className="text-white font-bold block">$2,500 - $5,000 Setup</span>
+            <span className="text-[#aaaaaa] text-[11px]">30-Day Money-Back Guarantee</span>
           </div>
-        </div>
-
-        <div className="p-3 bg-black border border-[#222222] text-[11px] text-[#cccccc] leading-relaxed">
-          <span className="text-primary font-bold mr-2">&gt;</span>
-          WE ARCHITECT HARDENED NERVOUS SYSTEMS FOR HIGH-VALUATION ENTERPRISES. REPLACING BLOATED $4,000/MO AGENCY RETAINERS WITH DETERMINISTIC VOICE DISPATCHERS, ZERO-DOUBLE-REASONING TELEPHONY, AND HIGH-THROUGHPUT PIPELINES ANCHORED IN KARPATHY LLM-WIKI MEMORY SPECIFICATIONS.
         </div>
       </div>
     </section>

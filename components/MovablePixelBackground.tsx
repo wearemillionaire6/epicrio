@@ -24,17 +24,24 @@ interface MiniSquare {
 }
 
 export default function MovablePixelBackground({
-  opacity = 0.25,
+  opacity = 0.2,
   inverted = false,
   interactive = true,
   standalone = false,
 }: MovablePixelBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  
+  // Use refs to prevent canvas teardown / buffer reallocation on theme toggle
+  const invertedRef = useRef(inverted)
+  invertedRef.current = inverted
+
+  const opacityRef = useRef(opacity)
+  opacityRef.current = opacity
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const ctx = canvas.getContext('2d', { alpha: true })
+    const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true })
     if (!ctx) return
 
     let animId: number
@@ -53,35 +60,30 @@ export default function MovablePixelBackground({
 
     const initGrid = () => {
       squares.length = 0
-      const dpr = Math.min(window.devicePixelRatio || 1, 2)
-      width = canvas.parentElement?.clientWidth || window.innerWidth
-      height = canvas.parentElement?.clientHeight || window.innerHeight
+      width = window.innerWidth
+      height = window.innerHeight
 
-      canvas.width = Math.floor(width * dpr)
-      canvas.height = Math.floor(height * dpr)
-      canvas.style.width = `${width}px`
-      canvas.style.height = `${height}px`
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      // 1:1 hardware pixel mapping for crisp retro pixels and ultra-lightweight GPU footprint
+      canvas.width = width
+      canvas.height = height
 
-      // Spacing for mini square pixel effect (subtle geometric micro-grid)
-      const step = standalone ? 16 : 28
-      const cols = Math.ceil(width / step) + 4
-      const rows = Math.ceil(height / step) + 4
+      const step = standalone ? 18 : 32
+      const cols = Math.ceil(width / step) + 2
+      const rows = Math.ceil(height / step) + 2
 
-      for (let r = -2; r < rows; r++) {
-        for (let c = -2; c < cols; c++) {
-          // Density variation: create elegant cyber clusters
+      for (let r = -1; r < rows; r++) {
+        for (let c = -1; c < cols; c++) {
           const hash = Math.sin(c * 12.9898 + r * 78.233) * 43758.5453
           const rand = hash - Math.floor(hash)
 
-          // Filter to roughly ~28% visible squares for clean negative space
-          if (rand > 0.32) continue
+          // Curated sparse density: ~22% squares visible for pure elegance
+          if (rand > 0.22) continue
 
-          const baseX = c * step + (rand * 6 - 3)
-          const baseY = r * step + ((rand * 13) % 6 - 3)
+          const baseX = c * step + (rand * 8 - 4)
+          const baseY = r * step + ((rand * 17) % 8 - 4)
 
-          const isAccent = rand < 0.08
-          const size = isAccent ? 4 : rand < 0.2 ? 3 : 2
+          const isAccent = rand < 0.07
+          const size = isAccent ? 4 : rand < 0.15 ? 3 : 2
 
           squares.push({
             baseX,
@@ -92,8 +94,8 @@ export default function MovablePixelBackground({
             vy: 0,
             size,
             isAccent,
-            baseAlpha: isAccent ? 0.75 : 0.18 + rand * 0.25,
-            pulseSpeed: 1.2 + rand * 2.5,
+            baseAlpha: isAccent ? 0.8 : 0.15 + rand * 0.2,
+            pulseSpeed: 1.0 + rand * 2.0,
             pulseOffset: rand * Math.PI * 2,
           })
         }
@@ -102,16 +104,15 @@ export default function MovablePixelBackground({
 
     initGrid()
 
-    // Mouse movement tracking
+    // Damped throttled mouse move tracking
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect()
-      state.mouseX = e.clientX - rect.left
-      state.mouseY = e.clientY - rect.top
+      state.mouseX = e.clientX
+      state.mouseY = e.clientY
 
       const centerX = width / 2
       const centerY = height / 2
-      state.targetOffsetX = ((e.clientX - centerX) / width) * 20
-      state.targetOffsetY = ((e.clientY - centerY) / height) * 20
+      state.targetOffsetX = ((e.clientX - centerX) / width) * 16
+      state.targetOffsetY = ((e.clientY - centerY) / height) * 16
     }
 
     const handleMouseLeave = () => {
@@ -121,40 +122,47 @@ export default function MovablePixelBackground({
       state.targetOffsetY = 0
     }
 
+    let resizeTimer: any = null
     const handleResize = () => {
-      initGrid()
+      if (resizeTimer) clearTimeout(resizeTimer)
+      resizeTimer = setTimeout(() => {
+        initGrid()
+      }, 150)
     }
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true })
-    window.addEventListener('mouseleave', handleMouseLeave)
-    window.addEventListener('resize', handleResize)
+    window.addEventListener('mouseleave', handleMouseLeave, { passive: true })
+    window.addEventListener('resize', handleResize, { passive: true })
 
     let startTime = performance.now()
 
     const render = (now: number) => {
       const elapsed = (now - startTime) * 0.001
 
-      // 60FPS Damped lerp for silky smooth parallax
+      // 60-120FPS Damped lerp
       state.currentOffsetX += (state.targetOffsetX - state.currentOffsetX) * 0.06
       state.currentOffsetY += (state.targetOffsetY - state.currentOffsetY) * 0.06
 
       ctx.clearRect(0, 0, width, height)
 
       // Ambient organic drift
-      const driftX = Math.sin(elapsed * 0.5) * 4
-      const driftY = Math.cos(elapsed * 0.4) * 4
+      const driftX = Math.sin(elapsed * 0.4) * 3
+      const driftY = Math.cos(elapsed * 0.35) * 3
 
       const totalOffsetX = state.currentOffsetX + driftX
       const totalOffsetY = state.currentOffsetY + driftY
 
-      const accentColor = inverted ? '#008744' : '#00FF88'
-      const baseColorRgb = inverted ? '15, 23, 42' : '255, 255, 255'
+      const isCurrentInverted = invertedRef.current
+      const accentColor = isCurrentInverted ? '#008744' : '#00FF88'
+      const baseColorRgb = isCurrentInverted ? '30, 41, 59' : '255, 255, 255'
 
-      // Render mini squares
+      // Arrays for batched rendering to eliminate canvas state switches
+      const normalSquares: { x: number; y: number; size: number; alpha: number }[] = []
+      const accentSquares: { x: number; y: number; size: number }[] = []
+
       for (let i = 0; i < squares.length; i++) {
         const sq = squares[i]
 
-        // Target anchor with parallax and drift
         const targetX = sq.baseX + totalOffsetX
         const targetY = sq.baseY + totalOffsetY
 
@@ -162,11 +170,12 @@ export default function MovablePixelBackground({
         if (interactive && state.mouseX > 0 && state.mouseY > 0) {
           const dx = sq.x - state.mouseX
           const dy = sq.y - state.mouseY
-          const dist = Math.hypot(dx, dy)
-          const maxDist = 95
+          const distSq = dx * dx + dy * dy
+          const maxDist = 90
 
-          if (dist < maxDist && dist > 0) {
-            const force = (1 - dist / maxDist) * 8
+          if (distSq < maxDist * maxDist && distSq > 0) {
+            const dist = Math.sqrt(distSq)
+            const force = (1 - dist / maxDist) * 7
             sq.vx += (dx / dist) * force
             sq.vy += (dy / dist) * force
           }
@@ -175,38 +184,45 @@ export default function MovablePixelBackground({
         // Spring force returning to anchor
         sq.vx += (targetX - sq.x) * 0.08
         sq.vy += (targetY - sq.y) * 0.08
-
-        // Damping
-        sq.vx *= 0.84
-        sq.vy *= 0.84
+        sq.vx *= 0.85
+        sq.vy *= 0.85
 
         sq.x += sq.vx
         sq.y += sq.vy
 
-        // Pulse calculation
-        const pulse = 0.5 + Math.sin(elapsed * sq.pulseSpeed + sq.pulseOffset) * 0.5
-        const isPerturbed = Math.hypot(sq.vx, sq.vy) > 0.3
+        const isPerturbed = Math.abs(sq.vx) + Math.abs(sq.vy) > 0.4
 
-        let alpha = sq.baseAlpha * (0.6 + pulse * 0.4)
-        if (isPerturbed) alpha = Math.min(1, alpha + 0.45)
-
-        // Draw mini square pixel
         if (sq.isAccent || isPerturbed) {
-          ctx.fillStyle = accentColor
-          ctx.shadowColor = accentColor
-          ctx.shadowBlur = isPerturbed ? 8 : 4
+          accentSquares.push({
+            x: Math.round(sq.x),
+            y: Math.round(sq.y),
+            size: sq.size,
+          })
         } else {
-          ctx.fillStyle = `rgba(${baseColorRgb}, ${alpha})`
-          ctx.shadowColor = 'transparent'
-          ctx.shadowBlur = 0
+          const pulse = 0.5 + Math.sin(elapsed * sq.pulseSpeed + sq.pulseOffset) * 0.5
+          normalSquares.push({
+            x: Math.round(sq.x),
+            y: Math.round(sq.y),
+            size: sq.size,
+            alpha: sq.baseAlpha * (0.6 + pulse * 0.4),
+          })
         }
+      }
 
-        ctx.fillRect(
-          Math.round(sq.x),
-          Math.round(sq.y),
-          sq.size,
-          sq.size
-        )
+      // 1. Batch render normal pixel squares
+      for (let i = 0; i < normalSquares.length; i++) {
+        const sq = normalSquares[i]
+        ctx.fillStyle = `rgba(${baseColorRgb}, ${sq.alpha})`
+        ctx.fillRect(sq.x, sq.y, sq.size, sq.size)
+      }
+
+      // 2. Batch render accent pixel squares in a single state
+      if (accentSquares.length > 0) {
+        ctx.fillStyle = accentColor
+        for (let i = 0; i < accentSquares.length; i++) {
+          const sq = accentSquares[i]
+          ctx.fillRect(sq.x, sq.y, sq.size, sq.size)
+        }
       }
 
       animId = requestAnimationFrame(render)
@@ -216,11 +232,12 @@ export default function MovablePixelBackground({
 
     return () => {
       cancelAnimationFrame(animId)
+      if (resizeTimer) clearTimeout(resizeTimer)
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('mouseleave', handleMouseLeave)
       window.removeEventListener('resize', handleResize)
     }
-  }, [inverted, interactive, standalone])
+  }, [interactive, standalone]) // Notice inverted is completely removed from dependencies!
 
   return (
     <canvas

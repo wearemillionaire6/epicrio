@@ -1,23 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import DynamicIslandNavbar from '@/components/DynamicIslandNavbar'
-import LiveTelemetryTicker from '@/components/LiveTelemetryTicker'
 import PixelHeader from '@/components/PixelHeader'
-import Biography from '@/components/Biography'
-import MetricsCounter from '@/components/MetricsCounter'
-import InteractiveCliSandbox from '@/components/InteractiveCliSandbox'
-import ProjectsArchitecture from '@/components/ProjectsArchitecture'
+import FreeTrialPilot from '@/components/FreeTrialPilot'
 import ServicesList from '@/components/ServicesList'
-import DataFlowVisualizer from '@/components/DataFlowVisualizer'
-import VoiceTerminal from '@/components/VoiceTerminal'
-import ProcessMethodology from '@/components/ProcessMethodology'
+import ProjectsArchitecture from '@/components/ProjectsArchitecture'
 import Sectors from '@/components/Sectors'
-import TechStackMatrix from '@/components/TechStackMatrix'
+import ProcessMethodology from '@/components/ProcessMethodology'
+import PricingPackages from '@/components/PricingPackages'
+import Biography from '@/components/Biography'
 import ContactTerminal from '@/components/ContactTerminal'
 import TerminalFooter from '@/components/TerminalFooter'
-import CustomCursor from '@/components/CustomCursor'
 import MovablePixelBackground from '@/components/MovablePixelBackground'
 import { sound } from '@/lib/sound'
 import { useTheme } from '@/components/ThemeProvider'
@@ -43,45 +37,47 @@ export default function Home() {
       if (key === 'h') {
         if (soundEnabled) sound.click()
         window.scrollTo({ top: 0, behavior: 'smooth' })
-      } else if (key === 'b') {
+      } else if (key === 'i') {
         if (soundEnabled) sound.click()
-        document.getElementById('biography')?.scrollIntoView({ behavior: 'smooth' })
-      } else if (key === 'p' || key === 'a') {
-        if (soundEnabled) sound.click()
-        document.getElementById('architecture')?.scrollIntoView({ behavior: 'smooth' })
+        document.getElementById('infrastructure')?.scrollIntoView({ behavior: 'smooth' })
       } else if (key === 's') {
         if (soundEnabled) sound.click()
         document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })
-      } else if (key === 'v') {
-        if (soundEnabled) sound.click()
-        document.getElementById('voice')?.scrollIntoView({ behavior: 'smooth' })
       } else if (key === 'c') {
         if (soundEnabled) sound.click()
+        document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' })
+      } else if (key === 'm') {
+        if (soundEnabled) sound.click()
+        document.getElementById('methodology')?.scrollIntoView({ behavior: 'smooth' })
+      } else if (key === 'p') {
+        if (soundEnabled) sound.click()
+        document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })
+      } else if (key === 'l' || key === 't') {
+        if (soundEnabled) sound.click()
+        document.getElementById('pilot')?.scrollIntoView({ behavior: 'smooth' })
+      } else if (key === 'a') {
+        if (soundEnabled) sound.click()
         document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
-      } else if (key === 'i' || key === 't') {
-        toggleTheme()
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [soundEnabled, toggleTheme])
+  }, [soundEnabled])
 
   return (
     <div
       id="home"
-      className={`min-h-screen transition-colors duration-200 selection:bg-primary selection:text-black font-mono uppercase ${
+      className={`min-h-screen selection:bg-primary selection:text-black font-mono uppercase ${
         !isDark ? 'inverted bg-white text-black' : 'bg-black text-white'
       }`}
     >
-      <CustomCursor />
-
       {/* Ambient Moving Retro Pixel Background Theme */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <MovablePixelBackground opacity={!isDark ? 0.12 : 0.22} inverted={!isDark} />
       </div>
 
-      {/* Floating Luxury Glassmorphic Navigation with Dynamic Island in the Middle */}
+      {/* Floating Glassmorphic Navigation with Dynamic Island in the Middle */}
       <DynamicIslandNavbar
         onToggleInvert={toggleTheme}
         inverted={!isDark}
@@ -91,105 +87,35 @@ export default function Home() {
 
       {/* Spacing compensation for floating dynamic island navbar */}
       <div className="pt-20 relative z-10">
-        {/* Real-time Streaming Telemetry Ticker */}
-        <LiveTelemetryTicker />
-
-        <main className="max-w-6xl mx-auto px-4 sm:px-8 relative z-10">
+        <main className="max-w-7xl w-full mx-auto px-4 sm:px-8 xl:px-12 relative z-10">
           {/* Top Pixel Header & Key Navigation */}
           <PixelHeader onToggleInvert={toggleTheme} inverted={!isDark} />
 
-          {/* Multi-Page Portals Gateway Strip */}
-          <div className="my-8 p-4 border border-white/20 bg-[#070707]">
-            <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#222222] text-[10px]">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-primary rounded-none animate-ping" />
-                <span className="text-primary font-bold tracking-wider">
-                  [MULTI-PAGE ARCHITECTURE SYSTEM // DEDICATED MODULE PORTALS]
-                </span>
-              </div>
-              <span className="text-muted hidden sm:inline">6 DEPLOYED PRODUCTION ROUTES</span>
-            </div>
+          {/* 1. Free 7-Day Outbound Pilot ("Show, Don't Tell" Proof-of-Fit) */}
+          <FreeTrialPilot />
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 text-xs">
-              <Link
-                href="/solutions"
-                className="p-2.5 border border-[#222222] bg-black hover:border-primary text-white hover:text-primary transition-all flex flex-col justify-between min-h-[60px]"
-              >
-                <span className="text-[9px] text-primary font-bold">[01]</span>
-                <span className="font-bold text-[11px] truncate">SOLUTIONS</span>
-              </Link>
-              <Link
-                href="/architecture"
-                className="p-2.5 border border-[#222222] bg-black hover:border-primary text-white hover:text-primary transition-all flex flex-col justify-between min-h-[60px]"
-              >
-                <span className="text-[9px] text-primary font-bold">[02]</span>
-                <span className="font-bold text-[11px] truncate">SYSTEM FABRIC</span>
-              </Link>
-              <Link
-                href="/voice-agent"
-                className="p-2.5 border border-[#222222] bg-black hover:border-primary text-white hover:text-primary transition-all flex flex-col justify-between min-h-[60px]"
-              >
-                <span className="text-[9px] text-primary font-bold">[03]</span>
-                <span className="font-bold text-[11px] truncate">VOICE LAB</span>
-              </Link>
-              <Link
-                href="/sectors"
-                className="p-2.5 border border-[#222222] bg-black hover:border-primary text-white hover:text-primary transition-all flex flex-col justify-between min-h-[60px]"
-              >
-                <span className="text-[9px] text-primary font-bold">[04]</span>
-                <span className="font-bold text-[11px] truncate">SECTORS & ROI</span>
-              </Link>
-              <Link
-                href="/methodology"
-                className="p-2.5 border border-[#222222] bg-black hover:border-primary text-white hover:text-primary transition-all flex flex-col justify-between min-h-[60px]"
-              >
-                <span className="text-[9px] text-primary font-bold">[05]</span>
-                <span className="font-bold text-[11px] truncate">30-DAY CUTOVER</span>
-              </Link>
-              <Link
-                href="/audit"
-                className="p-2.5 border border-primary/40 bg-primary/10 text-primary hover:bg-primary hover:text-black transition-all flex flex-col justify-between min-h-[60px] font-bold"
-              >
-                <span className="text-[9px]">[06]</span>
-                <span className="text-[11px] truncate">COMMISSION ■</span>
-              </Link>
-            </div>
-          </div>
-
-          {/* Columnar Biography Manifesto */}
-          <Biography />
-
-          {/* Viewport-Animated Production Metrics & SLAs */}
-          <MetricsCounter />
-
-          {/* NEW DISTINCT SECTION: Interactive Live CLI Sandbox & Command Deck */}
-          <InteractiveCliSandbox />
-
-          {/* Projects / System Architecture Ledgers */}
-          <ProjectsArchitecture />
-
-          {/* Aligned Stepped Services Tree + Live Telemetry Console */}
+          {/* 2. 5 Productized Outbound Pillars */}
           <ServicesList />
 
-          {/* Interactive System Fabric Node Visualizer */}
-          <DataFlowVisualizer />
+          {/* 3. Outbound Infrastructure & Humanized Copy Lab */}
+          <ProjectsArchitecture />
 
-          {/* Interactive Voice Receptionist Telephony Lab */}
-          <VoiceTerminal />
-
-          {/* 4-Stage Sprint Methodology */}
-          <ProcessMethodology />
-
-          {/* Interactive Sector Intelligence Command Center + ROI Calculator */}
+          {/* 4. Target ICPs & Interactive Outbound Pipeline Calculator */}
           <Sectors />
 
-          {/* Filterable Enterprise Tech Stack Matrix */}
-          <TechStackMatrix />
+          {/* 5. 30-Day Onboarding & 4-Week Warmup Methodology */}
+          <ProcessMethodology />
 
-          {/* Terminal Intake Application Form */}
+          {/* 6. Transparent Productized Pricing Tiers & Setup Fee Math */}
+          <PricingPackages />
+
+          {/* 7. Outbound Manifesto & Systems Architect Ledger */}
+          <Biography />
+
+          {/* 8. Outbound Commission & Discovery Application Terminal */}
           <ContactTerminal />
 
-          {/* Keycaps Footer */}
+          {/* 9. Minimalist Keycaps Terminal Footer */}
           <TerminalFooter onToggleInvert={toggleTheme} />
         </main>
       </div>

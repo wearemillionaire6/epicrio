@@ -1,26 +1,32 @@
 import type { Metadata, Viewport } from "next";
+import { Inter } from 'next/font/google';
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0B132B",
+  themeColor: "#FAFAF8",
 };
 
 export const metadata: Metadata = {
-  title: "Agency.co | High-Impact B2B Automation & AI Infrastructure",
+  title: "Epicrio | Autonomous Business Operations & Automation Platform",
   description:
-    "We build the connected systems behind modern enterprises: CRM, Automation, AI Voice Receptionists, Custom Technology, and Unified Workflows.",
+    "We automate the work your team shouldn't be doing manually. 24/7 AI voice reception, autonomous CRM pipelines, and back-office automation — one integrated system.",
   keywords: [
     "AI Automation Agency",
     "B2B Automation",
     "AI Voice Receptionist",
     "Enterprise CRM",
     "Workflow Integration",
-    "Zig.ai aesthetic",
   ],
-  authors: [{ name: "Agency.co" }],
+  authors: [{ name: "Epicrio" }],
 };
 
 export default function RootLayout({
@@ -29,8 +35,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className="font-mono antialiased bg-black text-white min-h-screen selection:bg-primary selection:text-black uppercase">
+    <html lang="en" className={`scroll-smooth bg-[#FAFAF8] ${inter.variable}`}>
+      <body className="antialiased min-h-screen bg-[#FAFAF8] text-[#1A1A1E] selection:bg-zinc-950 selection:text-white">
         <ThemeProvider>
           {children}
         </ThemeProvider>

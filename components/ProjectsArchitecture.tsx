@@ -1,249 +1,224 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import { sound } from '@/lib/sound'
 
-interface ArchitectureProject {
+interface ArchitectureTab {
   id: string
-  code: string
+  label: string
   title: string
-  protocol: string
-  stack: string
-  summary: string
-  latency: string
-  uptime: string
-  schema: string
+  description: string
+  diagram: string
+  spec: {
+    label: string
+    value: string
+  }[]
+  codeSnippet: string
 }
 
-const projects: ArchitectureProject[] = [
+const outboundArchitectures: ArchitectureTab[] = [
   {
-    id: 'hvac',
-    code: 'SYS.01',
-    title: 'HVAC AI VOICE RECEPTIONIST (HVACEQ)',
-    protocol: 'ZERO-DOUBLE-REASONING TELEPHONY // 1-RING ANSWER',
-    stack: 'VAPI • TWILIO SIP • PYTHON PAPERCLIP • GOOGLE CALENDAR',
-    summary: 'PURPOSE-BUILT FOR SOLO HVAC OPERATORS (1-3 TECHS). ANSWERS EVERY INBOUND CALL WITHIN 1 RING, ESCALATES \'NO HEAT\' / \'LEAK\' EMERGENCIES TO SMS WITHIN 30 SECONDS, AND COMMITS DIRECT BOOKINGS WITH ZERO DOUBLE-REASONING LATENCY.',
-    latency: '<260MS TTFT',
-    uptime: '99.98%',
-    schema: `{\n  "project": "hvac_ai_receptionist",\n  "offer": "$2000_lifetime",\n  "emergency_keywords": ["no heat", "gas smell", "freezer leak"],\n  "latency_rule": "ADR-005_rigid_python_sync",\n  "status": "OPERATIONAL"\n}`,
+    id: 'dns-deliverability',
+    label: '01 // DNS & DELIVERABILITY',
+    title: 'MULTI-DOMAIN ISOLATION & 28-DAY WARMUP PROTOCOL',
+    description: 'Sending high-volume cold email from your primary corporate domain carries severe blacklisting risk. We establish secondary domain clusters with strict cryptographic authentication records and gradual sending curves to protect inbox placement forever.',
+    diagram: '[PRIMARY DOMAIN: SAFE] ──> [5-15 SECONDARY DOMAINS] ──> [SPF+DKIM+DMARC PASS] ──> [PRIMARY INBOX: 98.4%]',
+    spec: [
+      { label: 'DNS PROTOCOLS', value: 'SPF, DKIM (2048-BIT), DMARC (P=REJECT)' },
+      { label: 'WARMUP CURVE', value: 'WEEK 1: 10/DAY -> WEEK 4: 50/DAY PER BOX' },
+      { label: 'SPAM THRESHOLD', value: '< 0.08% COMPLAINT SLA (GMAIL SAFE)' },
+      { label: 'TRACKING DOMAIN', value: 'ISOLATED SSL CNAME (NO SHARED PIXELS)' },
+    ],
+    codeSnippet: `; BIND9 DNS Zone Configuration (Sample Secondary Domain)
+$ORIGIN outreach-nexus.co.
+@   IN  TXT   "v=spf1 include:_spf.google.com ~all"
+google._domainkey IN TXT "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0lX..."
+_dmarc            IN TXT "v=DMARC1; p=reject; pct=100; rua=mailto:dmarc@outreach-nexus.co"
+track             IN CNAME custom.smartlead.io.`,
   },
   {
-    id: 'aas',
-    code: 'SYS.02',
-    title: 'AI APPOINTMENT SETTER (AAS)',
-    protocol: 'PMS / CAL.COM SYNC // 74% CONTAINMENT',
-    stack: 'RETELL AI • CAL.COM • TWENTY CRM • MAKE / N8N',
-    summary: 'PRODUCTIZED 24/7 INBOUND CONVERSATIONAL ENGINE FOR HIGH-TICKET MED SPAS, SOLO DENTAL PRACTICES, AND CONTRACTORS. 65-75% CALL CONTAINMENT RATE, REAL-TIME CALENDAR AVAILABILITY INJECTION, AND INSTANT POST-CALL SMS ENRICHMENT.',
-    latency: '<280MS TTFT',
-    uptime: '99.95%',
-    schema: `{\n  "project": "ai_appointment_setter",\n  "containment_target": "65-75%",\n  "pricing_tiers": ["$1.5k_starter", "$2.5k_growth", "$4.5k_prem"],\n  "post_call_sync": "twenty_crm_webhook",\n  "status": "ACTIVE"\n}`,
+    id: 'clay-waterfall',
+    label: '02 // CLAY CASCADE',
+    title: 'TRIPLE-VERIFIED WATERFALL ENRICHMENT ENGINE',
+    description: 'Single-source lead lists suffer 15-30% invalid email rates. Our Clay architecture chains multiple verification APIs in sequence, ensuring every decision-maker address is cryptographically validated via live SMTP handshakes before any email is dispatched.',
+    diagram: '[APOLLO / SALES NAV] ──> [CLAY TABLE] ──> [PROVIDER 1: NEVERBOUNCE] ──> [PROVIDER 2: PROSPEO] ──> [DEBOUNCE VERIFIED]',
+    spec: [
+      { label: 'CASCADE PROVIDERS', value: 'NEVERBOUNCE -> PROSPEO -> HUNTER -> DEBOUNCE' },
+      { label: 'BOUNCE GUARANTEE', value: '< 1.5% BOUNCE RATE ON ALL DELIVERIES' },
+      { label: 'SIGNAL EXTRACTION', value: 'RECENT LINKEDIN POSTS, PODCASTS, HIRING ADS' },
+      { label: 'EXPORT AUTOMATION', value: 'AUTO-PUSH INTO SMARTLEAD WARMED CAMPAIGNS' },
+    ],
+    codeSnippet: `// Clay Waterfall Step 3: Cascading Resolution
+{
+  "prospect": "David Vance",
+  "company": "Beacon Analytics",
+  "provider_1_result": { "source": "NeverBounce", "status": "catch_all" },
+  "provider_2_fallback": { "source": "Prospeo", "status": "verified_deliverable", "email": "david.vance@beaconanalytics.com" },
+  "trigger_signal": "Hired Head of Sales 12 days ago; expanding SDR team",
+  "outreach_ready": true
+}`,
   },
   {
-    id: 'aetherscrape',
-    code: 'SYS.03',
-    title: 'AETHERSCRAPE WEB EXTRACTION RUNTIME',
-    protocol: 'FIRECRAWL • SCRAPLING MCP • WATERFALL ENRICH',
-    stack: 'FIRECRAWL REST • SCRAPLING • PYTHON DOCKER • EXCEL ETL',
-    summary: 'RESILIENT TARGETED PROSPECTING PIPELINE. HIGH-SPEED SCRAPING OF REGIONAL CLINICS, DENTAL PRACTICES, AND CONTRACTOR FLEETS WITH REAL-TIME WATERFALL PHONE/EMAIL AUDITING AND EXCEL/DB HARMONIZATION.',
-    latency: '120MS / REC',
-    uptime: '99.99%',
-    schema: `{\n  "project": "aetherscrape_engine",\n  "extraction_tool": "firecrawl_and_scrapling",\n  "waterfall_enrichment": "phone_email_valid",\n  "dataset_output": "verified_leads_xlsx",\n  "status": "VERIFIED"\n}`,
+    id: 'humanized-copy',
+    label: '03 // COPY LAB',
+    title: 'HUMANIZED PEER-TO-PEER VS 2022 AI SLOP',
+    description: '47% of B2B professionals refuse to reply to emails they perceive as automated AI fluff. We ban corporate buzzwords, generic flattery, and long paragraphs. Every email is under 80 words, plain-text, and sounds like a sharp operator speaking directly to a peer.',
+    diagram: '[PROSPECT RESEARCH HOOK] ──> [REAL OPERATIONAL PAIN] ──> [PROVEN PROPOSITION] ──> [ZERO-FRICTION CTA]',
+    spec: [
+      { label: 'LENGTH CONSTRAINT', value: 'UNDER 80 WORDS MAXIMUM' },
+      { label: 'STRUCTURE', value: 'OBSERVATION -> PAIN -> SOLUTION -> ASYNC CTA' },
+      { label: 'FORMATTING', value: '100% PLAIN TEXT (NO HTML, NO TEMPLATES)' },
+      { label: 'REPLY RATE', value: '15-25% ON TRIGGER EVENTS (VS 3.4% BENCHMARK)' },
+    ],
+    codeSnippet: `=== ❌ GENERIC 2022 AI SLOP (REPLY: 1.2%) ===
+Subject: Synergizing Beacon Analytics with Revolutionary AI Paradigms
+Dear Mr. Vance,
+I hope this email finds you well in these exciting times! At AgencyCo, we are thrilled
+to introduce our cutting-edge, state-of-the-art AI-driven revenue enablement suite.
+Are you open for a 30-minute demonstration this Thursday at 2 PM EST?
+
+=== ✓ OUR 2026 HUMANIZED COPY (REPLY: 19.4%) ===
+Subject: quick question re: beacon's SDR hiring
+
+Hi David,
+
+Saw your post about the new sales team buildout and noticed you have 2 open outbound SDR roles.
+
+Most B2B SaaS teams at your stage are spending $77K/year per rep to book 8-12 meetings. We built an outbound system that configures 15 secondary mailboxes, Clay waterfall data, and consistently books 15-25 qualified meetings/month without adding headcount.
+
+Mind if I send over a 2-minute Loom showing how the system runs?
+
+Best,
+Bhavesh`,
   },
   {
-    id: 'clinicsync',
-    code: 'SYS.04',
-    title: 'CLINICSYNC AI & HEALTHCARE RECEPTION',
-    protocol: 'HIPAA BAA // OPENDENTAL & DENTRIX INTEGRATION',
-    stack: 'RETELL HIPAA • SUPABASE PGVECTOR • OPENDENTAL • TWILIO',
-    summary: 'HIPAA-COMPLIANT CLINICAL PATIENT INTAKE WITH SOC 2 TYPE II ENCRYPTION. PRE-OP GUIDANCE, AUTOMATED RESCHEDULING, AND EMERGENCY INTENT CLASSIFICATION LINKED DIRECTLY INTO EXISTING PRACTICE MANAGEMENT SYSTEMS.',
-    latency: '<310MS TTFT',
-    uptime: '100% HIPAA',
-    schema: `{\n  "project": "clinicsync_ai",\n  "security": "SOC2_Type_II_HIPAA_BAA",\n  "pms_bridges": ["OpenDental", "Dentrix", "Boulevard"],\n  "pii_redaction": "enforced",\n  "status": "COMPLIANT"\n}`,
-  },
-  {
-    id: 'agentos',
-    code: 'SYS.05',
-    title: 'AGENT OS 12-FACTOR ENGINE',
-    protocol: 'KARPATHY 3-LAYER WIKI // LITELLM ROUTING',
-    stack: 'LITELLM • LANGFUSE • OBSIDIAN MCP • NEXT.JS 15',
-    summary: 'PRODUCTION 12-FACTOR AGENT ORCHESTRATION LAYER. RAW INGESTION, AUDITED WIKI CITATIONS, AND TYPED TOOL EXECUTION (FACTOR 4) WITH CENTRALIZED TOKEN SPEND CAPS AND LANGFUSE DISTRIBUTED TRACING.',
-    latency: '18MS ROUTING',
-    uptime: '99.999%',
-    schema: `{\n  "project": "agent_os_core",\n  "pattern": "karpathy_llm_wiki_3_layer",\n  "spend_guard": "litellm_hard_caps",\n  "observability": "langfuse_trace_v2",\n  "status": "DEPLOYED"\n}`,
+    id: 'reply-triage',
+    label: '04 // AUTONOMOUS TRIAGE',
+    title: 'SUB-3-MINUTE SPEED-TO-LEAD & CRM SYNC',
+    description: 'When positive replies land, minutes matter. Our n8n workflow monitors Smartlead webhooks, parses intent, automatically halts subsequent follow-ups for that prospect across email and LinkedIn, and syncs directly into Cal.com and your CRM.',
+    diagram: '[INCOMING REPLY] ──> [N8N INTENT CLASSIFIER] ──> [HALT FOLLOWUPS] ──> [SLACK ALERT + CAL.COM SYNC]',
+    spec: [
+      { label: 'SPEED-TO-LEAD', value: '< 3 MINUTES FROM INBOX DEPOSIT' },
+      { label: 'INTENT LABELS', value: 'POSITIVE, QUESTION, OBJECTION, OOO' },
+      { label: 'CRM INTEGRATIONS', value: 'HUBSPOT, PIPEDRIVE, SALESFORCE, TWENTY' },
+      { label: 'SLACK WAR-ROOM', value: 'REAL-TIME RICH NOTIFICATION WITH PROSPECT BRIEF' },
+    ],
+    codeSnippet: `// n8n Webhook Reply Classification Payload
+{
+  "event": "email.reply.received",
+  "from": "david.vance@beaconanalytics.com",
+  "snippet": "Sure, send over the Loom or grab 15 mins on my calendar next Tuesday.",
+  "classification": "POSITIVE_INTEREST",
+  "actions_executed": [
+    "SMARTLEAD_CAMPAIGN_PAUSED",
+    "HEYREACH_LINKEDIN_PAUSED",
+    "HUBSPOT_DEAL_CREATED_STAGE_DISCOVERY",
+    "SLACK_WAR_ROOM_NOTIFIED_HOT_LEAD",
+    "CAL_COM_LINK_AUTO_DRAFTED"
+  ]
+}`,
   },
 ]
 
 export default function ProjectsArchitecture() {
-  const [activeTab, setActiveTab] = useState<string>('hvac')
-  const currentProject = projects.find((p) => p.id === activeTab) || projects[0]
+  const [activeTab, setActiveTab] = useState<number>(0)
+  const currentTab = outboundArchitectures[activeTab]
 
   return (
-    <section id="architecture" className="py-20 border-b border-[#222222] font-mono">
+    <section id="infrastructure" className="py-20 border-b border-[#222222] font-mono">
       {/* Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-[#222222] gap-4">
         <div>
           <div className="text-primary text-xs tracking-widest uppercase mb-1 flex items-center gap-2">
             <span className="inline-block w-2 h-2 bg-primary" />
-            <span>[SYSTEM_LEDGER // MODULE 02]</span>
+            <span>[TECHNICAL_BLUEPRINT // OUTBOUND ARCHITECTURE]</span>
           </div>
-          <h2 className="font-pixel text-3xl sm:text-5xl md:text-6xl text-white tracking-widest">
-            PROJECTS
+          <h2 className="font-pixel text-3xl sm:text-5xl text-white tracking-widest">
+            INFRASTRUCTURE
           </h2>
         </div>
         <div className="text-right text-xs text-muted">
-          <span>5 PRODUCTION SYSTEMS</span>
+          <span>HIGH-DELIVERABILITY ENGINE SPECIFICATION</span>
           <br />
-          <span className="text-white">SELECT MODULE TO INSPECT ARCHITECTURE</span>
+          <span className="text-white">CLICK TABS TO INSPECT SYSTEM SCHEMATICS</span>
         </div>
       </div>
 
-      {/* Terminal Prompt Header */}
-      <div className="text-muted text-xs sm:text-sm mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="text-primary">[/&gt; ARCHITECTURE_CATALOG : ]</span>
-          <span className="text-white">SELECT DEPLOYED SYSTEM FOR DEEP DIVE</span>
-        </div>
-        <span className="text-[11px] text-primary hidden md:inline">
-          ALL 5 PODS PASSING HEALTH CHECK
-        </span>
-      </div>
-
-      {/* Project Selector Box Tabs */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 mb-6">
-        {projects.map((proj) => {
-          const isActive = activeTab === proj.id
+      {/* Tab Navigation Strip */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
+        {outboundArchitectures.map((tab, idx) => {
+          const isActive = activeTab === idx
           return (
             <button
-              key={proj.id}
+              key={tab.id}
+              type="button"
               onClick={() => {
                 sound.click()
-                setActiveTab(proj.id)
+                setActiveTab(idx)
               }}
-              className={`p-3 border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[85px] ${
+              className={`p-3 text-left border transition-all text-xs cursor-pointer ${
                 isActive
-                  ? 'border-primary bg-primary/10 text-white shadow-[0_0_12px_rgba(0,255,136,0.2)]'
+                  ? 'border-primary bg-primary/10 text-white shadow-[0_0_15px_rgba(0,255,136,0.15)] font-bold'
                   : 'border-[#222222] bg-[#070707] text-muted hover:border-white hover:text-white'
               }`}
             >
-              <div className="flex items-center justify-between w-full text-[9px]">
-                <span className="text-primary font-bold">[{proj.code}]</span>
-                <span className="text-muted">{proj.latency}</span>
-              </div>
-              <span className="font-bold text-xs tracking-tight line-clamp-2 text-white mt-1">
-                {proj.title}
+              <span className={`text-[10px] block mb-0.5 ${isActive ? 'text-primary' : 'text-muted'}`}>
+                {tab.label.split(' // ')[0]}
               </span>
-              <div className="text-[9px] text-[#555555] mt-1 flex items-center justify-between">
-                <span>{proj.uptime} SLA</span>
-                {isActive && <span className="text-primary">■</span>}
-              </div>
+              <span className="truncate block font-pixel">
+                {tab.label.split(' // ')[1]}
+              </span>
             </button>
           )
         })}
       </div>
 
-      {/* Detailed Box-Style Project Architecture Console */}
-      <div className="border border-white/20 bg-[#070707] p-6 sm:p-8">
-        {/* Box Top Header Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-6 border-b border-[#222222] gap-3">
-          <div>
-            <div className="flex items-center gap-2 text-[10px] text-primary mb-1">
-              <span>MODULE // {currentProject.code}</span>
-              <span>•</span>
-              <span className="text-white">{currentProject.protocol}</span>
-            </div>
-            <h3 className="font-bold text-lg sm:text-2xl text-white tracking-wide">
-              {currentProject.title}
-            </h3>
+      {/* Main Spec Card */}
+      <div className="border border-white/20 bg-[#070707] p-6 sm:p-8 relative overflow-hidden">
+        {/* Title & Description */}
+        <div className="mb-6">
+          <div className="flex items-center gap-2 text-xs text-primary mb-1">
+            <span className="w-2 h-2 bg-primary" />
+            <span>MODULE {activeTab + 1} OF 4</span>
           </div>
-
-          <div className="flex items-center gap-4 bg-black border border-[#222222] px-4 py-2.5">
-            <div>
-              <span className="text-[9px] text-muted block">LATENCY TTFT</span>
-              <span className="text-primary font-bold text-sm sm:text-base">
-                {currentProject.latency}
-              </span>
-            </div>
-            <div className="h-6 w-[1px] bg-[#222222]" />
-            <div>
-              <span className="text-[9px] text-muted block">AVAILABILITY</span>
-              <span className="text-white font-bold text-sm sm:text-base">
-                {currentProject.uptime}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* 3 Boxed Specification Modules */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-          <div className="p-3.5 border border-[#222222] bg-black">
-            <span className="text-[9px] text-primary font-bold block mb-1 uppercase tracking-wider">
-              [01 // PROTOCOL STANDARD]
-            </span>
-            <span className="text-xs text-white font-bold block">
-              {currentProject.protocol}
-            </span>
-          </div>
-
-          <div className="p-3.5 border border-[#222222] bg-black">
-            <span className="text-[9px] text-primary font-bold block mb-1 uppercase tracking-wider">
-              [02 // VERIFIED TECH STACK]
-            </span>
-            <span className="text-xs text-[#dddddd] font-bold block truncate">
-              {currentProject.stack}
-            </span>
-          </div>
-
-          <div className="p-3.5 border border-[#222222] bg-black">
-            <span className="text-[9px] text-primary font-bold block mb-1 uppercase tracking-wider">
-              [03 // RESILIENCE MECHANIC]
-            </span>
-            <span className="text-xs text-white font-bold block">
-              DEAD-LETTER QUEUE AUTO-REPLAY
-            </span>
-          </div>
-        </div>
-
-        {/* Summary Box in Strict Monospace */}
-        <div className="p-4 border border-[#222222] bg-black mb-6">
-          <span className="text-[9px] text-muted block mb-1 uppercase tracking-wider">
-            [OPERATIONAL MANDATE]
-          </span>
-          <p className="text-xs text-white leading-relaxed">
-            {currentProject.summary}
+          <h3 className="font-bold text-lg sm:text-xl text-white tracking-wide mb-2">
+            {currentTab.title}
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-4xl">
+            {currentTab.description}
           </p>
         </div>
 
-        {/* Boxed JSON Schema Wire Transmission Preview */}
-        <div className="p-4 border border-[#222222] bg-black mb-6">
-          <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#1A1A1A] text-[10px]">
-            <span className="text-muted">[SAMPLE JSON WIRE TRANSMISSION // RUNTIME SCHEMA]</span>
-            <span className="text-primary font-bold">200 OK • ATOMIC COMMIT</span>
-          </div>
-          <pre className="text-xs text-[#00FF88] font-mono leading-relaxed overflow-x-auto p-1">
-            {currentProject.schema}
-          </pre>
+        {/* Spec Matrix Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 p-4 bg-black border border-[#222222] mb-6 text-xs">
+          {currentTab.spec.map((item) => (
+            <div key={item.label}>
+              <span className="text-[9px] text-muted block mb-1">{item.label}</span>
+              <span className="text-white font-bold text-[11px] block">{item.value}</span>
+            </div>
+          ))}
         </div>
 
-        {/* Bottom Actions Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-[#222222]">
-          <Link
-            href="/architecture"
-            className="text-xs text-muted hover:text-primary transition-colors flex items-center gap-1.5"
-          >
-            <span>[VIEW COMPLETE SYSTEM FABRIC SPECIFICATION</span>
-            <span>-&gt;]</span>
-          </Link>
+        {/* Circuit Diagram */}
+        <div className="mb-6">
+          <div className="text-[10px] text-muted mb-1 flex items-center justify-between">
+            <span>[PIPELINE FLOW DIAGRAM]</span>
+            <span className="text-primary text-[9px]">DETERMINISTIC PATH</span>
+          </div>
+          <div className="p-3 bg-black border border-[#222222] text-xs text-primary font-mono overflow-x-auto whitespace-nowrap">
+            {currentTab.diagram}
+          </div>
+        </div>
 
-          <a
-            href="#contact"
-            onClick={() => sound.click()}
-            className="px-4 py-2 bg-white text-black font-bold text-xs hover:bg-primary transition-colors flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <span>DEPLOY THIS SYSTEM</span>
-            <span className="text-[7px]">■</span>
-            <span>-&gt;</span>
-          </a>
+        {/* Code / Artifact Snippet */}
+        <div>
+          <div className="text-[10px] text-muted mb-1 flex items-center justify-between">
+            <span>[ENGINEERING SPECIFICATION &amp; PRODUCTION PAYLOAD]</span>
+            <span className="text-[9px] text-muted">VERIFIED RUNTIME</span>
+          </div>
+          <pre className="p-4 bg-black border border-[#222222] text-[11px] text-white font-mono leading-relaxed overflow-x-auto whitespace-pre-wrap">
+            {currentTab.codeSnippet}
+          </pre>
         </div>
       </div>
     </section>

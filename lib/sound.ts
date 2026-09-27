@@ -1,24 +1,32 @@
-// Lightweight Web Audio sound generator for retro mechanical clicks and terminal beeps
+// Lightweight, non-blocking Web Audio sound generator for retro mechanical clicks and terminal beeps
 class SoundFX {
   private ctx: AudioContext | null = null
+  private initialized = false
 
   private getContext(): AudioContext | null {
     if (typeof window === 'undefined') return null
     if (!this.ctx) {
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext
-      if (AudioCtx) this.ctx = new AudioCtx()
+      try {
+        const AudioCtx = window.AudioContext || (window as any).webkitAudioContext
+        if (AudioCtx) {
+          this.ctx = new AudioCtx()
+        }
+      } catch {
+        return null
+      }
     }
     if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume()
+      // Resume asynchronously without blocking the UI thread
+      this.ctx.resume().catch(() => {})
     }
     return this.ctx
   }
 
   // Soft mechanical keyboard click
   click() {
-    const ctx = this.getContext()
-    if (!ctx) return
     try {
+      const ctx = this.getContext()
+      if (!ctx) return
       const osc = ctx.createOscillator()
       const gain = ctx.createGain()
       osc.type = 'sine'
@@ -40,9 +48,9 @@ class SoundFX {
 
   // Terminal acknowledge beep
   beep() {
-    const ctx = this.getContext()
-    if (!ctx) return
     try {
+      const ctx = this.getContext()
+      if (!ctx) return
       const osc = ctx.createOscillator()
       const gain = ctx.createGain()
       osc.type = 'square'
