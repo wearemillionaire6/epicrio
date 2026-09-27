@@ -27,9 +27,31 @@ export default function BookAppointmentPage() {
   // Cal.com embed URL (light mode)
   const calEmbedUrl = `https://cal.com/${calUsername}/${meetingType}?embed=true&theme=light`
 
-  const handleSubmitDirectForm = (e: React.FormEvent) => {
+  const [isSubmittingDirect, setIsSubmittingDirect] = useState(false)
+
+  const handleSubmitDirectForm = async (e: React.FormEvent) => {
     e.preventDefault()
-    setFormSubmitted(true)
+    setIsSubmittingDirect(true)
+    try {
+      await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          domain: formData.company,
+          interest: `${formData.businessType} (Preferred: ${formData.preferredTime})`,
+          notes: formData.notes,
+          source: 'booking_direct_form',
+        }),
+      })
+    } catch (err) {
+      console.error('Lead post error:', err)
+    } finally {
+      setIsSubmittingDirect(false)
+      setFormSubmitted(true)
+    }
   }
 
   return (
