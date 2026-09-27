@@ -1,124 +1,58 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import DynamicIslandNavbar from '@/components/DynamicIslandNavbar'
-import PixelHeader from '@/components/PixelHeader'
-import FreeTrialPilot from '@/components/FreeTrialPilot'
-import ServicesList from '@/components/ServicesList'
-import ProjectsArchitecture from '@/components/ProjectsArchitecture'
-import Sectors from '@/components/Sectors'
-import ProcessMethodology from '@/components/ProcessMethodology'
-import PricingPackages from '@/components/PricingPackages'
-import Biography from '@/components/Biography'
-import ContactTerminal from '@/components/ContactTerminal'
-import TerminalFooter from '@/components/TerminalFooter'
-import MovablePixelBackground from '@/components/MovablePixelBackground'
-import { sound } from '@/lib/sound'
-import { useTheme } from '@/components/ThemeProvider'
+import StudioNav from '@/components/studio/StudioNav'
+import StudioEveryBusiness from '@/components/studio/StudioEveryBusiness'
+import StudioHero from '@/components/studio/StudioHero'
+import StudioOdooSuite from '@/components/studio/StudioOdooSuite'
+import StudioVoiceReceptionist from '@/components/studio/StudioVoiceReceptionist'
+import StudioCrmWorkflows from '@/components/studio/StudioCrmWorkflows'
+import StudioThesis from '@/components/studio/StudioThesis'
+import StudioPilot from '@/components/studio/StudioPilot'
+import StudioPricing from '@/components/studio/StudioPricing'
+import StudioInquiry from '@/components/studio/StudioInquiry'
+import StudioFooter from '@/components/studio/StudioFooter'
 
 export default function Home() {
-  const { isDark, toggleTheme } = useTheme()
-  const [soundEnabled, setSoundEnabled] = useState(true)
-
-  const toggleSound = () => {
-    setSoundEnabled((prev) => !prev)
-  }
-
-  // Keyboard navigation shortcuts
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignore when typing inside input / textarea
-      if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement).tagName)) {
-        return
-      }
-
-      const key = e.key.toLowerCase()
-
-      if (key === 'h') {
-        if (soundEnabled) sound.click()
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-      } else if (key === 'i') {
-        if (soundEnabled) sound.click()
-        document.getElementById('infrastructure')?.scrollIntoView({ behavior: 'smooth' })
-      } else if (key === 's') {
-        if (soundEnabled) sound.click()
-        document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })
-      } else if (key === 'c') {
-        if (soundEnabled) sound.click()
-        document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' })
-      } else if (key === 'm') {
-        if (soundEnabled) sound.click()
-        document.getElementById('methodology')?.scrollIntoView({ behavior: 'smooth' })
-      } else if (key === 'p') {
-        if (soundEnabled) sound.click()
-        document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })
-      } else if (key === 'l' || key === 't') {
-        if (soundEnabled) sound.click()
-        document.getElementById('pilot')?.scrollIntoView({ behavior: 'smooth' })
-      } else if (key === 'a') {
-        if (soundEnabled) sound.click()
-        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [soundEnabled])
+  // Light Mode Only - Luxury Monochrome Minimalist
+  const isDark = false
 
   return (
-    <div
-      id="home"
-      className={`min-h-screen selection:bg-primary selection:text-black font-mono uppercase ${
-        !isDark ? 'inverted bg-white text-black' : 'bg-black text-white'
-      }`}
-    >
-      {/* Ambient Moving Retro Pixel Background Theme */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <MovablePixelBackground opacity={!isDark ? 0.12 : 0.22} inverted={!isDark} />
-      </div>
+    <div className="min-h-screen font-sans selection:bg-zinc-950 selection:text-white bg-[#FAFAF8] text-[#1A1A1E]">
+      {/* Spacious Floating Capsule Navigation */}
+      <StudioNav isDark={false} />
 
-      {/* Floating Glassmorphic Navigation with Dynamic Island in the Middle */}
-      <DynamicIslandNavbar
-        onToggleInvert={toggleTheme}
-        inverted={!isDark}
-        soundEnabled={soundEnabled}
-        onToggleSound={toggleSound}
-      />
+      {/* Main Container - Responsive Full Screen across all device ratios */}
+      <main className="w-full max-w-[1536px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20">
+        {/* 1. Hero Statement: Everything Under One Roof */}
+        <StudioHero isDark={isDark} />
 
-      {/* Spacing compensation for floating dynamic island navbar */}
-      <div className="pt-20 relative z-10">
-        <main className="max-w-7xl w-full mx-auto px-4 sm:px-8 xl:px-12 relative z-10">
-          {/* Top Pixel Header & Key Navigation */}
-          <PixelHeader onToggleInvert={toggleTheme} inverted={!isDark} />
+        {/* 1.5. Built for Every Business: Converting Heavy Workload into Easy Automation */}
+        <StudioEveryBusiness isDark={isDark} />
 
-          {/* 1. Free 7-Day Outbound Pilot ("Show, Don't Tell" Proof-of-Fit) */}
-          <FreeTrialPilot />
+        {/* 2. The All-in-One Operations Suite */}
+        <StudioOdooSuite isDark={isDark} />
 
-          {/* 2. 5 Productized Outbound Pillars */}
-          <ServicesList />
+        {/* 3. 24/7 AI Voice Receptionist (Never Miss a Customer Call) */}
+        <StudioVoiceReceptionist isDark={isDark} />
 
-          {/* 3. Outbound Infrastructure & Humanized Copy Lab */}
-          <ProjectsArchitecture />
+        {/* 4. CRM & Back-Office Tech Services (Take Load Off Your Team) */}
+        <StudioCrmWorkflows isDark={isDark} />
 
-          {/* 4. Target ICPs & Interactive Outbound Pipeline Calculator */}
-          <Sectors />
+        {/* 5. Simple How It Works */}
+        <StudioThesis isDark={isDark} />
 
-          {/* 5. 30-Day Onboarding & 4-Week Warmup Methodology */}
-          <ProcessMethodology />
+        {/* 6. 7-Day Zero-Risk Trial */}
+        <StudioPilot isDark={isDark} />
 
-          {/* 6. Transparent Productized Pricing Tiers & Setup Fee Math */}
-          <PricingPackages />
+        {/* 8. Transparent All-in-One Productized Packages */}
+        <StudioPricing isDark={isDark} />
 
-          {/* 7. Outbound Manifesto & Systems Architect Ledger */}
-          <Biography />
+        {/* 9. Feasibility Assessment & Pilot Application */}
+        <StudioInquiry isDark={isDark} />
 
-          {/* 8. Outbound Commission & Discovery Application Terminal */}
-          <ContactTerminal />
-
-          {/* 9. Minimalist Keycaps Terminal Footer */}
-          <TerminalFooter onToggleInvert={toggleTheme} />
-        </main>
-      </div>
+        {/* 10. Colophon & Links */}
+        <StudioFooter isDark={false} />
+      </main>
     </div>
   )
 }
