@@ -1,8 +1,7 @@
 'use client'
 
-interface StudioPricingProps {
-  isDark: boolean
-}
+import { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
 
 const packages = [
   {
@@ -52,88 +51,111 @@ const packages = [
   },
 ]
 
-export default function StudioPricing({ isDark }: StudioPricingProps) {
+export default function StudioPricing() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const isInView = useInView(sectionRef, { once: true, margin: "-80px" })
+
+  const containerVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.7, ease: [0.25, 0.4, 0.25, 1] as const, staggerChildren: 0.1 }
+    }
+  }
+  
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.4, 0.25, 1] as const } }
+  }
+
   return (
-    <section id="investment" className="py-20 border-t border-current/10">
-      <div className="max-w-2xl mb-12">
-        <div className="text-zinc-400 font-medium tracking-wider uppercase text-xs mb-3 font-mono">
-          Pricing
-        </div>
-        <h2 className={`text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight ${
-          isDark ? 'text-white' : 'text-zinc-950'
-        }`}>
+    <motion.section 
+      ref={sectionRef}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={containerVariants}
+      id="investment" 
+      className="py-20 lg:py-28 border-b border-zinc-100/80 bg-white"
+    >
+      <div className="w-full max-w-4xl mb-16 px-4 sm:px-6 mx-auto text-center">
+        <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 text-zinc-600 font-medium text-xs mb-6">
+          <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
+          <span>Pricing</span>
+        </motion.div>
+        
+        <motion.h2 variants={itemVariants} className="text-4xl sm:text-5xl font-display font-medium tracking-[-0.03em] text-[#0A0A0A]">
           Simple, predictable pricing. No surprises.
-        </h2>
-        <p className={`mt-4 text-base leading-relaxed ${
-          isDark ? 'text-zinc-400' : 'text-zinc-600'
-        }`}>
+        </motion.h2>
+        
+        <motion.p variants={itemVariants} className="mt-6 text-[15px] text-zinc-500 max-w-2xl mx-auto leading-relaxed font-sans">
           One setup fee builds your infrastructure. A monthly retainer covers management, software, and voice minutes. Cancel anytime.
-        </p>
+        </motion.p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+      <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
         {packages.map((pkg) => (
-          <div
+          <motion.div
             key={pkg.name}
-            className={`rounded-3xl p-8 flex flex-col justify-between border backdrop-blur-md transition-all ${
+            variants={itemVariants}
+            className={`rounded-2xl p-8 flex flex-col justify-between bg-white ${
               pkg.highlight
-                ? isDark
-                  ? 'bg-zinc-900/60 border-white shadow-[0_0_30px_rgba(255,255,255,0.1)]'
-                  : 'bg-white border-zinc-950 shadow-[0_12px_40px_rgba(0,0,0,0.1)] ring-1 ring-zinc-950'
-                : isDark
-                ? 'bg-zinc-900/40 border-white/10 shadow-sm'
-                : 'bg-white/80 border-black/[0.06] shadow-sm'
+                ? 'border-2 border-zinc-900 shadow-sm'
+                : 'border border-zinc-100 shadow-[0_0_0_1px_rgba(0,0,0,0.04)]'
             }`}
           >
             <div>
-              <div className="flex items-center justify-between pb-3 border-b border-black/10 mb-4">
-                <span className="font-bold text-base text-zinc-950">{pkg.name}</span>
+              <div className="flex items-center justify-between pb-6">
+                <span className="font-medium text-[16px] text-[#0A0A0A]">{pkg.name}</span>
                 {pkg.highlight && (
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-zinc-950 text-white shadow-xs">
-                    Most popular
+                  <span className="px-3 py-1 rounded-full text-[11px] font-medium bg-zinc-100 text-zinc-700">
+                    Popular
                   </span>
                 )}
               </div>
 
-              <div className="space-y-1 mb-4">
-                <div className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-950 font-sans">
+              <div className="space-y-2 mb-6">
+                <div className="text-4xl font-display font-medium tracking-tight text-[#0A0A0A]">
                   {pkg.setup}
                 </div>
-                <div className="text-xs text-zinc-500">
+                <div className="text-[13px] text-zinc-500">
                   One-time buildout, then {pkg.retainer}
                 </div>
               </div>
 
-              <p className="text-xs mb-6 pb-4 border-b border-black/10 text-zinc-600">
+              <p className="text-[14px] mb-8 pb-6 border-b border-zinc-100 text-zinc-600">
                 {pkg.target}
               </p>
 
-              <ul className="space-y-3 text-xs">
+              <ul className="space-y-4 text-[14px]">
                 {pkg.deliverables.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-900 mt-1.5 flex-shrink-0" />
-                    <span className="text-zinc-700">{item}</span>
+                  <li key={idx} className="flex items-start gap-3">
+                    <svg className="w-4 h-4 text-zinc-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-zinc-600 leading-snug">{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="mt-8 pt-4 border-t border-black/10">
-              <a
+            <div className="mt-10 pt-6 border-t border-zinc-100">
+              <motion.a
                 href="#apply"
-                className={`w-full py-3.5 text-xs font-semibold rounded-full flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm active:scale-[0.98] ${
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`w-full py-3 text-sm font-medium rounded-full flex items-center justify-center transition-colors ${
                   pkg.highlight
-                    ? 'bg-zinc-950 text-white hover:bg-zinc-800 shadow-md'
-                    : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-900 border border-zinc-200/80'
+                    ? 'bg-zinc-900 text-white hover:bg-zinc-800'
+                    : 'bg-transparent border border-zinc-200 text-zinc-700 hover:border-zinc-300'
                 }`}
               >
-                <span>Select {pkg.name}</span>
-                <span>&rarr;</span>
-              </a>
+                Select {pkg.name}
+              </motion.a>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
-    </section>
+    </motion.section>
   )
 }

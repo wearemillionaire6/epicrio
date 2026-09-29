@@ -3,11 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --bg-color: #FAFAF8;
-  --text-color: #1A1A1E;
-  --border-color: #E5E5E5;
-  --accent-color: #09090B;
-  --primary: #09090B;
+  --bg: #FFFFFF;
+  --text: #0A0A0A;
+  --text-secondary: #52525B;
+  --text-tertiary: #A1A1AA;
+  --border: #F0F0F0;
+  --surface: #FAFAFA;
 }
 
 /* Luxury UI/UX Typography Stack */
@@ -23,34 +24,6 @@ body, p, span, button, input, select, textarea {
 
 code, kbd, samp, pre, .font-mono {
   font-family: var(--font-mono), monospace;
-}
-
-html.light, body.light, .inverted {
-  --bg-color: #FAFAF8;
-  --text-color: #0A0A0A;
-  --border-color: #E5E5E5;
-  --accent-color: #09090B;
-  --primary: #09090B;
-}
-
-/* Bulletproof enforcement: cyber green strictly for brutalist terminal pages */
-[data-theme="brutalist"] .text-primary {
-  color: #00FF88 !important;
-}
-[data-theme="brutalist"] .bg-primary {
-  background-color: #00FF88 !important;
-}
-[data-theme="brutalist"] .border-primary {
-  border-color: #00FF88 !important;
-}
-[data-theme="brutalist"].light .text-primary {
-  color: #008744 !important;
-}
-[data-theme="brutalist"].light .bg-primary {
-  background-color: #008744 !important;
-}
-[data-theme="brutalist"].light .border-primary {
-  border-color: #008744 !important;
 }
 
 /* Maintain clean default arrow cursor on text; avoid switching to copy-paste I-beam */
@@ -70,129 +43,49 @@ input[type="text"], input[type="email"], input[type="tel"], input[type="number"]
 
 html {
   scroll-behavior: smooth;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}
-
-/* Monospace Brutalist Typography defaults */
-.font-mono, [data-theme="brutalist"] {
-  font-family: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
-/* Premium High-End Editorial Typography for Studio & Booking Pages */
-.font-sans, .font-sans button, .font-sans input, .font-sans select, .font-sans textarea {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
-  text-transform: none !important;
-  letter-spacing: -0.01em;
+  background-color: var(--bg);
+  color: var(--text);
 }
 
 body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
+  background-color: var(--bg);
+  color: var(--text);
   overflow-x: hidden;
+  transition: all 0.3s ease-in-out;
 }
 
-/* Legacy brutalist theme overrides (strictly for brutalist terminal pages, never affecting modern studio pages) */
-[data-theme="brutalist"].light body, .inverted[data-theme="brutalist"] body {
-  background-color: #FFFFFF !important;
-  color: #0A0A0A !important;
+/* Smooth scroll-triggered animation utilities */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.7s cubic-bezier(0.25, 0.4, 0.25, 1);
 }
 
-[data-theme="brutalist"].light .bg-black, .inverted[data-theme="brutalist"] .bg-black {
-  background-color: #FFFFFF !important;
-  color: #0A0A0A !important;
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-[data-theme="brutalist"].light .bg-\[\#050505\],
-[data-theme="brutalist"].light .bg-\[\#070707\],
-[data-theme="brutalist"].light .bg-\[\#080808\],
-[data-theme="brutalist"].light .bg-\[\#0A0A0A\],
-[data-theme="brutalist"].light .bg-\[\#0c0c0c\] {
-  background-color: #F4F4F6 !important;
-  color: #0A0A0A !important;
-}
-
-[data-theme="brutalist"].light .border-\[\#1A1A1A\],
-[data-theme="brutalist"].light .border-\[\#1E1E1E\],
-[data-theme="brutalist"].light .border-\[\#222222\],
-[data-theme="brutalist"].light .border-\[\#333333\] {
-  border-color: #E2E8F0 !important;
-}
-
-[data-theme="brutalist"].light pre {
-  background-color: #F1F5F9 !important;
-  border-color: #CBD5E1 !important;
-  color: #007A3D !important;
-}
-
-/* Brutalist typography (only for non-studio pages) */
-.font-pixel h1, .font-pixel h2, .font-pixel h3, .font-pixel h4, .font-pixel h5, .font-pixel h6,
-.font-doto h1, .font-doto h2, .font-doto h3, .font-doto h4, .font-doto h5, .font-doto h6,
-.font-terminal h1, .font-terminal h2, .font-terminal h3, .font-terminal h4, .font-terminal h5, .font-terminal h6 {
-  font-family: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-weight: 700;
-}
-
-/* Clean editorial typography for studio/Epicrio pages */
-.font-sans h1, .font-sans h2, .font-sans h3, .font-sans h4, .font-sans h5, .font-sans h6 {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
-  text-transform: none;
-  letter-spacing: -0.025em;
-  font-weight: 600;
-}
-
-/* Brutalist Box-Style Info Card */
-.box-info {
-  border: 1px solid #222222;
-  background-color: #080808;
-  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.box-info:hover {
-  border-color: #444444;
-}
-
-.box-info-active {
-  border: 1px solid var(--accent-color);
-  background-color: rgba(0, 255, 136, 0.08);
-}
-
-/* Brutalist borders */
-.border-pixel {
-  border: 1px solid var(--text-color);
-}
-
-.border-pixel-muted {
-  border: 1px solid #262626;
-}
-
-/* Custom scrollbar */
+/* Elegant Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #000000;
+  background: #FFFFFF;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333333;
+  background: #E4E4E7;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #666666;
+  background: #D4D4D8;
 }
 
-/* Blinking cursor animation */
-@keyframes cursorBlink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-
-.animate-cursor {
-  animation: cursorBlink 1s infinite;
+/* Subtle Selection */
+::selection {
+  background: #0A0A0A;
+  color: #FFFFFF;
 }

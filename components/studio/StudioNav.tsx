@@ -5,19 +5,18 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import EpicrioLogo from './EpicrioLogo'
 
-interface StudioNavProps {
-  isDark?: boolean
-}
-
 const navLinks = [
   { href: '#industries', label: 'Solutions' },
+  { href: '#suite', label: 'Platform' },
   { href: '#voice-receptionist', label: 'Voice AI' },
-  { href: '#crm-workflows', label: 'Workflows' },
+  { href: '#crm-workflows', label: 'Back-Office' },
+  { href: '#how-it-works', label: 'How it works' },
   { href: '#investment', label: 'Pricing' },
 ]
 
-export default function StudioNav({ isDark = false }: StudioNavProps) {
-  const [isVisible, setIsVisible] = useState(false)
+export default function StudioNav() {
+  // Navigation is visible by default upon load
+  const [isVisible, setIsVisible] = useState(true)
   const [isHovered, setIsHovered] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -36,17 +35,16 @@ export default function StudioNav({ isDark = false }: StudioNavProps) {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      // Reveal menu bar smoothly when cursor moves within the top 85px of the viewport
-      if (e.clientY <= 85) {
+      if (e.clientY <= 90) {
         if (hideTimerRef.current) clearTimeout(hideTimerRef.current)
         setIsVisible(true)
-      } else if (!isHoveredRef.current && !isMobileOpenRef.current) {
+      } else if (!isHoveredRef.current && !isMobileOpenRef.current && window.scrollY > 80) {
         if (hideTimerRef.current) clearTimeout(hideTimerRef.current)
         hideTimerRef.current = setTimeout(() => {
           if (!isHoveredRef.current && !isMobileOpenRef.current) {
             setIsVisible(false)
           }
-        }, 220)
+        }, 300)
       }
     }
 
@@ -54,16 +52,20 @@ export default function StudioNav({ isDark = false }: StudioNavProps) {
       const currentScrollY = window.scrollY
       const diff = currentScrollY - lastScrollYRef.current
 
-      // Filter out micro scrolls
+      // Always show at the very top of the page
+      if (currentScrollY < 40) {
+        setIsVisible(true)
+        lastScrollYRef.current = currentScrollY
+        return
+      }
+
       if (Math.abs(diff) < 8) return
 
-      if (diff > 0 && currentScrollY > 70) {
-        // User scrolling DOWN -> smoothly glide menu bar up out of view
+      if (diff > 0 && currentScrollY > 90) {
         if (!isHoveredRef.current && !isMobileOpenRef.current) {
           setIsVisible(false)
         }
       } else if (diff < 0) {
-        // User scrolling UP -> smoothly glide menu bar down into view
         if (hideTimerRef.current) clearTimeout(hideTimerRef.current)
         setIsVisible(true)
       }
@@ -85,7 +87,6 @@ export default function StudioNav({ isDark = false }: StudioNavProps) {
 
   return (
     <>
-      {/* Floating Rounded Capsule Navigation - Butter-smooth spring scroll & cursor animation */}
       <motion.div
         initial={false}
         animate={{
@@ -93,71 +94,58 @@ export default function StudioNav({ isDark = false }: StudioNavProps) {
           opacity: shouldShow ? 1 : 0,
         }}
         transition={{
-          y: { type: 'spring', damping: 28, stiffness: 220, mass: 0.8 },
-          opacity: { duration: 0.28, ease: [0.16, 1, 0.3, 1] },
+          type: 'spring',
+          damping: 30,
+          stiffness: 260,
         }}
-        className="fixed top-3 left-0 right-0 z-50 flex justify-center px-3 sm:px-6 pointer-events-none transform-gpu will-change-transform"
+        className="fixed top-4 sm:top-5 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 pointer-events-none"
       >
         <nav
-          onMouseEnter={() => {
-            setIsHovered(true)
-            isHoveredRef.current = true
-            setIsVisible(true)
-          }}
-          onMouseLeave={() => {
-            setIsHovered(false)
-            isHoveredRef.current = false
-          }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
           className={`${
             shouldShow ? 'pointer-events-auto' : 'pointer-events-none'
-          } w-full max-w-6xl rounded-full px-5 sm:px-7 py-2.5 sm:py-3 flex items-center justify-between gap-4 transition-all duration-300 bg-white/92 backdrop-blur-2xl border border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.95)] text-zinc-900`}
+          } w-full max-w-5xl rounded-full px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-4 bg-white/95 backdrop-blur-2xl border border-zinc-200/70 shadow-[0_4px_20px_rgba(0,0,0,0.06)]`}
         >
-          {/* Brand Identity */}
-          <a href="#hero" className="flex items-center gap-2 group flex-shrink-0">
-            <EpicrioLogo size={26} showWordmark={true} />
-          </a>
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
+            <EpicrioLogo size={24} showWordmark={true} />
+          </Link>
 
-          {/* Desktop Links (Clean Sans-Serif & Perfectly Centered) */}
-          <div className="hidden lg:flex items-center gap-4 xl:gap-6 2xl:gap-8 text-xs xl:text-[13px] font-medium tracking-normal text-zinc-600">
+          {/* Desktop Navigation Links */}
+          <div className="hidden lg:flex items-center gap-7">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="hover:text-zinc-950 transition-colors whitespace-nowrap px-1 py-0.5"
+                className="text-[13px] font-normal text-zinc-500 hover:text-zinc-950 transition-colors"
               >
                 {link.label}
               </a>
             ))}
           </div>
 
-          {/* Right Action Buttons */}
-          <div className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
+          {/* CTA & Mobile Toggle */}
+          <div className="flex items-center gap-3 flex-shrink-0">
             <Link
               href="/book"
-              className="hidden sm:inline-flex text-xs px-3.5 py-1.5 font-medium tracking-wide rounded-full border border-black/10 text-zinc-800 hover:border-black/30 bg-black/[0.02] hover:bg-black/[0.05] transition-all duration-150 cursor-pointer whitespace-nowrap"
+              className="inline-flex text-xs sm:text-[13px] font-medium bg-zinc-950 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-zinc-800 transition-all active:scale-[0.98] shadow-xs"
             >
-              Book a Call
+              Book Systems Audit
             </Link>
 
-            <a
-              href="#apply"
-              className="text-xs sm:text-[13px] px-4 sm:px-5 py-1.5 sm:py-2 font-semibold tracking-wide rounded-full transition-all duration-150 cursor-pointer bg-zinc-950 hover:bg-zinc-800 text-white shadow-sm hover:shadow-md whitespace-nowrap active:scale-[0.98]"
-            >
-              Get Started
-            </a>
-
-            {/* Mobile Hamburger Toggle */}
+            {/* Mobile Hamburger Button */}
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle navigation menu"
-              className="lg:hidden p-1.5 rounded-full hover:bg-black/5 text-zinc-800 transition-colors cursor-pointer"
+              className="lg:hidden p-2 rounded-full text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100 transition-colors cursor-pointer"
+              aria-label="Toggle menu"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {isMobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M6 18L18 6M6 6l12 12" />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M4 6h16M4 12h16M4 18h16" />
                 )}
               </svg>
             </button>
@@ -165,43 +153,34 @@ export default function StudioNav({ isDark = false }: StudioNavProps) {
         </nav>
       </motion.div>
 
-      {/* Mobile Drawer Navigation */}
+      {/* Mobile Slide-Down Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -15 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            className="fixed top-18 left-4 right-4 z-50 lg:hidden p-6 rounded-3xl bg-white/95 backdrop-blur-2xl border border-black/10 shadow-2xl space-y-4"
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="fixed top-20 left-4 right-4 z-40 lg:hidden rounded-2xl bg-white border border-zinc-200/80 shadow-xl p-5 space-y-3"
           >
-            <div className="flex flex-col space-y-3 text-sm font-medium text-zinc-800">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="py-1 hover:text-zinc-950 transition-colors"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
-
-            <div className="pt-3 border-t border-black/10 flex flex-col gap-2">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block py-2 text-sm text-zinc-600 hover:text-zinc-950 font-medium"
+              >
+                {link.label}
+              </a>
+            ))}
+            <div className="pt-2 border-t border-zinc-100">
               <Link
                 href="/book"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="w-full py-2.5 text-center text-xs font-semibold rounded-full border border-black/15 text-zinc-800 hover:border-black/30"
+                className="block w-full text-center py-2.5 bg-zinc-950 text-white rounded-full text-xs font-medium"
               >
-                Book a Systems Call
+                Book Systems Audit
               </Link>
-              <a
-                href="#apply"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="w-full py-2.5 text-center text-xs font-semibold rounded-full bg-zinc-950 text-white hover:bg-zinc-800 transition-colors"
-              >
-                Get Started
-              </a>
             </div>
           </motion.div>
         )}

@@ -1,11 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
-
-interface StudioVoiceReceptionistProps {
-  isDark: boolean
-}
+import { motion, useInView } from 'framer-motion'
 
 interface DialogueItem {
   speaker: 'AI Receptionist' | 'Caller'
@@ -76,7 +72,7 @@ const callScenarios: Scenario[] = [
   },
   {
     id: 'faq',
-    title: 'Pricing & Service Inquiries',
+    title: 'Pricing & Service',
     callerType: 'Curious Prospect',
     dialogue: [
       {
@@ -103,57 +99,46 @@ const callScenarios: Scenario[] = [
   },
 ]
 
-export default function StudioVoiceReceptionist({ isDark }: StudioVoiceReceptionistProps) {
+export default function StudioVoiceReceptionist() {
   const [activeScenarioIndex, setActiveScenarioIndex] = useState(0)
-  // Which message index is currently being typed (or has been typed)
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0)
-  // Number of characters displayed for currentMessageIndex
-  const [typedChars, setTypedChars] = useState(0)
+  const [isTyping, setIsTyping] = useState(false)
   const [isFinished, setIsFinished] = useState(false)
+  
   const chatContainerRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const isInView = useInView(sectionRef, { once: true, margin: "-80px" })
 
   const activeScenario = callScenarios[activeScenarioIndex]
   const currentDialogue = activeScenario.dialogue
 
-  // Reset typewriter when switching tabs
   const handleSelectScenario = (index: number) => {
     setActiveScenarioIndex(index)
     setCurrentMessageIndex(0)
-    setTypedChars(0)
     setIsFinished(false)
+    setIsTyping(true)
   }
 
-  // Typewriter text animation loop
   useEffect(() => {
     if (isFinished) return
 
-    const targetText = currentDialogue[currentMessageIndex]?.text || ''
-
-    // If still typing the current message
-    if (typedChars < targetText.length) {
-      const typeTimeout = setTimeout(() => {
-        // Advance 2-3 characters at a time for brisk, natural typewriter cadence
-        setTypedChars((prev) => Math.min(prev + 2, targetText.length))
-      }, 22)
-      return () => clearTimeout(typeTimeout)
-    }
-
-    // Current message is fully typed: pause, then move to next message
-    if (typedChars >= targetText.length) {
+    setIsTyping(true)
+    const typeTimeout = setTimeout(() => {
+      setIsTyping(false)
+      
       if (currentMessageIndex < currentDialogue.length - 1) {
         const pauseTimeout = setTimeout(() => {
           setCurrentMessageIndex((prev) => prev + 1)
-          setTypedChars(0)
-        }, 550)
+        }, 800)
         return () => clearTimeout(pauseTimeout)
       } else {
-        // All messages in this section finished typing
         setIsFinished(true)
       }
-    }
-  }, [typedChars, currentMessageIndex, currentDialogue, isFinished])
+    }, 1500) // Simulated delay per message
 
-  // Auto-scroll chat box smoothly as text expands
+    return () => clearTimeout(typeTimeout)
+  }, [currentMessageIndex, currentDialogue, isFinished])
+
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTo({
@@ -161,44 +146,50 @@ export default function StudioVoiceReceptionist({ isDark }: StudioVoiceReception
         behavior: 'smooth',
       })
     }
-  }, [currentMessageIndex, typedChars])
+  }, [currentMessageIndex, isTyping])
+
+  const containerVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.7, ease: [0.25, 0.4, 0.25, 1] as const, staggerChildren: 0.08 }
+    }
+  }
+  
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.4, 0.25, 1] as const } }
+  }
 
   return (
-    <section id="voice-receptionist" className="py-20 border-t border-current/10">
-      <div className="max-w-3xl mb-14">
-        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold mb-3.5 shadow-sm ${
-          isDark ? 'border-white/10 bg-zinc-900/50 text-zinc-300' : 'border-black/[0.06] bg-white text-zinc-800'
-        }`}>
-          <span className="w-2 h-2 rounded-full bg-zinc-950" />
-          <span>AI voice receptionist</span>
-        </div>
-        <h2
-          className={`text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight ${
-            isDark ? 'text-white' : 'text-zinc-950'
-          }`}
-        >
+    <motion.section 
+      ref={sectionRef}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={containerVariants}
+      id="voice-receptionist" 
+      className="py-20 lg:py-28 border-b border-zinc-100/80 bg-white"
+    >
+      <div className="w-full max-w-4xl mb-16 px-4 sm:px-6 mx-auto text-center">
+        <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 text-zinc-600 font-medium text-xs mb-6">
+          <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 animate-pulse" />
+          <span>AI Voice Receptionist</span>
+        </motion.div>
+        
+        <motion.h2 variants={itemVariants} className="text-4xl sm:text-5xl font-display font-medium tracking-[-0.03em] text-[#0A0A0A]">
           Every call answered. Every appointment booked.
-        </h2>
-        <p
-          className={`mt-4 text-base leading-relaxed ${
-            isDark ? 'text-zinc-400' : 'text-zinc-600'
-          }`}
-        >
+        </motion.h2>
+        
+        <motion.p variants={itemVariants} className="mt-6 text-[15px] text-zinc-500 max-w-2xl mx-auto leading-relaxed font-sans">
           Your AI receptionist picks up in two rings, answers questions with warmth, and books directly into your calendar — 24/7, including holidays and weekends.
-        </p>
+        </motion.p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left: Text Animation Dialogue Preview (All 3 Sections) */}
-        <div
-          className={`lg:col-span-7 rounded-3xl p-6 sm:p-8 border backdrop-blur-xl space-y-6 ${
-            isDark
-              ? 'bg-zinc-900/60 border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.6)]'
-              : 'bg-white/85 border-black/10 shadow-xl'
-          }`}
-        >
-          {/* Top 3 Scenario Selection Tabs */}
-          <div className="flex flex-wrap gap-2.5">
+      <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        {/* Left: Chat Simulation */}
+        <motion.div variants={itemVariants} className="lg:col-span-7 bg-white rounded-2xl p-8 border border-zinc-100 shadow-[0_0_0_1px_rgba(0,0,0,0.04)]">
+          <div className="flex flex-wrap gap-2 mb-6">
             {callScenarios.map((sc, idx) => {
               const isSelected = activeScenarioIndex === idx
               return (
@@ -206,12 +197,10 @@ export default function StudioVoiceReceptionist({ isDark }: StudioVoiceReception
                   key={sc.id}
                   type="button"
                   onClick={() => handleSelectScenario(idx)}
-                  className={`px-4 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer select-none ${
+                  className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
                     isSelected
-                      ? 'bg-zinc-950 text-white shadow-sm'
-                      : isDark
-                      ? 'bg-white/10 text-zinc-300 hover:text-white hover:bg-white/15'
-                      : 'bg-zinc-100 text-zinc-700 hover:text-black hover:bg-zinc-200'
+                      ? 'bg-zinc-900 text-white'
+                      : 'bg-zinc-50 text-zinc-600 hover:bg-zinc-100'
                   }`}
                 >
                   {sc.title}
@@ -220,178 +209,149 @@ export default function StudioVoiceReceptionist({ isDark }: StudioVoiceReception
             })}
           </div>
 
-          <div className="border-t border-current/10 pt-4">
-            {/* Header info matching screenshot */}
-            <div className="flex items-center justify-between text-xs text-zinc-400 pb-3 font-sans">
+          <div className="border-t border-zinc-100 pt-6">
+            <div className="flex items-center justify-between text-xs text-zinc-400 pb-4">
               <span className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-zinc-950 animate-pulse" />
-                <span>
-                  Live call preview: <strong className="text-zinc-950 font-bold uppercase">{activeScenario.callerType}</strong>
-                </span>
+                <span>Live scenario: <strong className="text-zinc-600 font-medium">{activeScenario.callerType}</strong></span>
               </span>
-              <span className="hidden sm:inline opacity-75">Sub-300ms response</span>
+              <span className="hidden sm:inline">Sub-300ms response</span>
             </div>
 
-            {/* Chat Box Container with Text Typewriter Animation */}
             <div
               ref={chatContainerRef}
-              className={`rounded-2xl p-5 border min-h-[350px] max-h-[440px] overflow-y-auto space-y-4 ${
-                isDark ? 'bg-black/40 border-white/10' : 'bg-zinc-50 border-zinc-200 shadow-inner'
-              }`}
+              className="min-h-[400px] max-h-[450px] overflow-y-auto space-y-6 pr-4 pb-4 scrollbar-hide"
             >
               {currentDialogue.slice(0, currentMessageIndex + 1).map((item, idx) => {
                 const isAI = item.speaker === 'AI Receptionist'
-                const isCurrentlyTyping = idx === currentMessageIndex && !isFinished
-                const displayText = isCurrentlyTyping
-                  ? item.text.slice(0, typedChars)
-                  : item.text
-
+                
                 return (
                   <motion.div
                     key={`${activeScenario.id}-${idx}`}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.25 }}
+                    transition={{ duration: 0.3 }}
                     className={`flex flex-col ${isAI ? 'items-start' : 'items-end'}`}
                   >
-                    <div className="text-[11px] font-semibold text-zinc-400 mb-1 px-1 font-sans uppercase tracking-wider">
+                    <div className="text-[11px] text-zinc-400 mb-1.5 px-1">
                       {item.speaker}
                     </div>
 
                     <div
-                      className={`max-w-[85%] rounded-2xl px-4 py-3 text-xs sm:text-[13px] leading-relaxed transition-colors ${
+                      className={`max-w-[85%] rounded-2xl p-4 text-[14px] leading-relaxed ${
                         isAI
-                          ? isDark
-                            ? 'bg-zinc-800 text-white rounded-tl-sm border border-white/10'
-                            : 'bg-white text-zinc-900 rounded-tl-sm border border-zinc-200 shadow-sm'
-                          : 'bg-zinc-950 text-white font-medium rounded-tr-sm shadow-sm'
+                          ? 'bg-zinc-50 text-zinc-700 rounded-tl-sm'
+                          : 'bg-zinc-900 text-white rounded-tr-sm'
                       }`}
                     >
-                      <span>{displayText}</span>
-                      {/* Blinking cursor while this message is actively typing */}
-                      {isCurrentlyTyping && (
-                        <span className="inline-block w-1.5 h-3.5 ml-0.5 align-middle bg-current animate-pulse" />
-                      )}
+                      {item.text}
                     </div>
                   </motion.div>
                 )
               })}
+              
+              {isTyping && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex flex-col items-start"
+                >
+                  <div className="text-[11px] text-zinc-400 mb-1.5 px-1">
+                    {currentDialogue[currentMessageIndex + 1]?.speaker || 'AI Receptionist'}
+                  </div>
+                  <div className="bg-zinc-50 rounded-2xl rounded-tl-sm p-4 py-5 flex gap-1.5 items-center">
+                    <motion.div className="w-1.5 h-1.5 rounded-full bg-zinc-400" animate={{ y: [0, -3, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0 }} />
+                    <motion.div className="w-1.5 h-1.5 rounded-full bg-zinc-400" animate={{ y: [0, -3, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }} />
+                    <motion.div className="w-1.5 h-1.5 rounded-full bg-zinc-400" animate={{ y: [0, -3, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }} />
+                  </div>
+                </motion.div>
+              )}
             </div>
-
-            {/* Bottom Controls */}
-            <div className="flex items-center justify-between pt-3 text-xs">
-              <span className={`text-[11px] ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
-                {isFinished ? '✓ Conversation completed' : 'Streaming live conversation...'}
+            
+            <div className="pt-4 border-t border-zinc-100 flex items-center justify-between">
+              <span className="text-xs text-zinc-400">
+                {isFinished ? 'Conversation finished' : 'Listening...'}
               </span>
-
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => handleSelectScenario(activeScenarioIndex)}
-                  className={`text-xs font-semibold cursor-pointer transition-colors ${
-                    isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'
-                  }`}
-                >
-                  ↺ Replay Animation
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleSelectScenario((activeScenarioIndex + 1) % callScenarios.length)
-                  }
-                  className="text-xs font-semibold cursor-pointer transition-colors text-zinc-950 hover:underline"
-                >
-                  Next Section &rarr;
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => handleSelectScenario(activeScenarioIndex)}
+                className="text-xs font-medium text-zinc-500 hover:text-zinc-900 transition-colors"
+              >
+                ↺ Replay
+              </button>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Right: What Happens Automatically Behind The Scenes */}
-        <div
-          className={`lg:col-span-5 rounded-3xl p-6 sm:p-8 space-y-6 border backdrop-blur-xl ${
-            isDark
-              ? 'bg-zinc-900/40 border-white/10 shadow-lg'
-              : 'bg-white/80 border-black/10 shadow-lg'
-          }`}
-        >
-          <div className="pb-3 border-b border-current/10">
-            <h3 className={`text-base font-semibold ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+        {/* Right: What Happens */}
+        <motion.div variants={itemVariants} className="lg:col-span-5 bg-white rounded-2xl p-8 border border-zinc-100 shadow-[0_0_0_1px_rgba(0,0,0,0.04)] h-full flex flex-col justify-between">
+          <div>
+            <h3 className="text-lg font-medium text-[#0A0A0A] mb-8">
               What happens automatically after every call:
             </h3>
-          </div>
 
-          <div className="space-y-4">
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-xl bg-zinc-100 text-zinc-900 border border-zinc-200 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                1
+            <div className="space-y-8">
+              <div className="flex items-start gap-4">
+                <div className="w-6 h-6 rounded-full bg-zinc-50 text-zinc-500 flex items-center justify-center text-xs font-medium flex-shrink-0 mt-0.5">
+                  1
+                </div>
+                <div>
+                  <h4 className="text-[15px] font-medium text-[#0A0A0A]">Instant Calendar Booking</h4>
+                  <p className="text-[14px] mt-1.5 leading-relaxed text-zinc-500">
+                    The slot is reserved directly in your Google Calendar or Cal.com without double-bookings.
+                  </p>
+                </div>
               </div>
-              <div>
-                <h4 className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-zinc-900'}`}>
-                  Instant Calendar Booking
-                </h4>
-                <p className={`text-xs mt-0.5 leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                  The slot is reserved directly in your Google Calendar or Cal.com without double-bookings.
-                </p>
-              </div>
-            </div>
 
-            <div className="flex items-start gap-3 pt-3 border-t border-current/10">
-              <div className="w-8 h-8 rounded-xl bg-zinc-100 text-zinc-900 border border-zinc-200 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                2
+              <div className="flex items-start gap-4">
+                <div className="w-6 h-6 rounded-full bg-zinc-50 text-zinc-500 flex items-center justify-center text-xs font-medium flex-shrink-0 mt-0.5">
+                  2
+                </div>
+                <div>
+                  <h4 className="text-[15px] font-medium text-[#0A0A0A]">SMS Text to Customer</h4>
+                  <p className="text-[14px] mt-1.5 leading-relaxed text-zinc-500">
+                    The caller immediately gets a branded text message with appointment time, location, and instructions.
+                  </p>
+                </div>
               </div>
-              <div>
-                <h4 className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-zinc-900'}`}>
-                  SMS Text to Customer
-                </h4>
-                <p className={`text-xs mt-0.5 leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                  The caller immediately gets a branded text message with appointment time, location, and instructions.
-                </p>
-              </div>
-            </div>
 
-            <div className="flex items-start gap-3 pt-3 border-t border-current/10">
-              <div className="w-8 h-8 rounded-xl bg-zinc-100 text-zinc-900 border border-zinc-200 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                3
+              <div className="flex items-start gap-4">
+                <div className="w-6 h-6 rounded-full bg-zinc-50 text-zinc-500 flex items-center justify-center text-xs font-medium flex-shrink-0 mt-0.5">
+                  3
+                </div>
+                <div>
+                  <h4 className="text-[15px] font-medium text-[#0A0A0A]">Instant Team Alert</h4>
+                  <p className="text-[14px] mt-1.5 leading-relaxed text-zinc-500">
+                    Your phone, WhatsApp, or Slack gets a concise summary and audio recording so your team is prepared.
+                  </p>
+                </div>
               </div>
-              <div>
-                <h4 className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-zinc-900'}`}>
-                  Instant Team Alert
-                </h4>
-                <p className={`text-xs mt-0.5 leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                  Your phone, WhatsApp, or Slack gets a concise summary and audio recording so your team is prepared.
-                </p>
-              </div>
-            </div>
 
-            <div className="flex items-start gap-3 pt-3 border-t border-current/10">
-              <div className="w-8 h-8 rounded-xl bg-zinc-100 text-zinc-900 border border-zinc-200 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                4
-              </div>
-              <div>
-                <h4 className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-zinc-900'}`}>
-                  Logged in Your CRM
-                </h4>
-                <p className={`text-xs mt-0.5 leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                  Customer name, phone number, and conversation notes are automatically filed into your CRM with zero manual typing.
-                </p>
+              <div className="flex items-start gap-4">
+                <div className="w-6 h-6 rounded-full bg-zinc-50 text-zinc-500 flex items-center justify-center text-xs font-medium flex-shrink-0 mt-0.5">
+                  4
+                </div>
+                <div>
+                  <h4 className="text-[15px] font-medium text-[#0A0A0A]">Logged in Your CRM</h4>
+                  <p className="text-[14px] mt-1.5 leading-relaxed text-zinc-500">
+                    Customer name, phone number, and conversation notes are automatically filed into your CRM with zero manual typing.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-
-          <div className="pt-2">
-            <a
+          
+          <div className="pt-10">
+            <motion.a
               href="#apply"
-              className="w-full py-3.5 text-xs font-semibold rounded-full flex items-center justify-center gap-2 transition-all shadow-sm bg-zinc-950 text-white hover:bg-zinc-800 active:scale-[0.99] cursor-pointer"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full py-3 text-sm font-medium rounded-full bg-zinc-900 text-white flex items-center justify-center gap-2"
             >
-              <span>Get your AI receptionist</span>
-              <span>&rarr;</span>
-            </a>
+              Get your AI receptionist
+            </motion.a>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   )
 }

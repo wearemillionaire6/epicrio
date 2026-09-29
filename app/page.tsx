@@ -1,8 +1,8 @@
 'use client'
 
 import StudioNav from '@/components/studio/StudioNav'
-import StudioEveryBusiness from '@/components/studio/StudioEveryBusiness'
 import StudioHero from '@/components/studio/StudioHero'
+import StudioEveryBusiness from '@/components/studio/StudioEveryBusiness'
 import StudioOdooSuite from '@/components/studio/StudioOdooSuite'
 import StudioVoiceReceptionist from '@/components/studio/StudioVoiceReceptionist'
 import StudioCrmWorkflows from '@/components/studio/StudioCrmWorkflows'
@@ -13,46 +13,43 @@ import StudioInquiry from '@/components/studio/StudioInquiry'
 import StudioFooter from '@/components/studio/StudioFooter'
 
 export default function Home() {
-  // Light Mode Only - Luxury Monochrome Minimalist
-  const isDark = false
-
   return (
-    <div className="min-h-screen font-sans selection:bg-zinc-950 selection:text-white bg-[#FAFAF8] text-[#1A1A1E]">
-      {/* Spacious Floating Capsule Navigation */}
-      <StudioNav isDark={false} />
+    <div className="min-h-screen w-full font-sans selection:bg-zinc-950 selection:text-white bg-white text-zinc-900 overflow-x-hidden">
+      {/* Floating Capsule Navigation */}
+      <StudioNav />
 
-      {/* Main Container - Responsive Full Screen across all device ratios */}
-      <main className="w-full max-w-[1536px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20">
+      {/* Main Flow - Fluid and responsive across all device aspect ratios */}
+      <main className="w-full">
         {/* 1. Hero Statement: Everything Under One Roof */}
-        <StudioHero isDark={isDark} />
+        <StudioHero />
 
         {/* 1.5. Built for Every Business: Converting Heavy Workload into Easy Automation */}
-        <StudioEveryBusiness isDark={isDark} />
+        <StudioEveryBusiness />
 
         {/* 2. The All-in-One Operations Suite */}
-        <StudioOdooSuite isDark={isDark} />
+        <StudioOdooSuite />
 
-        {/* 3. 24/7 AI Voice Receptionist (Never Miss a Customer Call) */}
-        <StudioVoiceReceptionist isDark={isDark} />
+        {/* 3. 24/7 AI Voice Receptionist */}
+        <StudioVoiceReceptionist />
 
-        {/* 4. CRM & Back-Office Tech Services (Take Load Off Your Team) */}
-        <StudioCrmWorkflows isDark={isDark} />
+        {/* 4. CRM & Back-Office Tech Services */}
+        <StudioCrmWorkflows />
 
         {/* 5. Simple How It Works */}
-        <StudioThesis isDark={isDark} />
+        <StudioThesis />
 
         {/* 6. 7-Day Zero-Risk Trial */}
-        <StudioPilot isDark={isDark} />
+        <StudioPilot />
 
-        {/* 8. Transparent All-in-One Productized Packages */}
-        <StudioPricing isDark={isDark} />
+        {/* 7. Transparent All-in-One Productized Packages */}
+        <StudioPricing />
 
-        {/* 9. Feasibility Assessment & Pilot Application */}
-        <StudioInquiry isDark={isDark} />
-
-        {/* 10. Colophon & Links */}
-        <StudioFooter isDark={false} />
+        {/* 8. Feasibility Assessment & Pilot Application */}
+        <StudioInquiry />
       </main>
+
+      {/* 9. Full-Width Footer */}
+      <StudioFooter />
     </div>
   )
 }

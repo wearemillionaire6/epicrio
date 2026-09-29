@@ -3,55 +3,42 @@
 import Link from 'next/link'
 import EpicrioLogo from './EpicrioLogo'
 
-interface StudioFooterProps {
-  isDark?: boolean
-}
-
-export default function StudioFooter({ isDark = false }: StudioFooterProps) {
+export default function StudioFooter() {
   return (
-    <footer className="py-16 border-t border-black/10 text-xs">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start mb-12">
-        <div className="md:col-span-6 space-y-3">
-          <EpicrioLogo size={28} showWordmark={true} />
-          <p className="text-sm leading-relaxed max-w-sm text-zinc-600">
-            Business operations and automation infrastructure. We automate the work your team shouldn't be doing manually.
-          </p>
-        </div>
-
-        <div className="md:col-span-3 space-y-2.5">
-          <div className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
-            Solutions
+    <footer className="w-full py-10 bg-white border-t border-zinc-100">
+      <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center">
+            <EpicrioLogo size={24} showWordmark={true} />
           </div>
-          <ul className="space-y-2 text-xs">
-            <li><a href="#industries" className="text-zinc-600 hover:text-zinc-950 transition-colors">Solutions</a></li>
-            <li><a href="#suite" className="text-zinc-600 hover:text-zinc-950 transition-colors">Platform</a></li>
-            <li><a href="#voice-receptionist" className="text-zinc-600 hover:text-zinc-950 transition-colors">Voice AI</a></li>
-            <li><a href="#crm-workflows" className="text-zinc-600 hover:text-zinc-950 transition-colors">Workflows</a></li>
-            <li><a href="#investment" className="text-zinc-600 hover:text-zinc-950 transition-colors">Pricing</a></li>
-          </ul>
-        </div>
 
-        <div className="md:col-span-3 space-y-2.5">
-          <div className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
-            Appointment &amp; Demo
+          <nav className="flex flex-wrap items-center justify-center gap-6 sm:gap-8">
+            <a href="#industries" className="text-xs sm:text-sm text-zinc-400 hover:text-zinc-950 transition-colors font-sans">
+              Solutions
+            </a>
+            <a href="#suite" className="text-xs sm:text-sm text-zinc-400 hover:text-zinc-950 transition-colors font-sans">
+              Platform
+            </a>
+            <a href="#voice-receptionist" className="text-xs sm:text-sm text-zinc-400 hover:text-zinc-950 transition-colors font-sans">
+              Voice AI
+            </a>
+            <a href="#crm-workflows" className="text-xs sm:text-sm text-zinc-400 hover:text-zinc-950 transition-colors font-sans">
+              Back-Office
+            </a>
+            <a href="#how-it-works" className="text-xs sm:text-sm text-zinc-400 hover:text-zinc-950 transition-colors font-sans">
+              How it works
+            </a>
+            <a href="#investment" className="text-xs sm:text-sm text-zinc-400 hover:text-zinc-950 transition-colors font-sans">
+              Pricing
+            </a>
+            <Link href="/book" className="text-xs sm:text-sm text-zinc-400 hover:text-zinc-950 transition-colors font-sans">
+              Contact
+            </Link>
+          </nav>
+
+          <div className="text-xs sm:text-sm text-zinc-400 font-sans">
+            &copy; {new Date().getFullYear()} Epicrio&trade;. All rights reserved.
           </div>
-          <ul className="space-y-2 text-xs">
-            <li>
-              <Link href="/book" className="font-semibold text-zinc-950 hover:underline">
-                Book a Systems Call
-              </Link>
-            </li>
-            <li><a href="#pilot" className="text-zinc-600 hover:text-zinc-950 transition-colors">Zero-Risk Pilot</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div className="pt-8 border-t border-black/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
-        <div>
-          &copy; 2026 Epicrio. All rights reserved.
-        </div>
-        <div>
-          Autonomous Business Operations &amp; Automation Platform
         </div>
       </div>
     </footer>

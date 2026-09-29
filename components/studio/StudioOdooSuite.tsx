@@ -1,17 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
-
-interface StudioOdooSuiteProps {
-  isDark?: boolean
-}
+import { motion, AnimatePresence, useInView } from 'framer-motion'
 
 const modules = [
   {
     id: 'voice',
-    icon: '📞',
     name: '24/7 AI Voice Receptionist',
     subtitle: 'Never miss an inbound customer call again',
     description:
@@ -26,7 +21,6 @@ const modules = [
   },
   {
     id: 'crm',
-    icon: '🗂️',
     name: 'Central CRM & Pipeline Automation',
     subtitle: 'Every lead organized with zero manual data entry',
     description:
@@ -41,7 +35,6 @@ const modules = [
   },
   {
     id: 'workflows',
-    icon: '⚡',
     name: 'Autonomous Back-Office Workflows',
     subtitle: 'Put invoices, contracts, and team alerts on autopilot',
     description:
@@ -56,7 +49,6 @@ const modules = [
   },
   {
     id: 'outbound',
-    icon: '✉️',
     name: 'Managed Gmail & Client Outreach',
     subtitle: 'Steady stream of high-ticket B2B client meetings',
     description:
@@ -71,7 +63,6 @@ const modules = [
   },
   {
     id: 'integrations',
-    icon: '🔗',
     name: 'Custom Tech Integrations & Portals',
     subtitle: 'Make all your existing software talk to each other',
     description:
@@ -86,7 +77,6 @@ const modules = [
   },
   {
     id: 'dashboard',
-    icon: '📊',
     name: 'Executive Operations Dashboard',
     subtitle: 'Complete bird’s-eye visibility over your business',
     description:
@@ -101,123 +91,146 @@ const modules = [
   },
 ]
 
-export default function StudioOdooSuite({ isDark = false }: StudioOdooSuiteProps) {
+export default function StudioOdooSuite() {
   const [selectedModule, setSelectedModule] = useState(modules[0])
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: "-80px" })
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.08 }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.4, 0.25, 1] as const } }
+  }
 
   return (
-    <section id="suite" className="py-20 border-t border-black/[0.06]">
-      <div className="max-w-3xl mb-12">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-black/[0.06] bg-white text-xs font-semibold text-zinc-800 mb-3.5 shadow-sm">
-          <span className="w-2 h-2 rounded-full bg-zinc-950" />
-          <span>The Epicrio platform</span>
-        </div>
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-zinc-950">
-          Six systems. One roof. Zero manual work.
-        </h2>
-        <p className="mt-3.5 text-base leading-relaxed text-zinc-600 font-normal">
-          Each module works independently or as a unified stack. Pick what you need now — expand when you're ready.
-        </p>
-      </div>
-
-      {/* Grid of All 6 Modular Apps */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
-        {modules.map((mod) => {
-          const isSelected = selectedModule.id === mod.id
-          return (
-            <button
-              key={mod.id}
-              type="button"
-              onClick={() => setSelectedModule(mod)}
-              className={`rounded-2xl p-6 text-left border transition-all duration-150 cursor-pointer ${
-                isSelected
-                  ? 'bg-white border-zinc-950 shadow-[0_15px_35px_-5px_rgba(0,0,0,0.1),0_1px_3px_rgba(0,0,0,0.02)] ring-1 ring-zinc-950 scale-[1.01]'
-                  : 'bg-white/80 border-black/[0.06] hover:border-black/25 shadow-sm hover:shadow hover:bg-white'
-              }`}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <span
-                  className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full ${
-                    isSelected
-                      ? 'bg-zinc-950 text-white'
-                      : 'bg-zinc-100 text-zinc-700'
-                  }`}
-                >
-                  {mod.metric}
-                </span>
-              </div>
-              <h3 className="text-base font-bold text-zinc-950 mb-1 tracking-tight">
-                {mod.name}
-              </h3>
-              <p className="text-xs leading-relaxed text-zinc-600">
-                {mod.subtitle}
-              </p>
-            </button>
-          )
-        })}
-      </div>
-
-      {/* Selected Module Spotlight Card */}
-      <AnimatePresence mode="wait">
+    <section id="suite" className="py-20 lg:py-28 border-b border-zinc-100/80 bg-white">
+      <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
         <motion.div
-          key={selectedModule.id}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.25 }}
-          className="rounded-3xl p-7 sm:p-10 border border-black/[0.06] bg-white shadow-[0_25px_60px_-15px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.02)]"
+          ref={ref}
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.7, ease: [0.25, 0.4, 0.25, 1] as const }}
+          className="mb-16"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-            <div className="lg:col-span-7 space-y-4">
-              <div className="flex items-center gap-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 text-zinc-600 font-medium text-xs mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
+            The Epicrio platform
+          </div>
+          <h2 className="text-4xl md:text-5xl font-display font-medium tracking-[-0.03em] text-[#0A0A0A] max-w-2xl">
+            Six systems. One roof. Zero manual work.
+          </h2>
+          <p className="mt-6 text-[15px] leading-relaxed text-zinc-500 font-sans max-w-xl">
+            Each module works independently or as a unified stack. Pick what you need now — expand when you're ready.
+          </p>
+        </motion.div>
+
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+        >
+          {modules.map((mod) => {
+            const isSelected = selectedModule.id === mod.id
+            return (
+              <motion.button
+                key={mod.id}
+                variants={itemVariants}
+                whileHover={{ y: -2 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                onClick={() => setSelectedModule(mod)}
+                className={`text-left rounded-2xl p-8 border transition-all duration-200 group ${
+                  isSelected
+                    ? 'border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-100'
+                    : 'border-zinc-100 bg-white hover:border-zinc-200 hover:shadow-[0_0_0_1px_rgba(0,0,0,0.04)]'
+                }`}
+              >
+                <div className="flex items-center gap-2 mb-6">
+                  <div className={`w-2 h-2 rounded-full ${isSelected ? 'bg-zinc-800' : 'bg-zinc-200 group-hover:bg-zinc-300 transition-colors'}`} />
+                  <span className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">
+                    {mod.metric}
+                  </span>
+                </div>
+                <h3 className="text-base font-medium text-[#0A0A0A] mb-2 font-sans">
+                  {mod.name}
+                </h3>
+                <p className="text-sm text-zinc-500 font-sans leading-relaxed">
+                  {mod.subtitle}
+                </p>
+              </motion.button>
+            )
+          })}
+        </motion.div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={selectedModule.id}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] as const }}
+            className="rounded-2xl p-8 md:p-10 border border-zinc-100 bg-white shadow-sm"
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+              <div className="space-y-6">
                 <div>
-                  <h3 className="text-2xl font-bold text-zinc-950 tracking-tight">
+                  <h3 className="text-2xl font-display font-medium text-[#0A0A0A] tracking-[-0.03em] mb-2">
                     {selectedModule.name}
                   </h3>
-                  <p className="text-xs text-zinc-600 font-medium">
+                  <p className="text-[15px] text-zinc-500 font-sans">
                     {selectedModule.subtitle}
                   </p>
                 </div>
+
+                <p className="text-[15px] leading-relaxed text-zinc-500 font-sans">
+                  {selectedModule.description}
+                </p>
+
+                <div className="pt-4 flex items-center gap-4">
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <Link
+                      href="/book"
+                      className="inline-flex items-center justify-center bg-zinc-900 hover:bg-zinc-800 text-white rounded-full px-6 py-3 text-sm font-medium transition-colors"
+                    >
+                      Book a call
+                    </Link>
+                  </motion.div>
+                  <motion.a
+                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                    href="#voice-receptionist"
+                    className="inline-flex items-center justify-center bg-transparent border border-zinc-200 hover:border-zinc-300 text-zinc-700 rounded-full px-6 py-3 text-sm font-medium transition-colors"
+                  >
+                    See Details
+                  </motion.a>
+                </div>
               </div>
 
-              <p className="text-sm leading-relaxed text-zinc-600 font-normal">
-                {selectedModule.description}
-              </p>
-
-              <div className="pt-2 flex items-center gap-3">
-                <Link
-                  href="/book"
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-semibold bg-zinc-950 text-white hover:bg-zinc-800 shadow-sm transition-all active:scale-[0.98]"
-                >
-                  <span>Book a call</span>
-                  <span>&rarr;</span>
-                </Link>
-                <a
-                  href="#voice-receptionist"
-                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-medium border border-black/[0.06] text-zinc-700 hover:text-black hover:bg-zinc-50 transition-colors"
-                >
-                  See Voice AI &darr;
-                </a>
+              <div className="space-y-6">
+                <div className="text-sm font-medium text-[#0A0A0A]">
+                  Key Capabilities
+                </div>
+                <ul className="space-y-4">
+                  {selectedModule.features.map((feat, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <svg className="w-4 h-4 text-zinc-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span className="text-[15px] text-zinc-500 font-sans leading-relaxed">{feat}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
-
-            <div className="lg:col-span-5 rounded-2xl p-6 border border-zinc-200 bg-zinc-50/70 space-y-3 shadow-inner">
-              <div className="font-semibold text-xs uppercase tracking-wider text-zinc-500 pb-2 border-b border-black/5 font-sans">
-                Key Capabilities:
-              </div>
-              <ul className="space-y-2.5 text-xs">
-                {selectedModule.features.map((feat, idx) => (
-                  <li key={idx} className="flex items-start gap-2.5">
-                    <span className="text-zinc-950 font-bold text-sm leading-none mt-0.5">
-                      ✓
-                    </span>
-                    <span className="text-zinc-700 font-normal">{feat}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </motion.div>
-      </AnimatePresence>
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </section>
   )
 }

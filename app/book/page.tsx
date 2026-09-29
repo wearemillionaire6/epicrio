@@ -55,7 +55,7 @@ export default function BookAppointmentPage() {
   }
 
   return (
-    <div className="min-h-screen font-sans selection:bg-zinc-950 selection:text-white bg-[#FAFAF8] text-[#1A1A1E]">
+    <div className="min-h-screen font-sans selection:bg-zinc-950 selection:text-white bg-white text-zinc-900">
       {/* Top Floating Glass Navigation (Rounded Capsule Pill) */}
       <div className="fixed top-3 left-0 right-0 z-50 flex justify-center px-3 sm:px-6 pointer-events-none">
         <header className="pointer-events-auto w-full max-w-6xl rounded-full px-5 sm:px-7 py-2.5 sm:py-3 flex items-center justify-between gap-4 transition-all duration-200 bg-white/92 backdrop-blur-2xl border border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.95)] text-zinc-900">

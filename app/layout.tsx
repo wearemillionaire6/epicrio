@@ -27,7 +27,7 @@ const dmMono = DM_Mono({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#FAFAF8",
+  themeColor: "#FFFFFF",
 };
 
 export const metadata: Metadata = {
@@ -50,8 +50,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`scroll-smooth bg-[#FAFAF8] ${outfit.variable} ${plusJakartaSans.variable} ${dmMono.variable}`}>
-      <body className="antialiased min-h-screen bg-[#FAFAF8] text-[#1A1A1E] font-sans selection:bg-zinc-950 selection:text-white">
+    <html lang="en" className={`scroll-smooth bg-white ${outfit.variable} ${plusJakartaSans.variable} ${dmMono.variable}`}>
+      <body className="antialiased min-h-screen bg-white text-zinc-900 font-sans selection:bg-zinc-950 selection:text-white">
         <ThemeProvider>
           {children}
         </ThemeProvider>
