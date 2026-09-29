@@ -3,11 +3,23 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 
-const features = [
-  'No setup fee, no credit card required upfront',
-  'We identify and verify 100 ideal prospects for you',
-  'Emails are sent safely without touching your main domain',
-  'Only launch the full system if you are thrilled with the replies',
+const guarantees = [
+  {
+    title: '14-Day Full Money-Back Guarantee',
+    desc: 'If our AI receptionist doesn\'t capture 100% of your calls and save your team 15+ hours in the first two weeks, receive an immediate 100% refund.',
+  },
+  {
+    title: 'Private Staging Line in 48 Hours',
+    desc: 'Test your custom AI voice agent on a private test number with your staff first. Review call quality and calendar sync before routing live customers.',
+  },
+  {
+    title: 'Zero Business Disruption',
+    desc: 'Your existing company numbers, website, and daily operations continue running seamlessly with zero downtime or complex IT migration.',
+  },
+  {
+    title: 'Weekly Audio & Prompt Calibration',
+    desc: 'Our engineers review call transcripts and continuously optimize your AI receptionist\'s conversational responses every single week.',
+  },
 ]
 
 export default function StudioPilot() {
@@ -16,7 +28,7 @@ export default function StudioPilot() {
 
   return (
     <section
-      id="pilot"
+      id="guarantee"
       className="py-20 lg:py-28 border-b border-zinc-100/80 bg-white flex flex-col items-center text-center w-full"
     >
       <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 flex flex-col items-center">
@@ -29,38 +41,47 @@ export default function StudioPilot() {
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 text-zinc-600 font-medium text-xs mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
-            Zero-risk pilot
+            Performance Warranty
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-semibold tracking-[-0.03em] text-[#0A0A0A] mb-5 max-w-3xl">
-            Try us for 7 days before paying a dollar.
+            100% Risk-Free Guarantee. We deliver or you don't pay.
           </h2>
 
           <p className="text-[15px] leading-relaxed text-zinc-500 font-sans max-w-2xl mb-12">
-            We don't ask you to pay on blind faith. We test 100 real prospect communications and workflow automations first so you can experience the response quality with zero risk.
+            We don't ask you to take on any risk. Every Epicrio deployment includes private staging verification in 48 hours and an ironclad 14-day performance warranty.
           </p>
 
-          <div className="bg-zinc-50/70 border border-zinc-200/80 rounded-3xl p-6 sm:p-10 w-full max-w-3xl text-left mb-10 shadow-2xs">
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              {features.map((feature, idx) => (
-                <li key={idx} className="flex items-start gap-3">
-                  <svg
-                    className="w-5 h-5 text-zinc-950 shrink-0 mt-0.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.8}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  <span className="text-[14px] text-zinc-700 font-sans font-medium">{feature}</span>
-                </li>
+          <div className="bg-zinc-50/70 border border-zinc-200/80 rounded-3xl p-6 sm:p-10 w-full max-w-4xl text-left mb-10 shadow-2xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+              {guarantees.map((item, idx) => (
+                <div key={idx} className="flex items-start gap-3.5">
+                  <div className="w-6 h-6 rounded-full bg-zinc-950 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
+                    <svg
+                      className="w-3.5 h-3.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2.2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-zinc-950 font-sans mb-1">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs sm:text-[13px] text-zinc-600 leading-relaxed font-sans">
+                      {item.desc}
+                    </p>
+                  </div>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
 
           <motion.a
@@ -69,7 +90,7 @@ export default function StudioPilot() {
             href="/book"
             className="inline-flex items-center justify-center bg-zinc-950 hover:bg-zinc-800 text-white rounded-full px-8 py-3.5 sm:py-4 text-[14px] font-medium transition-colors shadow-sm cursor-pointer"
           >
-            Start your pilot &rarr;
+            Claim Your Guaranteed Implementation &rarr;
           </motion.a>
         </motion.div>
       </div>

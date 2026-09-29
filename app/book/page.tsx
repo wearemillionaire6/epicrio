@@ -156,9 +156,9 @@ export default function BookAppointmentPage() {
                     04
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold">7-Day Zero-Risk Pilot Blueprint</h3>
-                    <p className={`text-xs mt-0.5 leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                      Learn how we launch your operational pilot within 48 hours without changing your existing phone number or interrupting daily operations.
+                    <h3 className="text-sm font-semibold">14-Day Performance Guarantee & 48h Staging</h3>
+                    <p className="text-xs mt-0.5 leading-relaxed text-zinc-600">
+                      Learn how we launch your private test staging line within 48 hours without changing your existing phone number or interrupting daily operations.
                     </p>
                   </div>
                 </div>
