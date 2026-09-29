@@ -10,7 +10,7 @@ const packages = [
     retainer: '$290 / mo',
     target: 'Best for local clinics & service businesses wanting 24/7 call coverage',
     deliverables: [
-      '24/7 AI Voice Receptionist (up to 400 call minutes/mo included)',
+      '24/7 AI Voice Receptionist in English, Hindi, & 30+ languages (400 mins/mo)',
       'Instant Calendar Booking (Google Calendar & Cal.com)',
       'Automated SMS confirmations to callers upon booking',
       'Instant team alerts on WhatsApp or Email for every lead',

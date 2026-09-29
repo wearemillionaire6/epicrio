@@ -97,6 +97,33 @@ const callScenarios: Scenario[] = [
       },
     ],
   },
+  {
+    id: 'hindi',
+    title: 'Multilingual (Hindi / English)',
+    callerType: 'Bilingual Caller (Hindi / Hinglish)',
+    dialogue: [
+      {
+        speaker: 'AI Receptionist',
+        text: 'नमस्ते! Thank you for calling Epicrio. मैं आपकी क्या सहायता कर सकती हूँ?',
+      },
+      {
+        speaker: 'Caller',
+        text: 'नमस्ते! मुझे अपने बिज़नेस के लिए ऑटोमेशन और वॉइस रिसेप्शनिस्ट के बारे में बात करनी है। क्या कल कोई स्लॉट खाली है?',
+      },
+      {
+        speaker: 'AI Receptionist',
+        text: 'जी बिल्कुल! हमारे पास कल दोपहर 2:00 बजे और शाम 4:30 बजे का समय उपलब्ध है। आपके लिए कौन सा समय बेहतर रहेगा?',
+      },
+      {
+        speaker: 'Caller',
+        text: 'कल दोपहर 2:00 बजे का स्लॉट सही रहेगा।',
+      },
+      {
+        speaker: 'AI Receptionist',
+        text: 'बहुत बढ़िया! आपकी मीटिंग कल दोपहर 2:00 बजे शेड्यूल कर दी गई है। मैंने आपके फ़ोन नंबर पर SMS कन्फर्मेशन भेज दिया है। धन्यवाद!',
+      },
+    ],
+  },
 ]
 
 export default function StudioVoiceReceptionist() {
@@ -182,7 +209,7 @@ export default function StudioVoiceReceptionist() {
         </motion.h2>
         
         <motion.p variants={itemVariants} className="mt-6 text-[15px] text-zinc-500 max-w-2xl mx-auto leading-relaxed font-sans">
-          Your AI receptionist picks up in two rings, answers questions with warmth, and books directly into your calendar — 24/7, including holidays and weekends.
+          Your AI receptionist picks up in two rings, speaks fluently in Hindi, English, Spanish, and 30+ global languages, answers questions with natural warmth, and books directly into your calendar — 24/7.
         </motion.p>
       </div>
 

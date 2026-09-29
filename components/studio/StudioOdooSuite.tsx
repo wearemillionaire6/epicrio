@@ -13,6 +13,7 @@ const modules = [
       'Answers your company phone lines instantly with a natural, conversational human voice. Answers customer FAQs, screens spam callers, schedules appointments directly into Google Calendar or Cal.com, and sends instant SMS summaries to your phone.',
     features: [
       'Answers within 2 rings, 24 hours a day, 365 days a year',
+      'Fluent in Hindi, English, Spanish, and 30+ languages with auto-detection',
       'Books appointments and checks calendar availability in real time',
       'Sends instant SMS confirmations to the caller and alert to your team',
       'Routes urgent emergencies to your personal mobile immediately',
