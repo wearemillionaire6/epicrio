@@ -138,7 +138,7 @@ export default function StudioNav() {
                 }
               }}
               className="inline-flex items-center gap-1.5 text-xs sm:text-[13px] font-medium bg-zinc-100 hover:bg-zinc-200 text-zinc-950 border border-zinc-200/80 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full transition-all cursor-pointer shadow-2xs active:scale-[0.98]"
-              title="Talk to 24/7 AI Voice Agent"
+              title="Voice Agent"
             >
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>Voice Agent</span>

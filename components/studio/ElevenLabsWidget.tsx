@@ -31,11 +31,11 @@ export default function ElevenLabsWidget({
         dangerouslySetInnerHTML={{
           __html: `<elevenlabs-convai 
             agent-id="${agentId}" 
-            action-text="Talk with 24/7 AI Voice Agent" 
+            action-text="" 
             start-call-text="Talk to Voice Agent" 
             end-call-text="End Call" 
-            listening-text="Listening to you..." 
-            speaking-text="Sarah is speaking..." 
+            listening-text="Listening..." 
+            speaking-text="Sarah speaking..." 
             avatar-orb-color-1="#09090B" 
             avatar-orb-color-2="#3F3F46"
           ></elevenlabs-convai>`,
