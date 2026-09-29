@@ -20,46 +20,34 @@ export default function ElevenLabsWidget({
       document.body.appendChild(script)
     }
 
-    // 2. Poll & observe shadowRoot to guarantee "Powered by ElevenLabs" banner is completely hidden
-    const hideBanner = () => {
+    // 2. Target STRICTLY the poweredBy attribution class inside shadowRoot
+    const hideAttributionOnly = () => {
       const widget = document.querySelector('elevenlabs-convai')
       if (widget && widget.shadowRoot) {
-        if (!widget.shadowRoot.querySelector('#hide-eleven-branding')) {
+        if (!widget.shadowRoot.querySelector('#hide-powered-by-only')) {
           const style = document.createElement('style')
-          style.id = 'hide-eleven-branding'
+          style.id = 'hide-powered-by-only'
           style.textContent = `
-            a[href*="elevenlabs"],
-            [class*="banner"],
-            [class*="branding"],
-            [class*="powered"],
-            [class*="attribution"],
-            [aria-label*="Powered by"] {
+            [class*="poweredBy"],
+            [class*="_poweredBy"] {
               display: none !important;
               visibility: hidden !important;
+              height: 0 !important;
+              max-height: 0 !important;
+              margin: 0 !important;
+              padding: 0 !important;
               opacity: 0 !important;
               pointer-events: none !important;
-              height: 0 !important;
-              width: 0 !important;
               overflow: hidden !important;
             }
           `
           widget.shadowRoot.appendChild(style)
         }
-
-        // Also directly find and remove/hide any anchor or text with elevenlabs
-        widget.shadowRoot.querySelectorAll('a, p, span, div').forEach((el) => {
-          if (
-            el.textContent?.toLowerCase().includes('powered by') ||
-            (el as HTMLAnchorElement).href?.includes('elevenlabs')
-          ) {
-            ;(el as HTMLElement).style.display = 'none'
-          }
-        })
       }
     }
 
-    const interval = setInterval(hideBanner, 250)
-    const timeout = setTimeout(() => clearInterval(interval), 10000)
+    const interval = setInterval(hideAttributionOnly, 200)
+    const timeout = setTimeout(() => clearInterval(interval), 8000)
 
     return () => {
       clearInterval(interval)
