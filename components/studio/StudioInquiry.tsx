@@ -110,8 +110,8 @@ export default function StudioInquiry() {
                   3
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 font-sans">14-Day Performance Guarantee</h4>
-                  <p className="text-xs text-zinc-500 mt-0.5 font-sans">100% money-back warranty if your system doesn't deliver promised results.</p>
+                  <h4 className="text-sm font-semibold text-zinc-900 font-sans">Engineered to Your Exact Specs</h4>
+                  <p className="text-xs text-zinc-500 mt-0.5 font-sans">We build, test, and hand over the exact custom operational infrastructure you ask for.</p>
                 </div>
               </div>
             </motion.div>
