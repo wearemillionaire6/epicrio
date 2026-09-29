@@ -126,10 +126,27 @@ export default function StudioNav() {
           </div>
 
           {/* CTA & Mobile Toggle */}
-          <div className="flex items-center gap-3 flex-shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0">
+            {/* Live Voice Agent Call Trigger in Right Corner */}
+            <button
+              type="button"
+              onClick={() => {
+                const widget = document.querySelector('elevenlabs-convai')
+                if (widget) {
+                  const btn = widget.shadowRoot?.querySelector('button') || widget
+                  ;(btn as HTMLElement)?.click()
+                }
+              }}
+              className="inline-flex items-center gap-1.5 text-xs sm:text-[13px] font-medium bg-zinc-100 hover:bg-zinc-200 text-zinc-950 border border-zinc-200/80 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full transition-all cursor-pointer shadow-2xs active:scale-[0.98]"
+              title="Talk to 24/7 AI Voice Agent"
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Voice Agent</span>
+            </button>
+
             <Link
               href="/book"
-              className="inline-flex text-xs sm:text-[13px] font-medium bg-zinc-950 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-zinc-800 transition-all active:scale-[0.98] shadow-xs"
+              className="hidden sm:inline-flex text-xs sm:text-[13px] font-medium bg-zinc-950 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-zinc-800 transition-all active:scale-[0.98] shadow-xs"
             >
               Book Systems Audit
             </Link>
