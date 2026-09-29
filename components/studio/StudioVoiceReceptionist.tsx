@@ -294,17 +294,33 @@ export default function StudioVoiceReceptionist() {
               )}
             </div>
             
-            <div className="pt-4 border-t border-zinc-100 flex items-center justify-between">
+            <div className="pt-4 border-t border-zinc-100 flex flex-wrap items-center justify-between gap-3">
               <span className="text-xs text-zinc-400">
-                {isFinished ? 'Conversation finished' : 'Listening...'}
+                {isFinished ? 'Simulation finished' : 'Simulating live conversation...'}
               </span>
-              <button
-                type="button"
-                onClick={() => handleSelectScenario(activeScenarioIndex)}
-                className="text-xs font-medium text-zinc-500 hover:text-zinc-900 transition-colors"
-              >
-                ↺ Replay
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => handleSelectScenario(activeScenarioIndex)}
+                  className="text-xs font-medium text-zinc-500 hover:text-zinc-900 transition-colors cursor-pointer"
+                >
+                  ↺ Replay
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const widget = document.querySelector('elevenlabs-convai')
+                    if (widget) {
+                      const btn = widget.shadowRoot?.querySelector('button') || widget
+                      ;(btn as HTMLElement)?.click()
+                    }
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-zinc-950 hover:bg-zinc-800 text-white text-xs font-medium transition-all shadow-xs cursor-pointer active:scale-95"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Talk Live to Sarah (Mic Test)</span>
+                </button>
+              </div>
             </div>
           </div>
         </motion.div>

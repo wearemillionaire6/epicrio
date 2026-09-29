@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Outfit, Plus_Jakarta_Sans, DM_Mono } from 'next/font/google';
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import ElevenLabsWidget from "@/components/studio/ElevenLabsWidget";
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -55,6 +56,8 @@ export default function RootLayout({
         <ThemeProvider>
           {children}
         </ThemeProvider>
+        {/* Live ElevenLabs Conversational Voice Receptionist Widget */}
+        <ElevenLabsWidget />
       </body>
     </html>
   );
