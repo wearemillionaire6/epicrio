@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 export default function StudioInquiry() {
@@ -12,8 +12,20 @@ export default function StudioInquiry() {
     email: '',
     phone: '',
     domain: '',
-    interest: 'All-in-One Operations Suite (Complete System)',
+    interest: 'Complete Business OS (All-in-One)',
   })
+
+  useEffect(() => {
+    const handleSelectPlan = (e: any) => {
+      if (e?.detail) {
+        setForm((prev) => ({ ...prev, interest: e.detail }))
+      }
+    }
+    window.addEventListener('epicrio-select-plan' as any, handleSelectPlan)
+    return () => {
+      window.removeEventListener('epicrio-select-plan' as any, handleSelectPlan)
+    }
+  }, [])
 
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: '-80px' })
@@ -207,20 +219,17 @@ export default function StudioInquiry() {
                     onChange={(e) => setForm({ ...form, interest: e.target.value })}
                     className="w-full h-11 px-4 rounded-xl border border-zinc-200 text-[14px] bg-white text-[#0A0A0A] focus:border-zinc-950 focus:ring-0 outline-none transition-colors"
                   >
-                    <option value="All-in-One Operations Suite (Complete System)">
-                      All-in-One Operations Suite (Complete System)
+                    <option value="Dedicated Voice AI Receptionist">
+                      Dedicated Voice AI Receptionist (24/7 Phone Answering &amp; Booking)
                     </option>
-                    <option value="24/7 AI Voice Receptionist & Call Booking">
-                      24/7 AI Voice Receptionist & Call Booking
+                    <option value="Autonomous Back-Office & CRM">
+                      Autonomous Back-Office &amp; CRM (Invoices, Contracts &amp; Zero Data Entry)
                     </option>
-                    <option value="Autonomous Back-Office & Invoicing Automation">
-                      Autonomous Back-Office & Invoicing Automation
+                    <option value="Complete Business OS (All-in-One)">
+                      Complete Business OS (All-in-One: Voice + Back-Office + CRM)
                     </option>
-                    <option value="CRM Pipeline & Zero-Data-Entry Setup">
-                      CRM Pipeline & Zero-Data-Entry Setup
-                    </option>
-                    <option value="Outbound Client Acquisition Engine">
-                      Outbound Client Acquisition Engine
+                    <option value="Custom Enterprise Architecture">
+                      Custom Enterprise Architecture &amp; Bespoke Integrations
                     </option>
                   </select>
                 </div>
