@@ -62,7 +62,7 @@ export default function BookAppointmentPage() {
     setCustomStack(data)
     setFormData((prev) => ({
       ...prev,
-      businessType: 'Bespoke Enterprise OS (Custom Stack)',
+      businessType: 'Custom Enterprise (Custom Stack)',
     }))
   }
 
@@ -84,10 +84,10 @@ export default function BookAppointmentPage() {
           phone: formData.phone,
           domain: formData.company,
           interest: customStack
-            ? `Bespoke Custom Stack (${customStack.setup} / ${customStack.retainer}): ${customStack.modules.join(', ')}`
+            ? `Custom Enterprise Stack (${customStack.setup} / ${customStack.retainer}): ${customStack.modules.join(', ')}`
             : `${formData.businessType} (Preferred: ${formData.preferredTime})`,
           notes: customStack
-            ? `Client customized stack via query: ${customStack.modules.join(', ')} | Pricing: Setup ${customStack.setup}, Retainer ${customStack.retainer}. Notes: ${formData.notes}`
+            ? `Client configured custom stack via query: ${customStack.modules.join(', ')} | Pricing: Setup ${customStack.setup}, Retainer ${customStack.retainer}. Notes: ${formData.notes}`
             : formData.notes,
           source: 'booking_direct_form',
         }),
@@ -146,7 +146,7 @@ export default function BookAppointmentPage() {
                   Customized Enterprise Stack Loaded Via Query
                 </div>
                 <h2 className="text-xl sm:text-2xl font-display font-medium text-white">
-                  Bespoke Enterprise OS Configuration
+                  Custom Enterprise Architecture Configuration
                 </h2>
                 <p className="text-xs text-zinc-400 mt-1 font-sans">
                   Your customized modules and calculated investment have been saved for your strategy consultation.
@@ -472,8 +472,8 @@ export default function BookAppointmentPage() {
                         } focus:outline-none`}
                       >
                         {customStack && (
-                          <option value="Bespoke Enterprise OS (Custom Stack)">
-                            Bespoke Enterprise OS (Custom Configured Stack: {customStack.setup})
+                          <option value="Custom Enterprise (Custom Stack)">
+                            Custom Enterprise (Custom Configured Stack: {customStack.setup})
                           </option>
                         )}
                         <option value="Trades & Home Services">Trades &amp; Home Services (HVAC, Plumbing, Electrical)</option>

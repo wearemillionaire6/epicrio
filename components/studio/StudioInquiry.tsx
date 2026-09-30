@@ -12,7 +12,7 @@ export default function StudioInquiry() {
     email: '',
     phone: '',
     domain: '',
-    interest: 'Bespoke Enterprise OS (Custom Stack)',
+    interest: 'Custom Enterprise (Tailored Scope)',
   })
   const [customScopeDetail, setCustomScopeDetail] = useState('')
 
@@ -20,8 +20,8 @@ export default function StudioInquiry() {
     const handleSelectPlan = (e: any) => {
       if (e?.detail) {
         const detailStr = String(e.detail)
-        if (detailStr.includes('Bespoke Enterprise OS')) {
-          setForm((prev) => ({ ...prev, interest: 'Bespoke Enterprise OS (Custom Stack)' }))
+        if (detailStr.includes('Custom Enterprise')) {
+          setForm((prev) => ({ ...prev, interest: 'Custom Enterprise (Tailored Scope)' }))
           setCustomScopeDetail(detailStr)
         } else {
           setForm((prev) => ({ ...prev, interest: detailStr }))
@@ -235,11 +235,11 @@ export default function StudioInquiry() {
                     <option value="Autonomous Back-Office & CRM ($1,500 buildout)">
                       Autonomous Back-Office &amp; CRM ($1,500 buildout / $690 mo)
                     </option>
-                    <option value="Bespoke Enterprise OS (Custom Stack)">
-                      Bespoke Enterprise OS (Customizable Modular Stack)
+                    <option value="Custom Enterprise (Tailored Scope)">
+                      Custom Enterprise (Tailored Scope &amp; Direct Architecture Proposal)
                     </option>
                     <option value="Custom Enterprise Architecture">
-                      Custom Enterprise Architecture &amp; Bespoke Integrations
+                      Custom Enterprise Architecture &amp; Legacy ERP Integrations
                     </option>
                   </select>
 
