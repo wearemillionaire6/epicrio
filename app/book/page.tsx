@@ -1,9 +1,42 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import EpicrioLogo from '@/components/studio/EpicrioLogo'
+
+interface CustomStackData {
+  plan: string
+  setup: string
+  retainer: string
+  modules: string[]
+}
+
+function CustomStackQueryHandler({
+  onStackLoaded,
+}: {
+  onStackLoaded: (data: CustomStackData) => void
+}) {
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const plan = searchParams.get('plan')
+    if (plan) {
+      const setup = searchParams.get('setup') || ''
+      const retainer = searchParams.get('retainer') || ''
+      const rawModules = searchParams.get('modules') || ''
+      const modules = rawModules
+        ? (rawModules.includes('||') ? rawModules.split('||') : rawModules.split(','))
+            .map((m) => m.trim())
+            .filter(Boolean)
+        : []
+      onStackLoaded({ plan, setup, retainer, modules })
+    }
+  }, [searchParams, onStackLoaded])
+
+  return null
+}
 
 export default function BookAppointmentPage() {
   // Light Mode Only
@@ -12,6 +45,7 @@ export default function BookAppointmentPage() {
   const [calUsername, setCalUsername] = useState('bhavesh-agency')
   const [isEditingUsername, setIsEditingUsername] = useState(false)
   const [formSubmitted, setFormSubmitted] = useState(false)
+  const [customStack, setCustomStack] = useState<CustomStackData | null>(null)
 
   // Direct quick-form state
   const [formData, setFormData] = useState({
@@ -23,6 +57,14 @@ export default function BookAppointmentPage() {
     preferredTime: 'Morning (9 AM - 12 PM)',
     notes: '',
   })
+
+  const handleStackLoaded = (data: CustomStackData) => {
+    setCustomStack(data)
+    setFormData((prev) => ({
+      ...prev,
+      businessType: 'Bespoke Enterprise OS (Custom Stack)',
+    }))
+  }
 
   // Cal.com embed URL (light mode)
   const calEmbedUrl = `https://cal.com/${calUsername}/${meetingType}?embed=true&theme=light`
@@ -41,8 +83,12 @@ export default function BookAppointmentPage() {
           email: formData.email,
           phone: formData.phone,
           domain: formData.company,
-          interest: `${formData.businessType} (Preferred: ${formData.preferredTime})`,
-          notes: formData.notes,
+          interest: customStack
+            ? `Bespoke Custom Stack (${customStack.setup} / ${customStack.retainer}): ${customStack.modules.join(', ')}`
+            : `${formData.businessType} (Preferred: ${formData.preferredTime})`,
+          notes: customStack
+            ? `Client customized stack via query: ${customStack.modules.join(', ')} | Pricing: Setup ${customStack.setup}, Retainer ${customStack.retainer}. Notes: ${formData.notes}`
+            : formData.notes,
           source: 'booking_direct_form',
         }),
       })
@@ -83,6 +129,56 @@ export default function BookAppointmentPage() {
 
       {/* Main Content Area - Full Screen Responsive */}
       <main className="w-full max-w-[1536px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 pt-24 sm:pt-28 pb-16">
+        <Suspense fallback={null}>
+          <CustomStackQueryHandler onStackLoaded={handleStackLoaded} />
+        </Suspense>
+
+        {customStack && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 p-6 sm:p-7 rounded-3xl bg-[#0C0D0E] text-white border border-zinc-800 shadow-xl"
+          >
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-5 border-b border-zinc-800">
+              <div>
+                <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-300 text-[10px] font-mono uppercase tracking-wider mb-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                  Customized Enterprise Stack Loaded Via Query
+                </div>
+                <h2 className="text-xl sm:text-2xl font-display font-medium text-white">
+                  Bespoke Enterprise OS Configuration
+                </h2>
+                <p className="text-xs text-zinc-400 mt-1 font-sans">
+                  Your customized modules and calculated investment have been saved for your strategy consultation.
+                </p>
+              </div>
+              <div className="text-left sm:text-right shrink-0">
+                <div className="text-3xl font-display font-medium text-white">{customStack.setup}</div>
+                <div className="text-xs text-zinc-400 font-mono mt-0.5">then {customStack.retainer}</div>
+              </div>
+            </div>
+
+            {customStack.modules.length > 0 && (
+              <div className="mt-5">
+                <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 block mb-2.5">
+                  Selected Modules ({customStack.modules.length}):
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {customStack.modules.map((mod, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-700/80 text-xs text-zinc-200 font-medium inline-flex items-center gap-1.5 shadow-2xs"
+                    >
+                      <span className="text-white font-bold">✓</span>
+                      <span>{mod}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </motion.div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           
           {/* Left Column: What We Provide For Your Business (7 Cols) */}
@@ -375,6 +471,11 @@ export default function BookAppointmentPage() {
                             : 'bg-white border-zinc-300 text-zinc-900 focus:border-zinc-950'
                         } focus:outline-none`}
                       >
+                        {customStack && (
+                          <option value="Bespoke Enterprise OS (Custom Stack)">
+                            Bespoke Enterprise OS (Custom Configured Stack: {customStack.setup})
+                          </option>
+                        )}
                         <option value="Trades & Home Services">Trades &amp; Home Services (HVAC, Plumbing, Electrical)</option>
                         <option value="Healthcare & Specialty Clinics">Healthcare &amp; Dental Clinics</option>
                         <option value="Legal & Professional Services">Law Firm / Accounting / Advisory</option>

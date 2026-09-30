@@ -12,13 +12,21 @@ export default function StudioInquiry() {
     email: '',
     phone: '',
     domain: '',
-    interest: 'Complete Business OS (All-in-One)',
+    interest: 'Bespoke Enterprise OS (Custom Stack)',
   })
+  const [customScopeDetail, setCustomScopeDetail] = useState('')
 
   useEffect(() => {
     const handleSelectPlan = (e: any) => {
       if (e?.detail) {
-        setForm((prev) => ({ ...prev, interest: e.detail }))
+        const detailStr = String(e.detail)
+        if (detailStr.includes('Bespoke Enterprise OS')) {
+          setForm((prev) => ({ ...prev, interest: 'Bespoke Enterprise OS (Custom Stack)' }))
+          setCustomScopeDetail(detailStr)
+        } else {
+          setForm((prev) => ({ ...prev, interest: detailStr }))
+          setCustomScopeDetail('')
+        }
       }
     }
     window.addEventListener('epicrio-select-plan' as any, handleSelectPlan)
@@ -40,6 +48,8 @@ export default function StudioInquiry() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
+          interest: customScopeDetail || form.interest,
+          notes: customScopeDetail ? `Customized Stack: ${customScopeDetail}` : undefined,
           source: 'homepage_inquiry',
         }),
       })
@@ -219,19 +229,40 @@ export default function StudioInquiry() {
                     onChange={(e) => setForm({ ...form, interest: e.target.value })}
                     className="w-full h-11 px-4 rounded-xl border border-zinc-200 text-[14px] bg-white text-[#0A0A0A] focus:border-zinc-950 focus:ring-0 outline-none transition-colors"
                   >
-                    <option value="Dedicated Voice AI Receptionist">
-                      Dedicated Voice AI Receptionist (24/7 Phone Answering &amp; Booking)
+                    <option value="Dedicated Voice AI Receptionist ($1,000 buildout)">
+                      Dedicated Voice AI Receptionist ($1,000 buildout / $490 mo)
                     </option>
-                    <option value="Autonomous Back-Office & CRM">
-                      Autonomous Back-Office &amp; CRM (Invoices, Contracts &amp; Zero Data Entry)
+                    <option value="Autonomous Back-Office & CRM ($1,500 buildout)">
+                      Autonomous Back-Office &amp; CRM ($1,500 buildout / $690 mo)
                     </option>
-                    <option value="Complete Business OS (All-in-One)">
-                      Complete Business OS (All-in-One: Voice + Back-Office + CRM)
+                    <option value="Bespoke Enterprise OS (Custom Stack)">
+                      Bespoke Enterprise OS (Customizable Modular Stack)
                     </option>
                     <option value="Custom Enterprise Architecture">
                       Custom Enterprise Architecture &amp; Bespoke Integrations
                     </option>
                   </select>
+
+                  {customScopeDetail && (
+                    <div className="mt-2.5 p-3 rounded-xl bg-zinc-950 text-white text-xs border border-zinc-800 flex items-start justify-between gap-3">
+                      <div>
+                        <span className="font-mono text-[10px] text-zinc-400 uppercase tracking-wider block">
+                          Configured Stack Attached:
+                        </span>
+                        <span className="text-[12px] text-zinc-200 mt-0.5 block font-medium">
+                          {customScopeDetail}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setCustomScopeDetail('')}
+                        className="text-zinc-500 hover:text-white text-xs cursor-pointer p-0.5"
+                        title="Clear custom stack"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {errorMsg && (
