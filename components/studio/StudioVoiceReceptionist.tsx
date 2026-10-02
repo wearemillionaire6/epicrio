@@ -45,7 +45,7 @@ const callScenarios: Scenario[] = [
   },
   {
     id: 'emergency',
-    title: 'Emergency Call Routing',
+    title: 'Emergency Routing',
     callerType: 'Urgent Weekend Customer',
     dialogue: [
       {
@@ -99,8 +99,8 @@ const callScenarios: Scenario[] = [
   },
   {
     id: 'hindi',
-    title: 'Multilingual (Hindi / English)',
-    callerType: 'Bilingual Caller (Hindi / Hinglish)',
+    title: 'Multilingual Support',
+    callerType: 'Bilingual Caller',
     dialogue: [
       {
         speaker: 'AI Receptionist',
@@ -125,6 +125,12 @@ const callScenarios: Scenario[] = [
     ],
   },
 ]
+
+const EASE = [0.16, 1, 0.3, 1] as const
+const blurReveal = {
+  hidden: { opacity: 0, y: 40, filter: 'blur(8px)' },
+  visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: EASE } }
+}
 
 export default function StudioVoiceReceptionist() {
   const [activeScenarioIndex, setActiveScenarioIndex] = useState(0)
@@ -161,7 +167,7 @@ export default function StudioVoiceReceptionist() {
       } else {
         setIsFinished(true)
       }
-    }, 1500) // Simulated delay per message
+    }, 1500)
 
     return () => clearTimeout(typeTimeout)
   }, [currentMessageIndex, currentDialogue, isFinished])
@@ -175,48 +181,40 @@ export default function StudioVoiceReceptionist() {
     }
   }, [currentMessageIndex, isTyping])
 
-  const containerVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.7, ease: [0.25, 0.4, 0.25, 1] as const, staggerChildren: 0.08 }
-    }
-  }
-  
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.4, 0.25, 1] as const } }
-  }
-
   return (
     <motion.section 
       ref={sectionRef}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      variants={containerVariants}
+      variants={{
+        hidden: {},
+        visible: { transition: { staggerChildren: 0.12 } }
+      }}
       id="voice-receptionist" 
-      className="py-20 lg:py-28 border-b border-zinc-100/80 bg-white"
+      className="py-32 md:py-40 bg-white border-b border-zinc-100"
     >
-      <div className="w-full max-w-4xl mb-16 px-4 sm:px-6 mx-auto text-center">
-        <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 text-zinc-600 font-medium text-xs mb-6">
-          <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 animate-pulse" />
-          <span>AI Voice Receptionist</span>
+      <div className="w-full max-w-4xl mb-24 px-4 sm:px-6 mx-auto text-center flex flex-col items-center">
+        <motion.div variants={blurReveal} className="flex items-center gap-4 mb-8">
+          <div className="w-8 h-px bg-zinc-300" />
+          <span className="text-[13px] font-sans font-medium text-zinc-400 uppercase tracking-[0.15em]">
+            AI Voice Receptionist
+          </span>
+          <div className="w-8 h-px bg-zinc-300" />
         </motion.div>
         
-        <motion.h2 variants={itemVariants} className="text-4xl sm:text-5xl font-display font-medium tracking-[-0.03em] text-[#0A0A0A]">
+        <motion.h2 variants={blurReveal} className="text-5xl md:text-6xl font-display tracking-tight text-[#0A0A0A]">
           Every call answered. Every appointment booked.
         </motion.h2>
         
-        <motion.p variants={itemVariants} className="mt-6 text-[15px] text-zinc-500 max-w-2xl mx-auto leading-relaxed font-sans">
-          Your AI receptionist picks up in two rings, speaks fluently in Hindi, English, Spanish, and 30+ global languages, answers questions with natural warmth, and books directly into your calendar — 24/7.
+        <motion.p variants={blurReveal} className="mt-8 text-[17px] text-zinc-500 max-w-2xl mx-auto leading-relaxed font-sans">
+          Your AI receptionist picks up in two rings, speaks fluently in multiple global languages, answers questions with natural warmth, and books directly into your calendar — 24/7.
         </motion.p>
       </div>
 
-      <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+      <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left: Chat Simulation */}
-        <motion.div variants={itemVariants} className="lg:col-span-7 bg-white rounded-2xl p-8 border border-zinc-100 shadow-[0_0_0_1px_rgba(0,0,0,0.04)]">
-          <div className="flex flex-wrap gap-2 mb-6">
+        <motion.div variants={blurReveal} className="lg:col-span-7 bg-[#FAFAFA] rounded-3xl p-10 border border-[#F0F0F0] shadow-sm">
+          <div className="flex flex-wrap gap-6 mb-10 border-b border-zinc-200">
             {callScenarios.map((sc, idx) => {
               const isSelected = activeScenarioIndex === idx
               return (
@@ -224,10 +222,10 @@ export default function StudioVoiceReceptionist() {
                   key={sc.id}
                   type="button"
                   onClick={() => handleSelectScenario(idx)}
-                  className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
+                  className={`pb-4 text-[15px] font-medium transition-all border-b-2 relative top-[1px] ${
                     isSelected
-                      ? 'bg-zinc-900 text-white'
-                      : 'bg-zinc-50 text-zinc-600 hover:bg-zinc-100'
+                      ? 'border-[#0A0A0A] text-[#0A0A0A]'
+                      : 'border-transparent text-zinc-400 hover:text-zinc-600'
                   }`}
                 >
                   {sc.title}
@@ -236,17 +234,41 @@ export default function StudioVoiceReceptionist() {
             })}
           </div>
 
-          <div className="border-t border-zinc-100 pt-6">
-            <div className="flex items-center justify-between text-xs text-zinc-400 pb-4">
-              <span className="flex items-center gap-2">
-                <span>Live scenario: <strong className="text-zinc-600 font-medium">{activeScenario.callerType}</strong></span>
-              </span>
-              <span className="hidden sm:inline">Sub-300ms response</span>
+          <div className="pt-2">
+            <div className="flex items-center justify-between pb-8">
+              <div className="flex items-center gap-3">
+                <span className="text-[13px] font-mono text-zinc-400 uppercase tracking-widest">
+                  Live Scenario:
+                </span>
+                <span className="text-[14px] font-medium text-zinc-700">
+                  {activeScenario.callerType}
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5 h-4">
+                {/* Waveform Visualization */}
+                {[1, 2, 3, 4, 5].map((bar) => (
+                  <motion.div
+                    key={bar}
+                    animate={
+                      isTyping 
+                        ? { height: ['4px', '14px', '4px'] } 
+                        : { height: '4px' }
+                    }
+                    transition={{
+                      duration: 0.6,
+                      repeat: Infinity,
+                      delay: bar * 0.1,
+                      ease: "easeInOut"
+                    }}
+                    className="w-1 bg-zinc-300 rounded-full"
+                  />
+                ))}
+              </div>
             </div>
 
             <div
               ref={chatContainerRef}
-              className="min-h-[400px] max-h-[450px] overflow-y-auto space-y-6 pr-4 pb-4 scrollbar-hide"
+              className="min-h-[450px] max-h-[550px] overflow-y-auto space-y-8 pr-4 pb-4 scrollbar-hide"
             >
               {currentDialogue.slice(0, currentMessageIndex + 1).map((item, idx) => {
                 const isAI = item.speaker === 'AI Receptionist'
@@ -254,20 +276,20 @@ export default function StudioVoiceReceptionist() {
                 return (
                   <motion.div
                     key={`${activeScenario.id}-${idx}`}
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.5, ease: EASE }}
                     className={`flex flex-col ${isAI ? 'items-start' : 'items-end'}`}
                   >
-                    <div className="text-[11px] text-zinc-400 mb-1.5 px-1">
+                    <div className="text-[12px] font-medium tracking-wide text-zinc-400 mb-2 px-2 uppercase">
                       {item.speaker}
                     </div>
 
                     <div
-                      className={`max-w-[85%] rounded-2xl p-4 text-[14px] leading-relaxed ${
+                      className={`max-w-[80%] rounded-2xl p-5 text-[16px] leading-relaxed font-sans shadow-sm ${
                         isAI
-                          ? 'bg-zinc-50 text-zinc-700 rounded-tl-sm'
-                          : 'bg-zinc-900 text-white rounded-tr-sm'
+                          ? 'bg-white text-zinc-800 rounded-tl-sm border border-zinc-100'
+                          : 'bg-[#0A0A0A] text-white rounded-tr-sm'
                       }`}
                     >
                       {item.text}
@@ -278,33 +300,33 @@ export default function StudioVoiceReceptionist() {
               
               {isTyping && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="flex flex-col items-start"
                 >
-                  <div className="text-[11px] text-zinc-400 mb-1.5 px-1">
+                  <div className="text-[12px] font-medium tracking-wide text-zinc-400 mb-2 px-2 uppercase">
                     {currentDialogue[currentMessageIndex + 1]?.speaker || 'AI Receptionist'}
                   </div>
-                  <div className="bg-zinc-50 rounded-2xl rounded-tl-sm p-4 py-5 flex gap-1.5 items-center">
-                    <motion.div className="w-1.5 h-1.5 rounded-full bg-zinc-400" animate={{ y: [0, -3, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0 }} />
-                    <motion.div className="w-1.5 h-1.5 rounded-full bg-zinc-400" animate={{ y: [0, -3, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }} />
-                    <motion.div className="w-1.5 h-1.5 rounded-full bg-zinc-400" animate={{ y: [0, -3, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }} />
+                  <div className="bg-white rounded-2xl rounded-tl-sm p-5 border border-zinc-100 shadow-sm flex gap-2 items-center h-[56px]">
+                    <motion.div className="w-1.5 h-1.5 rounded-full bg-zinc-400" animate={{ y: [0, -4, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0 }} />
+                    <motion.div className="w-1.5 h-1.5 rounded-full bg-zinc-400" animate={{ y: [0, -4, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }} />
+                    <motion.div className="w-1.5 h-1.5 rounded-full bg-zinc-400" animate={{ y: [0, -4, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }} />
                   </div>
                 </motion.div>
               )}
             </div>
             
-            <div className="pt-4 border-t border-zinc-100 flex flex-wrap items-center justify-between gap-3">
-              <span className="text-xs text-zinc-400">
-                {isFinished ? 'Simulation finished' : 'Simulating live conversation...'}
+            <div className="pt-8 mt-4 border-t border-zinc-200 flex flex-wrap items-center justify-between gap-4">
+              <span className="text-[13px] font-mono text-zinc-400">
+                {isFinished ? 'SIMULATION_COMPLETE' : 'STREAMING_AUDIO...'}
               </span>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <button
                   type="button"
                   onClick={() => handleSelectScenario(activeScenarioIndex)}
-                  className="text-xs font-medium text-zinc-500 hover:text-zinc-900 transition-colors cursor-pointer"
+                  className="text-[14px] font-medium text-zinc-500 hover:text-[#0A0A0A] transition-colors"
                 >
-                  ↺ Replay
+                  Restart
                 </button>
                 <button
                   type="button"
@@ -315,10 +337,10 @@ export default function StudioVoiceReceptionist() {
                       ;(btn as HTMLElement)?.click()
                     }
                   }}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-zinc-950 hover:bg-zinc-800 text-white text-xs font-medium transition-all shadow-xs cursor-pointer active:scale-95"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#0A0A0A] hover:bg-zinc-800 text-white text-[14px] font-medium transition-all shadow-md active:scale-95"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>Talk Live to Sarah (Mic Test)</span>
+                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                  <span>Talk Live to AI</span>
                 </button>
               </div>
             </div>
@@ -326,56 +348,56 @@ export default function StudioVoiceReceptionist() {
         </motion.div>
 
         {/* Right: What Happens */}
-        <motion.div variants={itemVariants} className="lg:col-span-5 bg-white rounded-2xl p-8 border border-zinc-100 shadow-[0_0_0_1px_rgba(0,0,0,0.04)] h-full flex flex-col justify-between">
+        <motion.div variants={blurReveal} className="lg:col-span-5 bg-white rounded-3xl p-10 border border-[#F0F0F0] shadow-sm h-full flex flex-col justify-between">
           <div>
-            <h3 className="text-lg font-medium text-[#0A0A0A] mb-8">
-              What happens automatically after every call:
+            <h3 className="text-2xl font-display text-[#0A0A0A] mb-12">
+              Automatic Post-Call Workflow
             </h3>
 
-            <div className="space-y-8">
-              <div className="flex items-start gap-4">
-                <div className="w-6 h-6 rounded-full bg-zinc-50 text-zinc-500 flex items-center justify-center text-xs font-medium flex-shrink-0 mt-0.5">
+            <div className="space-y-10">
+              <div className="flex items-start gap-6">
+                <div className="font-display text-4xl text-zinc-200 mt-[-4px]">
                   1
                 </div>
                 <div>
-                  <h4 className="text-[15px] font-medium text-[#0A0A0A]">Instant Calendar Booking</h4>
-                  <p className="text-[14px] mt-1.5 leading-relaxed text-zinc-500">
+                  <h4 className="text-[17px] font-medium text-[#0A0A0A]">Instant Calendar Booking</h4>
+                  <p className="text-[15px] mt-2 leading-relaxed text-zinc-500 font-sans">
                     The slot is reserved directly in your Google Calendar or Cal.com without double-bookings.
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4">
-                <div className="w-6 h-6 rounded-full bg-zinc-50 text-zinc-500 flex items-center justify-center text-xs font-medium flex-shrink-0 mt-0.5">
+              <div className="flex items-start gap-6">
+                <div className="font-display text-4xl text-zinc-200 mt-[-4px]">
                   2
                 </div>
                 <div>
-                  <h4 className="text-[15px] font-medium text-[#0A0A0A]">SMS Text to Customer</h4>
-                  <p className="text-[14px] mt-1.5 leading-relaxed text-zinc-500">
+                  <h4 className="text-[17px] font-medium text-[#0A0A0A]">SMS Text to Customer</h4>
+                  <p className="text-[15px] mt-2 leading-relaxed text-zinc-500 font-sans">
                     The caller immediately gets a branded text message with appointment time, location, and instructions.
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4">
-                <div className="w-6 h-6 rounded-full bg-zinc-50 text-zinc-500 flex items-center justify-center text-xs font-medium flex-shrink-0 mt-0.5">
+              <div className="flex items-start gap-6">
+                <div className="font-display text-4xl text-zinc-200 mt-[-4px]">
                   3
                 </div>
                 <div>
-                  <h4 className="text-[15px] font-medium text-[#0A0A0A]">Instant Team Alert</h4>
-                  <p className="text-[14px] mt-1.5 leading-relaxed text-zinc-500">
+                  <h4 className="text-[17px] font-medium text-[#0A0A0A]">Instant Team Alert</h4>
+                  <p className="text-[15px] mt-2 leading-relaxed text-zinc-500 font-sans">
                     Your phone, WhatsApp, or Slack gets a concise summary and audio recording so your team is prepared.
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4">
-                <div className="w-6 h-6 rounded-full bg-zinc-50 text-zinc-500 flex items-center justify-center text-xs font-medium flex-shrink-0 mt-0.5">
+              <div className="flex items-start gap-6">
+                <div className="font-display text-4xl text-zinc-200 mt-[-4px]">
                   4
                 </div>
                 <div>
-                  <h4 className="text-[15px] font-medium text-[#0A0A0A]">Logged in Your CRM</h4>
-                  <p className="text-[14px] mt-1.5 leading-relaxed text-zinc-500">
+                  <h4 className="text-[17px] font-medium text-[#0A0A0A]">Logged in Your CRM</h4>
+                  <p className="text-[15px] mt-2 leading-relaxed text-zinc-500 font-sans">
                     Customer name, phone number, and conversation notes are automatically filed into your CRM with zero manual typing.
                   </p>
                 </div>
@@ -383,12 +405,12 @@ export default function StudioVoiceReceptionist() {
             </div>
           </div>
           
-          <div className="pt-10">
+          <div className="pt-12 mt-8 border-t border-[#F0F0F0]">
             <motion.a
               href="#apply"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full py-3 text-sm font-medium rounded-full bg-zinc-900 text-white flex items-center justify-center gap-2"
+              className="w-full py-4 text-[15px] font-medium rounded-full bg-[#0A0A0A] text-white flex items-center justify-center gap-2"
             >
               Get your AI receptionist
             </motion.a>

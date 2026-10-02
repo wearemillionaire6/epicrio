@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { containerVariants, itemVariants } from '@/lib/motion'
 
 const industries = [
   {
@@ -57,48 +58,34 @@ export default function StudioEveryBusiness() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-80px" })
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08
-      }
-    }
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.7, ease: [0.25, 0.4, 0.25, 1] as const }
-    }
-  }
-
   return (
-    <section ref={ref} id="industries" className="py-20 lg:py-28 border-b border-zinc-100/80 bg-white">
+    <section ref={ref} id="industries" className="py-32 md:py-40 bg-white">
       <motion.div 
-        variants={containerVariants}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
+        variants={{
+          hidden: { opacity: 0 },
+          visible: { opacity: 1, transition: { staggerChildren: 0.12 } }
+        }}
         className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12"
       >
-        <motion.div variants={itemVariants} className="max-w-3xl mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 text-zinc-600 text-xs font-medium mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
-            Who we work with
+        <motion.div variants={{ hidden: { opacity: 0, y: 40, filter: 'blur(8px)' }, visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }} className="max-w-3xl mb-20">
+          <div className="flex items-center gap-4 mb-6">
+            <span className="w-8 h-px bg-zinc-300" />
+            <span className="uppercase tracking-[0.15em] text-zinc-400 text-[13px] font-sans font-medium">Who We Work With</span>
           </div>
-          <h2 className="font-display text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-zinc-900 mb-6">
+          
+          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl tracking-tight text-[#0A0A0A] mb-8">
             Built for businesses that run on appointments and service calls.
           </h2>
-          <p className="font-sans text-[15px] leading-relaxed text-zinc-500">
+          
+          <p className="font-sans text-[17px] leading-relaxed text-zinc-500 max-w-2xl">
             Whether you're dispatching HVAC technicians or managing a dental practice — if your team loses hours to phone tag, spreadsheets, and manual follow-ups, we fix that.
           </p>
         </motion.div>
 
-        {/* Industry Filter Pills */}
-        <motion.div variants={itemVariants} className="flex overflow-x-auto hide-scrollbar gap-3 mb-12 pb-2">
+        {/* Industry Filter Tabs */}
+        <motion.div variants={{ hidden: { opacity: 0, y: 40, filter: 'blur(8px)' }, visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }} className="flex overflow-x-auto hide-scrollbar gap-8 mb-16 border-b border-zinc-100 pb-px">
           {industries.map((ind) => {
             const isSelected = activeTab.id === ind.id
             return (
@@ -106,54 +93,59 @@ export default function StudioEveryBusiness() {
                 key={ind.id}
                 type="button"
                 onClick={() => setActiveTab(ind)}
-                className={`whitespace-nowrap flex-shrink-0 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                  isSelected
-                    ? 'bg-zinc-900 text-white'
-                    : 'bg-transparent text-zinc-500 hover:text-zinc-900 border border-zinc-200 hover:border-zinc-300'
+                className={`relative whitespace-nowrap pb-4 text-[15px] font-medium transition-colors ${
+                  isSelected ? 'text-[#0A0A0A]' : 'text-zinc-400 hover:text-zinc-600'
                 }`}
               >
                 {ind.title}
+                {isSelected && (
+                  <motion.div
+                    layoutId="activeIndustry"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0A0A0A]"
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  />
+                )}
               </button>
             )
           })}
         </motion.div>
 
         {/* Selected Industry Transformation Card */}
-        <motion.div variants={itemVariants}>
+        <motion.div variants={{ hidden: { opacity: 0, y: 60, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }}>
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab.id}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.4, ease: [0.25, 0.4, 0.25, 1] as const }}
-              className="border border-zinc-100 rounded-2xl p-8 bg-white shadow-sm"
+              initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              exit={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-[#FAFAFA] border border-zinc-100 rounded-3xl p-8 sm:p-12 lg:p-16"
             >
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
                 {/* Left: Industry Overview */}
-                <div className="lg:col-span-5 space-y-8">
+                <div className="lg:col-span-5 space-y-10">
                   <div>
-                    <h3 className="font-display text-2xl font-medium tracking-tight text-zinc-900 mb-2">
+                    <h3 className="font-display text-4xl lg:text-5xl text-[#0A0A0A] mb-4">
                       {activeTab.title}
                     </h3>
-                    <p className="text-[15px] text-zinc-500">
+                    <p className="text-[17px] text-zinc-500 font-sans">
                       {activeTab.subtitle}
                     </p>
                   </div>
                   
-                  <div className="flex flex-col gap-3">
-                    <span className="inline-block text-xs font-medium px-3 py-1.5 rounded-full bg-zinc-100 text-zinc-600 w-fit">
+                  <div className="flex flex-col gap-4">
+                    <span className="inline-block text-[13px] font-mono tracking-tight px-4 py-2 bg-white border border-zinc-200 text-zinc-600 rounded-full w-fit">
                       {activeTab.hoursSaved}
                     </span>
-                    <span className="inline-block text-xs font-medium px-3 py-1.5 rounded-full bg-zinc-100 text-zinc-600 w-fit">
+                    <span className="inline-block text-[13px] font-mono tracking-tight px-4 py-2 bg-white border border-zinc-200 text-zinc-600 rounded-full w-fit">
                       {activeTab.badge}
                     </span>
                   </div>
 
-                  <div>
+                  <div className="pt-4">
                     <Link
                       href="/book"
-                      className="inline-flex items-center text-sm font-medium text-zinc-900 hover:underline"
+                      className="inline-flex items-center text-[15px] font-medium text-[#0A0A0A] hover:opacity-70 transition-opacity"
                     >
                       Book a systems call &rarr;
                     </Link>
@@ -163,25 +155,25 @@ export default function StudioEveryBusiness() {
                 {/* Right: The Contrast (Before & After) */}
                 <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {/* Before */}
-                  <div className="border border-zinc-100 bg-white p-6 rounded-xl flex flex-col h-full">
-                    <div className="mb-4">
-                      <span className="text-xs text-zinc-400 uppercase tracking-wider font-semibold">
+                  <div className="bg-white border-t-2 border-rose-200 border-x border-b border-zinc-100 p-8 rounded-2xl flex flex-col h-full">
+                    <div className="mb-6">
+                      <span className="text-[11px] text-zinc-400 uppercase tracking-widest font-sans font-medium">
                         Before
                       </span>
                     </div>
-                    <p className="text-sm text-zinc-600 leading-relaxed">
+                    <p className="text-[15px] text-zinc-500 leading-relaxed font-sans">
                       {activeTab.heavyWork}
                     </p>
                   </div>
 
                   {/* After */}
-                  <div className="border border-zinc-900 bg-zinc-900 text-white p-6 rounded-xl flex flex-col h-full shadow-[0_0_0_1px_rgba(0,0,0,0.04)]">
-                    <div className="mb-4">
-                      <span className="text-xs text-zinc-400 uppercase tracking-wider font-semibold">
+                  <div className="bg-[#0A0A0A] text-white p-8 rounded-2xl flex flex-col h-full shadow-xl">
+                    <div className="mb-6">
+                      <span className="text-[11px] text-zinc-400 uppercase tracking-widest font-sans font-medium">
                         With Epicrio
                       </span>
                     </div>
-                    <p className="text-sm text-zinc-100 leading-relaxed">
+                    <p className="text-[15px] text-zinc-100 leading-relaxed font-sans">
                       {activeTab.automatedWork}
                     </p>
                   </div>

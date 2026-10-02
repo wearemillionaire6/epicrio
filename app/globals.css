@@ -11,20 +11,25 @@
   --surface: #FAFAFA;
 }
 
-/* Luxury UI/UX Typography Stack */
+/* ── Premium Typography Stack ────────────────────────────────── */
+
+/* Display / Headlines: Instrument Serif — editorial luxury */
 h1, h2, h3, h4, .font-display {
-  font-family: var(--font-outfit), var(--font-sans), sans-serif;
+  font-family: var(--font-display), 'Georgia', 'Times New Roman', serif;
   letter-spacing: -0.025em;
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
-body, p, span, button, input, select, textarea {
-  font-family: var(--font-sans), var(--font-outfit), system-ui, sans-serif;
+/* Body / UI: Satoshi — premium sans-serif with character */
+body, p, span, button, input, select, textarea, .font-sans {
+  font-family: 'Satoshi', var(--font-display), system-ui, -apple-system, sans-serif;
 }
 
+/* Monospace / Metrics: JetBrains Mono — engineered precision */
 code, kbd, samp, pre, .font-mono {
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-mono), 'SF Mono', 'Fira Code', monospace;
 }
+
+/* ── Cursor Philosophy ───────────────────────────────────────── */
 
 /* Maintain clean default arrow cursor on text; avoid switching to copy-paste I-beam */
 *, *::before, *::after {
@@ -41,8 +46,9 @@ input[type="text"], input[type="email"], input[type="tel"], input[type="number"]
   cursor: text !important;
 }
 
+/* ── Base Styles ─────────────────────────────────────────────── */
+
 html {
-  scroll-behavior: smooth;
   background-color: var(--bg);
   color: var(--text);
 }
@@ -51,40 +57,35 @@ body {
   background-color: var(--bg);
   color: var(--text);
   overflow-x: hidden;
-  transition: all 0.3s ease-in-out;
 }
 
-/* Smooth scroll-triggered animation utilities */
-.fade-in {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.7s cubic-bezier(0.25, 0.4, 0.25, 1);
-}
+/* ── Elegant Custom Scrollbar ────────────────────────────────── */
 
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Elegant Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #FFFFFF;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #E4E4E7;
-  border-radius: 3px;
+  background: #D4D4D8;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #D4D4D8;
+  background: #A1A1AA;
 }
 
-/* Subtle Selection */
+/* Hide scrollbar when not scrolling (Firefox) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #D4D4D8 transparent;
+}
+
+/* ── Selection ───────────────────────────────────────────────── */
+
 ::selection {
   background: #0A0A0A;
   color: #FFFFFF;

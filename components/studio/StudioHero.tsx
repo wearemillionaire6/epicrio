@@ -3,38 +3,17 @@
 import { useRef } from 'react'
 import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
+import { headingVariants, fadeUpVariants, cardVariants, containerVariants, viewportConfig, premiumEase } from '@/lib/motion'
 
 export default function StudioHero() {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-80px' })
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-      },
-    },
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 24 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.25, 0.4, 0.25, 1] as const,
-      },
-    },
-  }
+  const isInView = useInView(ref, viewportConfig)
 
   return (
     <section
       ref={ref}
       id="hero"
-      className="w-full min-h-[92vh] flex items-center pt-28 pb-16 lg:py-24 border-b border-zinc-100/80 bg-white"
+      className="w-full min-h-[90vh] flex items-center pt-32 pb-20 lg:py-32 border-b border-zinc-100/80 bg-white"
     >
       <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-14 items-center w-full">
@@ -46,16 +25,19 @@ export default function StudioHero() {
             className="lg:col-span-7 space-y-7 sm:space-y-8"
           >
             {/* Eyebrow Live Badge */}
-            <motion.div variants={itemVariants} className="inline-flex">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-zinc-200/80 bg-zinc-50/80 shadow-xs text-xs font-medium text-zinc-700">
-                <span className="w-2 h-2 rounded-full bg-zinc-950 animate-pulse" />
-                <span>Autonomous Operations Infrastructure</span>
-              </div>
+            <motion.div variants={fadeUpVariants} className="flex items-center gap-3">
+              <span className="w-8 h-px bg-zinc-300" />
+              <span className="uppercase tracking-[0.15em] text-[13px] font-sans font-medium text-zinc-400">
+                Autonomous Operations Infrastructure
+              </span>
             </motion.div>
 
             {/* Primary Headline */}
             <motion.h1
-              variants={itemVariants}
+              variants={headingVariants}
+              initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
+              animate={isInView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : { opacity: 0, y: 40, filter: 'blur(8px)' }}
+              transition={{ duration: 0.8, ease: premiumEase }}
               className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-display font-semibold tracking-[-0.035em] leading-[1.08] text-zinc-950"
             >
               Automate the work your team{' '}
@@ -64,7 +46,7 @@ export default function StudioHero() {
 
             {/* Outcome Description */}
             <motion.p
-              variants={itemVariants}
+              variants={fadeUpVariants}
               className="text-base sm:text-lg lg:text-xl text-zinc-500 leading-relaxed max-w-2xl font-normal font-sans"
             >
               From 24/7 AI phone reception to autonomous CRM pipelines and back-office invoicing — one integrated system, zero manual data entry.
@@ -72,7 +54,7 @@ export default function StudioHero() {
 
             {/* Action CTAs */}
             <motion.div
-              variants={itemVariants}
+              variants={fadeUpVariants}
               className="pt-2 flex flex-wrap items-center gap-4 sm:gap-5"
             >
               <Link href="/book">
@@ -95,41 +77,41 @@ export default function StudioHero() {
 
             {/* Live Metric Proof Strip */}
             <motion.div
-              variants={itemVariants}
+              variants={fadeUpVariants}
               className="pt-6 sm:pt-8 border-t border-zinc-100 grid grid-cols-3 gap-6 sm:gap-8 text-left"
             >
-              <div>
+              <motion.div variants={fadeUpVariants} transition={{ delay: 0.1, duration: 0.7, ease: premiumEase }}>
                 <div className="font-semibold text-2xl sm:text-3xl text-zinc-950 font-display">
                   100%
                 </div>
                 <div className="text-zinc-500 text-xs sm:text-[13px] mt-1 font-sans">
                   Call answer rate
                 </div>
-              </div>
-              <div>
+              </motion.div>
+              <motion.div variants={fadeUpVariants} transition={{ delay: 0.2, duration: 0.7, ease: premiumEase }}>
                 <div className="font-semibold text-2xl sm:text-3xl text-zinc-950 font-display">
                   35+ hrs
                 </div>
                 <div className="text-zinc-500 text-xs sm:text-[13px] mt-1 font-sans">
                   Saved weekly
                 </div>
-              </div>
-              <div>
+              </motion.div>
+              <motion.div variants={fadeUpVariants} transition={{ delay: 0.3, duration: 0.7, ease: premiumEase }}>
                 <div className="font-semibold text-2xl sm:text-3xl text-zinc-950 font-display">
                   48 hrs
                 </div>
                 <div className="text-zinc-500 text-xs sm:text-[13px] mt-1 font-sans">
                   To deployment
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
           </motion.div>
 
-          {/* Right: The Operations Transformation Cockpit (Fills screen proportionately) */}
+          {/* Right: The Operations Transformation Cockpit */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.98, y: 20 }}
-            animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.98, y: 20 }}
-            transition={{ duration: 0.7, delay: 0.15, ease: [0.25, 0.4, 0.25, 1] as const }}
+            variants={cardVariants}
+            initial="hidden"
+            animate={isInView ? 'visible' : 'hidden'}
             className="lg:col-span-5 rounded-3xl p-6 sm:p-8 space-y-5 bg-zinc-50/70 border border-zinc-200/70 shadow-sm backdrop-blur-xl w-full"
           >
             <div className="pb-3 border-b border-zinc-200/80 flex items-center justify-between">

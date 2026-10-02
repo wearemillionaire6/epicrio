@@ -5,7 +5,7 @@ import { motion, useInView } from 'framer-motion'
 
 const workflowSteps = [
   {
-    number: '01',
+    number: '1',
     title: 'Instant Lead Capture',
     desc: 'When a customer calls your AI receptionist, submits a website form, or replies to an email, their details are immediately created in your CRM with zero manual typing.',
     icon: (
@@ -15,7 +15,7 @@ const workflowSteps = [
     )
   },
   {
-    number: '02',
+    number: '2',
     title: 'Automated Quote & Contract',
     desc: 'Generate branded PDF proposals and contracts in seconds. Customers can sign on their phone with a single tap, with deposit invoices automatically sent via Stripe.',
     icon: (
@@ -25,7 +25,7 @@ const workflowSteps = [
     )
   },
   {
-    number: '03',
+    number: '3',
     title: 'Team Dispatch & Notifications',
     desc: 'Your technicians, account reps, or clinic staff receive instant WhatsApp or Slack notifications with customer notes, address, and job requirements.',
     icon: (
@@ -35,7 +35,7 @@ const workflowSteps = [
     )
   },
   {
-    number: '04',
+    number: '4',
     title: 'Automated Reviews & Re-Booking',
     desc: 'Once the service is completed, the system automatically sends a friendly review request, files the paid receipt, and schedules routine follow-ups.',
     icon: (
@@ -46,91 +46,108 @@ const workflowSteps = [
   }
 ]
 
+const EASE = [0.16, 1, 0.3, 1] as const
+const blurReveal = {
+  hidden: { opacity: 0, y: 40, filter: 'blur(8px)' },
+  visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: EASE } }
+}
+const cardReveal = {
+  hidden: { opacity: 0, y: 60, scale: 0.95 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: EASE } }
+}
+
 export default function StudioCrmWorkflows() {
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: "-80px" })
-
-  const containerVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.7, ease: [0.25, 0.4, 0.25, 1] as const, staggerChildren: 0.08 }
-    }
-  }
-  
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.4, 0.25, 1] as const } }
-  }
 
   return (
     <motion.section 
       ref={sectionRef}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      variants={containerVariants}
+      variants={{
+        hidden: {},
+        visible: { transition: { staggerChildren: 0.12 } }
+      }}
       id="crm-workflows" 
-      className="py-20 lg:py-28 border-b border-zinc-100/80 bg-white"
+      className="py-32 md:py-40 bg-[#FAFAFA] border-b border-zinc-100"
     >
-      <div className="w-full max-w-4xl mb-16 px-4 sm:px-6 mx-auto text-center">
-        <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 text-zinc-600 font-medium text-xs mb-6">
-          <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
-          <span>Autonomous back-office</span>
+      <div className="w-full max-w-4xl mb-24 px-4 sm:px-6 mx-auto text-center flex flex-col items-center">
+        <motion.div variants={blurReveal} className="flex items-center gap-4 mb-8">
+          <div className="w-8 h-px bg-zinc-300" />
+          <span className="text-[13px] font-sans font-medium text-zinc-400 uppercase tracking-[0.15em]">
+            Autonomous Back-Office
+          </span>
+          <div className="w-8 h-px bg-zinc-300" />
         </motion.div>
         
-        <motion.h2 variants={itemVariants} className="text-4xl sm:text-5xl font-display font-medium tracking-[-0.03em] text-[#0A0A0A]">
+        <motion.h2 variants={blurReveal} className="text-5xl md:text-6xl font-display tracking-tight text-[#0A0A0A]">
           From lead capture to invoice — fully hands-free.
         </motion.h2>
         
-        <motion.p variants={itemVariants} className="mt-6 text-[15px] text-zinc-500 max-w-2xl mx-auto leading-relaxed font-sans">
+        <motion.p variants={blurReveal} className="mt-8 text-[17px] text-zinc-500 max-w-2xl mx-auto leading-relaxed font-sans">
           New leads flow into your CRM automatically. Quotes generate themselves. Contracts get signed digitally. Invoices fire through Stripe. Your team just shows up and does the work.
         </motion.p>
       </div>
 
-      <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {workflowSteps.map((step) => (
-          <motion.div
-            key={step.number}
-            variants={itemVariants}
-            whileHover={{ y: -2 }}
-            transition={{ type: "spring", stiffness: 300 }}
-            className="rounded-2xl p-8 bg-white border border-zinc-100 shadow-sm flex flex-col"
-          >
-            <div className="w-10 h-10 rounded-full bg-zinc-50 flex items-center justify-center mb-6">
-              {step.icon}
-            </div>
-            
-            <h3 className="text-[16px] font-medium text-[#0A0A0A] mb-3">
-              {step.title}
-            </h3>
-            
-            <p className="text-[14px] leading-relaxed text-zinc-500">
-              {step.desc}
-            </p>
-          </motion.div>
-        ))}
+      <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 relative">
+        {/* Decorative connecting line */}
+        <div className="hidden lg:block absolute top-[45%] left-12 right-12 h-[1px] border-b border-dashed border-zinc-300 -z-10" />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {workflowSteps.map((step) => (
+            <motion.div
+              key={step.number}
+              variants={cardReveal}
+              whileHover={{ y: -6 }}
+              className="relative rounded-3xl p-10 bg-white border border-[#F0F0F0] shadow-sm flex flex-col overflow-hidden"
+            >
+              {/* Massive Serif Watermark */}
+              <div className="absolute -top-4 -right-4 text-8xl font-display text-zinc-50 opacity-50 select-none pointer-events-none">
+                0{step.number}
+              </div>
+
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-xl bg-[#FAFAFA] border border-[#F0F0F0] flex items-center justify-center mb-8">
+                  {step.icon}
+                </div>
+                
+                <h3 className="text-xl font-medium text-[#0A0A0A] mb-4 font-sans">
+                  {step.title}
+                </h3>
+                
+                <p className="text-[15px] leading-relaxed text-zinc-500 font-sans">
+                  {step.desc}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 sm:px-8 mt-12">
+      <div className="max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 mt-20">
         <motion.div 
-          variants={itemVariants} 
-          className="rounded-2xl p-8 bg-zinc-50 flex flex-col md:flex-row items-center justify-between gap-6"
+          variants={blurReveal} 
+          className="rounded-3xl p-10 bg-white border border-[#F0F0F0] flex flex-col md:flex-row items-center justify-between gap-10 shadow-sm"
         >
-          <div>
-            <h4 className="text-[15px] font-medium text-[#0A0A0A] mb-1">
+          <div className="flex-1">
+            <h4 className="text-[17px] font-medium text-[#0A0A0A] mb-4">
               Compatible with your existing tools
             </h4>
-            <p className="text-[14px] text-zinc-500">
-              We seamlessly connect HubSpot, Twenty CRM, GoHighLevel, Stripe, Google Workspace, WhatsApp, Slack, and QuickBooks.
-            </p>
+            <div className="flex flex-wrap gap-3">
+              {['HubSpot', 'Twenty CRM', 'GoHighLevel', 'Stripe', 'Google Workspace', 'WhatsApp', 'Slack', 'QuickBooks'].map((tool) => (
+                <span key={tool} className="px-3 py-1.5 bg-[#FAFAFA] border border-[#F0F0F0] rounded-md text-[13px] font-mono text-zinc-600">
+                  {tool}
+                </span>
+              ))}
+            </div>
           </div>
 
           <motion.a
             href="#apply"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="px-6 py-3 text-sm font-medium rounded-full whitespace-nowrap bg-zinc-900 text-white"
+            className="px-8 py-4 text-[15px] font-medium rounded-full whitespace-nowrap bg-[#0A0A0A] text-white shadow-md"
           >
             Automate Your Workflows
           </motion.a>

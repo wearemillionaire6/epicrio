@@ -1,28 +1,28 @@
 import type { Metadata, Viewport } from "next";
-import { Outfit, Plus_Jakarta_Sans, DM_Mono } from 'next/font/google';
+import { Instrument_Serif, JetBrains_Mono } from 'next/font/google';
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import ElevenLabsWidget from "@/components/studio/ElevenLabsWidget";
+import SmoothScroll from "@/components/SmoothScroll";
+import LoadingScreen from "@/components/studio/LoadingScreen";
 
-const outfit = Outfit({
+/* ── Premium Typography Stack ──────────────────────────────────── */
+
+// Display: Instrument Serif — elegant, high-contrast editorial serif
+const instrumentSerif = Instrument_Serif({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-outfit',
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  variable: '--font-display',
+  weight: ['400'],
+  style: ['normal', 'italic'],
 });
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-sans',
-  weight: ['400', '500', '600', '700', '800'],
-});
-
-const dmMono = DM_Mono({
+// Mono: JetBrains Mono — engineered for technical labels & metrics
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-mono',
-  weight: ['400', '500'],
+  weight: ['400', '500', '600', '700'],
 });
 
 export const viewport: Viewport = {
@@ -51,11 +51,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`scroll-smooth bg-white ${outfit.variable} ${plusJakartaSans.variable} ${dmMono.variable}`}>
-      <body className="antialiased min-h-screen bg-white text-zinc-900 font-sans selection:bg-zinc-950 selection:text-white">
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+    <html lang="en" className={`bg-white ${instrumentSerif.variable} ${jetbrainsMono.variable}`}>
+      <head>
+        {/* Satoshi — premium sans-serif from Fontshare (not on Google Fonts) */}
+        <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
+        <link
+          href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,600,700,800,900&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="antialiased min-h-screen bg-white text-zinc-900 font-sans selection:bg-zinc-900 selection:text-white">
+        <LoadingScreen />
+        <SmoothScroll>
+          <ThemeProvider>
+            {children}
+          </ThemeProvider>
+        </SmoothScroll>
         {/* Live ElevenLabs Conversational Voice Receptionist Widget */}
         <ElevenLabsWidget />
       </body>

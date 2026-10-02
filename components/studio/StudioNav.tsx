@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
 import EpicrioLogo from './EpicrioLogo'
 
 const navLinks = [
@@ -24,6 +24,13 @@ export default function StudioNav() {
   const isMobileOpenRef = useRef(false)
   const lastScrollYRef = useRef(0)
   const hideTimerRef = useRef<NodeJS.Timeout | null>(null)
+
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  })
 
   useEffect(() => {
     isHoveredRef.current = isHovered
@@ -100,57 +107,71 @@ export default function StudioNav() {
         }}
         className="fixed top-4 sm:top-5 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 pointer-events-none"
       >
-        <nav
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+        <div 
           className={`${
             shouldShow ? 'pointer-events-auto' : 'pointer-events-none'
-          } w-full max-w-5xl rounded-full px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-4 bg-white/95 backdrop-blur-2xl border border-zinc-200/70 shadow-[0_4px_20px_rgba(0,0,0,0.06)]`}
+          } relative w-full max-w-5xl rounded-full bg-white/95 backdrop-blur-2xl border border-zinc-200/70 shadow-[0_4px_20px_rgba(0,0,0,0.06)] overflow-hidden`}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-            <EpicrioLogo size={24} showWordmark={true} />
-          </Link>
-
-          {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center gap-7">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-[13px] font-normal text-zinc-500 hover:text-zinc-950 transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-
-          {/* CTA & Mobile Toggle */}
-          <div className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0">
-            <Link
-              href="/book"
-              className="inline-flex text-xs sm:text-[13px] font-medium bg-zinc-950 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-zinc-800 transition-all active:scale-[0.98] shadow-xs"
-            >
-              Book Systems Audit
+          <nav className="w-full px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-4">
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-2 flex-shrink-0">
+              <EpicrioLogo size={24} showWordmark={true} />
             </Link>
 
-            {/* Mobile Hamburger Button */}
-            <button
-              type="button"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 rounded-full text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100 transition-colors cursor-pointer"
-              aria-label="Toggle menu"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                {isMobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
+            {/* Desktop Navigation Links */}
+            <div className="hidden lg:flex items-center gap-7">
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="relative text-[13px] font-normal text-zinc-500 hover:text-zinc-950 transition-colors
+                             after:absolute after:-bottom-[2px] after:left-0 after:h-[1px] after:w-full 
+                             after:origin-bottom-right after:scale-x-0 hover:after:origin-bottom-left hover:after:scale-x-100 
+                             after:transition-transform after:duration-300 after:ease-[0.16,1,0.3,1] after:bg-zinc-950"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+
+            {/* CTA & Mobile Toggle */}
+            <div className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0">
+              <Link
+                href="/book"
+                className="group relative inline-flex items-center justify-center text-xs sm:text-[13px] font-medium text-zinc-900 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full border border-zinc-900 overflow-hidden transition-all active:scale-[0.98]"
+              >
+                <span className="absolute inset-0 w-full h-full bg-zinc-900 origin-bottom scale-y-0 group-hover:scale-y-100 transition-transform duration-500 ease-[0.16,1,0.3,1]"></span>
+                <span className="relative z-10 group-hover:text-white transition-colors duration-500 ease-[0.16,1,0.3,1]">Book a Call &rarr;</span>
+              </Link>
+
+              {/* Mobile Hamburger Button */}
+              <button
+                type="button"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="lg:hidden p-2 rounded-full text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100 transition-colors cursor-pointer"
+                aria-label="Toggle menu"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  {isMobileMenuOpen ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M6 18L18 6M6 6l12 12" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M4 6h16M4 12h16M4 18h16" />
+                  )}
+                </svg>
+              </button>
+            </div>
+          </nav>
+          
+          {/* Scroll Progress Bar */}
+          <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-zinc-200">
+            <motion.div 
+              className="h-full bg-zinc-900 origin-left"
+              style={{ scaleX }}
+            />
           </div>
-        </nav>
+        </div>
       </motion.div>
 
       {/* Mobile Slide-Down Menu */}
@@ -177,9 +198,9 @@ export default function StudioNav() {
               <Link
                 href="/book"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block w-full text-center py-2.5 bg-zinc-950 text-white rounded-full text-xs font-medium"
+                className="block w-full text-center py-2.5 bg-zinc-950 text-white rounded-full text-[13px] font-medium"
               >
-                Book Systems Audit
+                Book a Call &rarr;
               </Link>
             </div>
           </motion.div>

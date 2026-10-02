@@ -2,6 +2,14 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
+import {
+  containerVariants,
+  headingVariants,
+  fadeUpVariants,
+  cardVariants,
+  viewportConfig,
+  premiumEase,
+} from '@/lib/motion'
 
 export default function StudioInquiry() {
   const [submitted, setSubmitted] = useState(false)
@@ -36,7 +44,7 @@ export default function StudioInquiry() {
   }, [])
 
   const sectionRef = useRef<HTMLElement>(null)
-  const isInView = useInView(sectionRef, { once: true, margin: '-80px' })
+  const isInView = useInView(sectionRef, viewportConfig)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -65,19 +73,23 @@ export default function StudioInquiry() {
     }
   }
 
-  const containerVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.7, ease: [0.25, 0.4, 0.25, 1] as const, staggerChildren: 0.1 },
+  const guarantees = [
+    {
+      num: '01',
+      title: '20-Min Systems Audit',
+      desc: 'We map your exact bottlenecks, missed calls, and manual spreadsheet work.',
     },
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.4, 0.25, 1] as const } },
-  }
+    {
+      num: '02',
+      title: 'Custom Blueprint',
+      desc: 'Delivered directly by founders with clear timelines and architecture.',
+    },
+    {
+      num: '03',
+      title: 'Engineered to Your Exact Specs',
+      desc: 'We build, test, and hand over the exact custom operational infrastructure you ask for.',
+    },
+  ]
 
   return (
     <motion.section
@@ -86,85 +98,85 @@ export default function StudioInquiry() {
       animate={isInView ? 'visible' : 'hidden'}
       variants={containerVariants}
       id="apply"
-      className="py-20 lg:py-28 bg-white border-b border-zinc-100/80 w-full"
+      className="py-32 md:py-40 bg-white border-b border-zinc-100/80 w-full"
     >
       <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 xl:gap-20 items-start">
           {/* Left Column: Context & Guarantees */}
           <div className="lg:col-span-5 space-y-8">
-            <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 text-zinc-600 font-medium text-xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
-              <span>Get started</span>
+            {/* Eyebrow */}
+            <motion.div variants={fadeUpVariants} className="flex items-center gap-3">
+              <span className="w-8 h-px bg-zinc-300" />
+              <span className="text-[13px] font-sans font-medium uppercase tracking-[0.15em] text-zinc-400">
+                Get Started
+              </span>
             </motion.div>
 
-            <motion.h2 variants={itemVariants} className="text-3xl sm:text-4xl lg:text-5xl font-display font-semibold tracking-[-0.03em] text-[#0A0A0A] leading-[1.1]">
-              Let's talk about your operations.
+            <motion.h2
+              variants={headingVariants}
+              className="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight text-zinc-900 leading-[1.1]"
+            >
+              Let&apos;s talk about your operations.
             </motion.h2>
 
-            <motion.p variants={itemVariants} className="text-[15px] text-zinc-500 leading-relaxed font-sans">
-              Tell us about your current workload. We'll review your operations personally and send you a custom automation blueprint within 24 hours.
+            <motion.p
+              variants={fadeUpVariants}
+              className="text-[17px] text-zinc-500 leading-relaxed font-sans"
+            >
+              Tell us about your current workload. We&apos;ll review your operations personally and
+              send you a custom automation blueprint within 24 hours.
             </motion.p>
 
             {/* Value Guarantees */}
-            <motion.div variants={itemVariants} className="space-y-4 pt-4 border-t border-zinc-100">
-              <div className="flex items-start gap-3.5">
-                <div className="w-6 h-6 rounded-full bg-zinc-100 text-zinc-900 flex items-center justify-center shrink-0 mt-0.5 text-xs font-semibold">
-                  1
+            <motion.div variants={fadeUpVariants} className="space-y-6 pt-6 border-t border-zinc-100">
+              {guarantees.map((g) => (
+                <div key={g.num} className="flex items-start gap-4">
+                  <span className="text-2xl font-display text-zinc-200 leading-none mt-0.5 select-none">
+                    {g.num}
+                  </span>
+                  <div>
+                    <h4 className="text-sm font-semibold text-zinc-900 font-sans">{g.title}</h4>
+                    <p className="text-[13px] text-zinc-500 mt-0.5 font-sans leading-relaxed">
+                      {g.desc}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 font-sans">20-Min Systems Audit</h4>
-                  <p className="text-xs text-zinc-500 mt-0.5 font-sans">We map your exact bottlenecks, missed calls, and manual spreadsheet work.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3.5">
-                <div className="w-6 h-6 rounded-full bg-zinc-100 text-zinc-900 flex items-center justify-center shrink-0 mt-0.5 text-xs font-semibold">
-                  2
-                </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 font-sans">Custom Blueprint</h4>
-                  <p className="text-xs text-zinc-500 mt-0.5 font-sans">Delivered directly by founders with clear timelines and architecture.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3.5">
-                <div className="w-6 h-6 rounded-full bg-zinc-100 text-zinc-900 flex items-center justify-center shrink-0 mt-0.5 text-xs font-semibold">
-                  3
-                </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 font-sans">Engineered to Your Exact Specs</h4>
-                  <p className="text-xs text-zinc-500 mt-0.5 font-sans">We build, test, and hand over the exact custom operational infrastructure you ask for.</p>
-                </div>
-              </div>
+              ))}
             </motion.div>
           </div>
 
           {/* Right Column: Form Card */}
           <motion.div
-            variants={itemVariants}
-            className="lg:col-span-7 bg-zinc-50/70 rounded-3xl p-6 sm:p-10 border border-zinc-200/80 shadow-2xs"
+            variants={cardVariants}
+            className="lg:col-span-7 bg-zinc-50/50 rounded-3xl p-8 sm:p-12 border border-zinc-200/60 shadow-sm"
           >
             {submitted ? (
-              <div className="py-16 text-center space-y-6">
-                <div className="w-14 h-14 rounded-full bg-zinc-950 text-white flex items-center justify-center mx-auto shadow-sm">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, ease: premiumEase }}
+                className="py-20 text-center space-y-6"
+              >
+                <div className="w-14 h-14 rounded-full bg-zinc-900 text-white flex items-center justify-center mx-auto">
                   <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-2xl font-display font-semibold text-[#0A0A0A] mb-2">
+                  <h3 className="text-2xl font-display text-zinc-900 mb-2">
                     Request Received
                   </h3>
                   <p className="text-[15px] max-w-md mx-auto leading-relaxed text-zinc-500 font-sans">
-                    We are reviewing your current setup and will send your custom automation blueprint to your email within 24 hours.
+                    We are reviewing your current setup and will send your custom automation
+                    blueprint to your email within 24 hours.
                   </p>
                 </div>
-              </div>
+              </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-                  <div className="space-y-2">
-                    <label className="block text-[13px] font-medium text-zinc-700 font-sans">
+              <form onSubmit={handleSubmit} className="space-y-7">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="space-y-2.5">
+                    <label className="block text-[13px] font-medium text-zinc-600 font-sans tracking-wide">
                       Your Name
                     </label>
                     <input
@@ -173,12 +185,12 @@ export default function StudioInquiry() {
                       placeholder="e.g. David Sterling"
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
-                      className="w-full h-11 px-4 rounded-xl border border-zinc-200 text-[14px] bg-white text-[#0A0A0A] placeholder-zinc-400 focus:border-zinc-950 focus:ring-0 outline-none transition-colors"
+                      className="w-full h-14 px-5 rounded-xl bg-white border border-zinc-200 text-[15px] text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:ring-0 outline-none transition-colors font-sans"
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="block text-[13px] font-medium text-zinc-700 font-sans">
+                  <div className="space-y-2.5">
+                    <label className="block text-[13px] font-medium text-zinc-600 font-sans tracking-wide">
                       Work Email
                     </label>
                     <input
@@ -187,14 +199,14 @@ export default function StudioInquiry() {
                       placeholder="david@company.com"
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      className="w-full h-11 px-4 rounded-xl border border-zinc-200 text-[14px] bg-white text-[#0A0A0A] placeholder-zinc-400 focus:border-zinc-950 focus:ring-0 outline-none transition-colors"
+                      className="w-full h-14 px-5 rounded-xl bg-white border border-zinc-200 text-[15px] text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:ring-0 outline-none transition-colors font-sans"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-                  <div className="space-y-2">
-                    <label className="block text-[13px] font-medium text-zinc-700 font-sans">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="space-y-2.5">
+                    <label className="block text-[13px] font-medium text-zinc-600 font-sans tracking-wide">
                       Direct Phone
                     </label>
                     <input
@@ -202,12 +214,12 @@ export default function StudioInquiry() {
                       placeholder="+1 (555) 000-0000"
                       value={form.phone}
                       onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                      className="w-full h-11 px-4 rounded-xl border border-zinc-200 text-[14px] bg-white text-[#0A0A0A] placeholder-zinc-400 focus:border-zinc-950 focus:ring-0 outline-none transition-colors"
+                      className="w-full h-14 px-5 rounded-xl bg-white border border-zinc-200 text-[15px] text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:ring-0 outline-none transition-colors font-sans"
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="block text-[13px] font-medium text-zinc-700 font-sans">
+                  <div className="space-y-2.5">
+                    <label className="block text-[13px] font-medium text-zinc-600 font-sans tracking-wide">
                       Company Website
                     </label>
                     <input
@@ -215,19 +227,19 @@ export default function StudioInquiry() {
                       placeholder="company.com"
                       value={form.domain}
                       onChange={(e) => setForm({ ...form, domain: e.target.value })}
-                      className="w-full h-11 px-4 rounded-xl border border-zinc-200 text-[14px] bg-white text-[#0A0A0A] placeholder-zinc-400 focus:border-zinc-950 focus:ring-0 outline-none transition-colors"
+                      className="w-full h-14 px-5 rounded-xl bg-white border border-zinc-200 text-[15px] text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:ring-0 outline-none transition-colors font-sans"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="block text-[13px] font-medium text-zinc-700 font-sans">
+                <div className="space-y-2.5">
+                  <label className="block text-[13px] font-medium text-zinc-600 font-sans tracking-wide">
                     Primary Area of Focus
                   </label>
                   <select
                     value={form.interest}
                     onChange={(e) => setForm({ ...form, interest: e.target.value })}
-                    className="w-full h-11 px-4 rounded-xl border border-zinc-200 text-[14px] bg-white text-[#0A0A0A] focus:border-zinc-950 focus:ring-0 outline-none transition-colors"
+                    className="w-full h-14 px-5 rounded-xl bg-white border border-zinc-200 text-[15px] text-zinc-900 focus:border-zinc-900 focus:ring-0 outline-none transition-colors font-sans appearance-none"
                   >
                     <option value="Dedicated Voice AI Receptionist ($1,000 buildout)">
                       Dedicated Voice AI Receptionist ($1,000 buildout / $490 mo)
@@ -244,7 +256,7 @@ export default function StudioInquiry() {
                   </select>
 
                   {customScopeDetail && (
-                    <div className="mt-2.5 p-3 rounded-xl bg-zinc-950 text-white text-xs border border-zinc-800 flex items-start justify-between gap-3">
+                    <div className="mt-3 p-4 rounded-xl bg-zinc-900 text-white text-xs border border-zinc-800 flex items-start justify-between gap-3">
                       <div>
                         <span className="font-mono text-[10px] text-zinc-400 uppercase tracking-wider block">
                           Configured Stack Attached:
@@ -274,9 +286,9 @@ export default function StudioInquiry() {
                 <motion.button
                   type="submit"
                   disabled={isSubmitting}
-                  whileHover={{ scale: 1.01 }}
+                  whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.99 }}
-                  className="w-full py-4 rounded-full bg-zinc-950 hover:bg-zinc-800 text-white font-medium text-[15px] transition-colors shadow-sm disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-4.5 rounded-full bg-zinc-900 hover:bg-zinc-800 text-white font-medium text-[15px] transition-all shadow-sm disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {isSubmitting ? (
                     <>
