@@ -118,9 +118,10 @@ export default function BookAppointmentPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="text-[11px] font-mono px-3 py-1 rounded-full bg-zinc-100 text-zinc-800 border border-zinc-200 font-semibold">
-              CAL.COM CONNECTED
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-medium text-zinc-600 font-sans">
+              Live Scheduling Active
             </span>
           </div>
         </header>
@@ -314,10 +315,6 @@ export default function BookAppointmentPage() {
                   </button>
                 </div>
 
-                {/* Cal.com Handle Configuration */}
-                <div className="text-[11px] text-zinc-400 flex items-center gap-1.5 font-mono">
-                  <span>cal.com/{calUsername}</span>
-                </div>
               </div>
 
               {/* Embedded Cal.com iFrame Container */}
