@@ -7,8 +7,12 @@ const LEADS_FILE = path.join(DATA_DIR, 'leads.json')
 const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json')
 
 function ensureDirectoryExists() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true })
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true })
+    }
+  } catch {
+    // Read-only filesystem in serverless environments
   }
 }
 
@@ -223,14 +227,15 @@ Bhavesh • Epicrio Operations Engineering`,
 
 export function getLeads(): Lead[] {
   ensureDirectoryExists()
-  if (!fs.existsSync(LEADS_FILE)) {
-    fs.writeFileSync(LEADS_FILE, JSON.stringify(SEED_LEADS, null, 2), 'utf8')
-    return SEED_LEADS
-  }
   try {
+    if (!fs.existsSync(LEADS_FILE)) {
+      try {
+        fs.writeFileSync(LEADS_FILE, JSON.stringify(SEED_LEADS, null, 2), 'utf8')
+      } catch {}
+      return SEED_LEADS
+    }
     const raw = fs.readFileSync(LEADS_FILE, 'utf8')
     if (!raw.trim()) {
-      fs.writeFileSync(LEADS_FILE, JSON.stringify(SEED_LEADS, null, 2), 'utf8')
       return SEED_LEADS
     }
     return JSON.parse(raw) as Lead[]
@@ -241,8 +246,13 @@ export function getLeads(): Lead[] {
 }
 
 export function saveAllLeads(leads: Lead[]): void {
-  ensureDirectoryExists()
-  fs.writeFileSync(LEADS_FILE, JSON.stringify(leads, null, 2), 'utf8')
+  try {
+    ensureDirectoryExists()
+    fs.writeFileSync(LEADS_FILE, JSON.stringify(leads, null, 2), 'utf8')
+  } catch (err) {
+    // Vercel serverless functions have a read-only filesystem
+    console.warn('Filesystem write skipped in serverless environment:', err)
+  }
 }
 
 export function getLeadById(id: string): Lead | undefined {
@@ -298,11 +308,13 @@ export function deleteLead(id: string): boolean {
 
 export function getSettings(): TelegramConfig {
   ensureDirectoryExists()
-  if (!fs.existsSync(SETTINGS_FILE)) {
-    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(DEFAULT_SETTINGS, null, 2), 'utf8')
-    return DEFAULT_SETTINGS
-  }
   try {
+    if (!fs.existsSync(SETTINGS_FILE)) {
+      try {
+        fs.writeFileSync(SETTINGS_FILE, JSON.stringify(DEFAULT_SETTINGS, null, 2), 'utf8')
+      } catch {}
+      return DEFAULT_SETTINGS
+    }
     const raw = fs.readFileSync(SETTINGS_FILE, 'utf8')
     const saved = JSON.parse(raw)
     return {
@@ -320,7 +332,11 @@ export function saveSettings(settings: Partial<TelegramConfig>): TelegramConfig 
   ensureDirectoryExists()
   const current = getSettings()
   const merged = { ...current, ...settings }
-  fs.writeFileSync(SETTINGS_FILE, JSON.stringify(merged, null, 2), 'utf8')
+  try {
+    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(merged, null, 2), 'utf8')
+  } catch (err) {
+    console.warn('Settings write skipped in serverless environment:', err)
+  }
   return merged
 }
 

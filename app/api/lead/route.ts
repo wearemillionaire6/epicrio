@@ -45,7 +45,11 @@ export async function POST(request: Request) {
     }
 
     // Save into unified lead pipeline
-    saveLead(enrichedLead)
+    try {
+      saveLead(enrichedLead)
+    } catch (saveErr) {
+      console.warn('Inbound lead save warning:', saveErr)
+    }
 
     // 2. Dispatch Real-Time Alert to Telegram (with ICP Score & Insights)
     try {
