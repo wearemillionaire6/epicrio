@@ -38,7 +38,7 @@ export default function Home() {
         {/* 5. Simple How It Works */}
         <StudioThesis />
 
-        {/* 6. 7-Day Zero-Risk Trial */}
+        {/* 6. The Business Case & ROI */}
         <StudioPilot />
 
         {/* 7. Transparent All-in-One Productized Packages */}

@@ -6,18 +6,18 @@ import { motion, useInView } from 'framer-motion'
 const steps = [
   {
     step: '1',
-    title: 'We set up fresh, dedicated Gmail accounts',
-    desc: 'We purchase separate, lookalike web addresses and create official Google Workspace inboxes for your business. We slowly warm up each account so Google trusts them completely.',
+    title: 'Telephony & call-forwarding setup',
+    desc: 'We configure a dedicated Twilio phone line or set up 2-ring call forwarding from your existing business number — zero downtime, no number changes, no carrier hassle.',
   },
   {
     step: '2',
-    title: 'We find verified decision-makers',
-    desc: 'We carefully identify the exact founders, directors, and executives who can afford your service, and double-check their real work email so zero emails bounce.',
+    title: 'Voice AI training & knowledge base',
+    desc: 'We train your AI receptionist on your specific pricing, FAQs, booking availability, and service area. It sounds like your best front-desk hire — warm, accurate, and always on.',
   },
   {
     step: '3',
-    title: 'We send friendly emails & deliver replies',
-    desc: 'We write simple, polite messages that sound like a thoughtful peer reaching out. When prospects reply, we send them straight to your calendar to book a call.',
+    title: 'CRM & back-office integration',
+    desc: 'We connect your calendar, Stripe invoicing, CRM pipeline, and team alerts on Slack or WhatsApp. Every call flows into a fully automated operational pipeline.',
   },
 ]
 
@@ -55,10 +55,10 @@ export default function StudioThesis() {
             </span>
           </motion.div>
           <motion.h2 variants={blurReveal} className="text-5xl md:text-6xl font-display tracking-tight text-[#0A0A0A]">
-            How we fill your calendar without you lifting a finger.
+            Live in 48 hours. No disruption to your daily operations.
           </motion.h2>
           <motion.p variants={blurReveal} className="mt-8 text-[17px] leading-relaxed text-zinc-500 font-sans max-w-2xl">
-            You do not need to learn complex software or spend hours prospecting. We handle the entire email setup, list building, and message sending from start to finish.
+            We handle the entire setup from carrier configuration to CRM integration. You keep running your business while we build the system around it.
           </motion.p>
         </motion.div>
 

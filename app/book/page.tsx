@@ -42,8 +42,7 @@ export default function BookAppointmentPage() {
   // Light Mode Only
   const isDark = false
   const [meetingType, setMeetingType] = useState<'15min' | '30min'>('15min')
-  const [calUsername, setCalUsername] = useState('bhavesh-agency')
-  const [isEditingUsername, setIsEditingUsername] = useState(false)
+  const [calUsername] = useState('bhavesh-agency')
   const [formSubmitted, setFormSubmitted] = useState(false)
   const [customStack, setCustomStack] = useState<CustomStackData | null>(null)
 
@@ -184,14 +183,16 @@ export default function BookAppointmentPage() {
           {/* Left Column: What We Provide For Your Business (7 Cols) */}
           <div className="lg:col-span-5 space-y-8">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold tracking-wide mb-4 border border-black/10 bg-white shadow-xs">
-                <span className="w-2 h-2 rounded-full bg-zinc-950 animate-pulse" />
-                <span>15-Minute Operational Discovery</span>
+              <div className="flex items-center gap-3 mb-5">
+                <span className="w-8 h-px bg-zinc-300" />
+                <span className="text-[13px] font-sans font-medium uppercase tracking-[0.15em] text-zinc-400">
+                  Operational Discovery
+                </span>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-950">
-                See How Your Business Runs on Autopilot.
+              <h1 className="text-3xl sm:text-4xl font-display tracking-tight text-zinc-950">
+                See how your business runs on autopilot.
               </h1>
-              <p className={`mt-3 text-sm leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+              <p className="mt-4 text-[15px] leading-relaxed text-zinc-500 font-sans">
                 Book a 1-on-1 strategy call with our automation team. We demonstrate our live 24/7 AI Voice Receptionist, audit your manual bottlenecks, and map out your custom all-in-one operations stack.
               </p>
             </div>
@@ -315,37 +316,7 @@ export default function BookAppointmentPage() {
 
                 {/* Cal.com Handle Configuration */}
                 <div className="text-[11px] text-zinc-400 flex items-center gap-1.5 font-mono">
-                  {isEditingUsername ? (
-                    <div className="flex items-center gap-1">
-                      <span>cal.com/</span>
-                      <input
-                        type="text"
-                        value={calUsername}
-                        onChange={(e) => setCalUsername(e.target.value)}
-                        className="px-2 py-0.5 rounded bg-black/40 border border-white/20 text-xs w-28 text-white focus:outline-none focus:border-[#00FF88]"
-                        placeholder="your-username"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setIsEditingUsername(false)}
-                        className="text-[#00FF88] hover:underline text-[10px]"
-                      >
-                        Save
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-1">
-                      <span>cal.com/{calUsername}</span>
-                      <button
-                        type="button"
-                        onClick={() => setIsEditingUsername(true)}
-                        className="text-zinc-500 hover:text-[#00FF88] ml-1"
-                        title="Change Cal.com username"
-                      >
-                        [edit]
-                      </button>
-                    </div>
-                  )}
+                  <span>cal.com/{calUsername}</span>
                 </div>
               </div>
 
