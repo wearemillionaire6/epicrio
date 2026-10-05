@@ -12,6 +12,7 @@ const navLinks = [
   { href: '#crm-workflows', label: 'Back-Office' },
   { href: '#how-it-works', label: 'How it works' },
   { href: '#investment', label: 'Pricing' },
+  { href: '/leads', label: 'Lead Engine' },
 ]
 
 export default function StudioNav() {

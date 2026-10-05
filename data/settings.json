@@ -1,0 +1,8 @@
+{
+  "botToken": "",
+  "chatId": "",
+  "autoAlertNewLeads": true,
+  "autoAlertHighICP": true,
+  "autoAlertEmailsSent": true,
+  "webhookConfigured": false
+}

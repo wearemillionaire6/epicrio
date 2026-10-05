@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
-import fs from 'fs'
-import path from 'path'
+import { saveLead } from '@/lib/leads/store'
+import { researchAndRefineLead } from '@/lib/leads/researcher'
+import { notifyNewWebsiteInbound, sendTelegramNotification } from '@/lib/telegram/bot'
+import { Lead } from '@/lib/leads/types'
 
 export async function POST(request: Request) {
   try {
@@ -15,49 +17,44 @@ export async function POST(request: Request) {
       )
     }
 
-    const leadData = {
-      id: `lead_${Date.now()}`,
+    const leadId = `lead_${Date.now()}`
+    const rawLead: Lead = {
+      id: leadId,
       name,
       email,
-      phone: phone || 'Not provided',
+      phone: phone || '',
+      company: domain ? domain.split('.')[0].toUpperCase() : name,
       domain: domain || 'Not provided',
-      interest: interest || 'General Automation Inquiry',
-      notes: notes || '',
-      source,
-      receivedAt: new Date().toISOString(),
+      industry: interest || 'General Business Operations',
+      source: 'website_inquiry',
+      status: 'discovered',
+      icpScore: 70,
+      icpTier: 'Medium Fit',
+      notes: notes || `Inquiry Interest: ${interest}`,
+      telegramNotified: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     }
 
-    // 1. Dispatch Real-Time Alert to Telegram (to YOU)
-    const telegramToken = process.env.TELEGRAM_BOT_TOKEN
-    const telegramChatId = process.env.TELEGRAM_CHAT_ID
-
-    if (telegramToken && telegramChatId) {
-      try {
-        const text = `🚨 *NEW EPICRIO LEAD!*\n\n` +
-          `👤 *Name:* ${name}\n` +
-          `✉️ *Email:* ${email}\n` +
-          `📞 *Phone:* ${phone || 'N/A'}\n` +
-          `🏢 *Website:* ${domain || 'N/A'}\n` +
-          `🎯 *Interest:* ${interest}\n` +
-          `${notes ? `📝 *Notes:* ${notes}\n` : ''}` +
-          `📍 *Source:* ${source}\n` +
-          `⏰ *Time:* ${new Date().toLocaleString()}`
-
-        await fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: telegramChatId,
-            text,
-            parse_mode: 'Markdown',
-          }),
-        })
-      } catch (err) {
-        console.error('Telegram notification error:', err)
-      }
+    // 1. Run Autonomous Lead Research & Refinement
+    let enrichedLead = rawLead
+    try {
+      enrichedLead = await researchAndRefineLead(rawLead)
+    } catch (researchErr) {
+      console.warn('Inbound research warning:', researchErr)
     }
 
-    // 2. Dispatch Real-Time Alert to Discord Webhook (to YOU)
+    // Save into unified lead pipeline
+    saveLead(enrichedLead)
+
+    // 2. Dispatch Real-Time Alert to Telegram (with ICP Score & Insights)
+    try {
+      await notifyNewWebsiteInbound(enrichedLead)
+    } catch (tgErr) {
+      console.error('Telegram notification error:', tgErr)
+    }
+
+    // 3. Dispatch Real-Time Alert to Discord Webhook (if configured)
     const discordWebhook = process.env.DISCORD_WEBHOOK_URL
     if (discordWebhook) {
       try {
@@ -75,7 +72,8 @@ export async function POST(request: Request) {
                   { name: 'Email', value: email, inline: true },
                   { name: 'Phone', value: phone || 'N/A', inline: true },
                   { name: 'Company', value: domain || 'N/A', inline: true },
-                  { name: 'Service Requested', value: interest, inline: false },
+                  { name: 'ICP Score', value: `${enrichedLead.icpScore}/100 (${enrichedLead.icpTier})`, inline: true },
+                  { name: 'Service Requested', value: interest || 'Operations Suite', inline: false },
                   ...(notes ? [{ name: 'Client Notes', value: notes, inline: false }] : []),
                 ],
                 footer: { text: `Epicrio Lead Capture • ${new Date().toLocaleTimeString()}` },
@@ -88,7 +86,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // 3. Send Automated Branded Confirmation Email (to the CLIENT)
+    // 4. Send Automated Branded Confirmation Email (to the CLIENT)
     const resendApiKey = process.env.RESEND_API_KEY
     if (resendApiKey) {
       try {
@@ -143,7 +141,7 @@ export async function POST(request: Request) {
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                       <tr>
                         <td style="font-size: 13px; color: #71717A; padding-bottom: 8px; width: 120px; font-weight: 600;">Solution:</td>
-                        <td style="font-size: 13px; color: #18181B; padding-bottom: 8px; font-weight: 600;">${interest}</td>
+                        <td style="font-size: 13px; color: #18181B; padding-bottom: 8px; font-weight: 600;">${interest || 'Operations Suite'}</td>
                       </tr>
                       <tr>
                         <td style="font-size: 13px; color: #71717A; padding-bottom: 8px; font-weight: 600;">Company:</td>
@@ -210,28 +208,12 @@ export async function POST(request: Request) {
       }
     }
 
-    // 4. Fallback: Save to local leads database
-    try {
-      const leadsFilePath = path.join(process.cwd(), 'data', 'leads.json')
-      const dir = path.dirname(leadsFilePath)
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true })
-      }
-      let existingLeads: any[] = []
-      if (fs.existsSync(leadsFilePath)) {
-        const fileContent = fs.readFileSync(leadsFilePath, 'utf8')
-        existingLeads = fileContent ? JSON.parse(fileContent) : []
-      }
-      existingLeads.unshift(leadData)
-      fs.writeFileSync(leadsFilePath, JSON.stringify(existingLeads, null, 2), 'utf8')
-    } catch (saveErr) {
-      console.log('Lead processed in memory:', leadData.id)
-    }
-
     return NextResponse.json({
       success: true,
-      message: 'Inquiry received successfully',
-      leadId: leadData.id,
+      message: 'Inquiry processed and enriched successfully',
+      leadId: enrichedLead.id,
+      icpScore: enrichedLead.icpScore,
+      icpTier: enrichedLead.icpTier,
     })
   } catch (error) {
     console.error('Error handling lead submission:', error)

@@ -1,0 +1,154 @@
+[
+  {
+    "id": "lead_dental_01",
+    "name": "Dr. Sarah Vance",
+    "company": "Apex Dental Partners & Aesthetics",
+    "domain": "apexdentalpartners.com",
+    "email": "contact@apexdentalpartners.com",
+    "phone": "+1 (512) 890-4120",
+    "location": "Austin, TX",
+    "industry": "Healthcare / Dental Clinics",
+    "source": "research_finder",
+    "status": "qualified",
+    "icpScore": 94,
+    "icpTier": "High Fit",
+    "notes": "Multi-location dental practice. High call volume during lunch and evening hours. Zero automated call handling after 5:00 PM.",
+    "research": {
+      "summary": "High-ticket cosmetic & restorative dentistry practice with 3 locations in Greater Austin. Website features static booking request forms with manual staff confirmation delays.",
+      "businessType": "Medical & Dental Clinic",
+      "industry": "Healthcare / Dental",
+      "estimatedSize": "15-40 employees",
+      "detectedTechStack": ["WordPress", "Gravity Forms", "Legacy VoIP", "OpenDental"],
+      "painPoints": [
+        "No 24/7 call receptionist — missed emergency and after-hours booking requests",
+        "Staff spends 3.5+ hours/day manually calling back patients to confirm appointments",
+        "No automated CRM pipeline sync between phone inquiries and booking software"
+      ],
+      "epicrioOpportunity": "Deploy Epicrio 24/7 AI Voice Receptionist to handle inbound patient intake, triage dental emergencies, and instantly sync scheduled slots into OpenDental.",
+      "suggestedService": "Voice AI Receptionist",
+      "confidence": "high",
+      "researchedAt": "2026-10-05T10:00:00.000Z",
+      "decisionMaker": {
+        "name": "Dr. Sarah Vance",
+        "title": "Managing Partner & Clinical Director",
+        "email": "dr.vance@apexdentalpartners.com"
+      },
+      "contactMethodsFound": {
+        "emails": ["contact@apexdentalpartners.com", "dr.vance@apexdentalpartners.com"],
+        "phones": ["+1 (512) 890-4120"],
+        "formsFound": true
+      }
+    },
+    "outreach": {
+      "subject": "Quick question regarding Apex Dental after-hours patient intake",
+      "body": "Hi Dr. Vance,\n\nI came across Apex Dental while researching high-performing dental groups in Austin — your patient reviews for cosmetic restoration are outstanding.\n\nI noticed that outside clinic hours (post-5:00 PM and weekends), new patient inquiries go directly to voicemail or a static form. For emergency dentistry and high-ticket smile consultations, data shows up to 62% of patients call the next clinic on Google rather than leaving a message.\n\nAt Epicrio, we build autonomous 24/7 AI Voice Receptionists engineered specifically for dental practices. Our voice agent:\n• Answers every inbound call with sub-second, natural human cadence\n• Qualifies patient treatment interest and insurance tier\n• Books consultations directly into your scheduling software without staff involvement\n\nWould you be open to hearing a 30-second live demo tailored with Apex Dental's clinic protocols?\n\nBest regards,\nBhavesh • Epicrio Autonomous Operations\nhttps://epicrio.com",
+      "followUpSubject": "Re: Quick question regarding Apex Dental after-hours patient intake",
+      "followUpBody": "Hi Dr. Vance,\n\nCircling back quickly on this — we recently set up an autonomous voice receptionist for a multi-chair dental practice that recaptured 28 booked appointments in month one that would have otherwise gone to voicemail.\n\nHappy to send over a 2-minute workflow breakdown or let you test-call a live practice sandbox. Does Thursday afternoon suit?\n\nBest,\nBhavesh",
+      "angle": "voice_ai",
+      "status": "draft"
+    },
+    "telegramNotified": true,
+    "createdAt": "2026-10-05T03:30:00.000Z",
+    "updatedAt": "2026-10-05T10:00:00.000Z"
+  },
+  {
+    "id": "lead_legal_02",
+    "name": "Marcus Sterling",
+    "company": "Sterling & Croft Litigation",
+    "domain": "sterlingcroftlaw.com",
+    "email": "msterling@sterlingcroftlaw.com",
+    "phone": "+1 (305) 555-0199",
+    "location": "Miami, FL",
+    "industry": "Legal Services / Law Firms",
+    "source": "research_finder",
+    "status": "drafted",
+    "icpScore": 89,
+    "icpTier": "High Fit",
+    "notes": "Boutique corporate and civil litigation firm. Incurring high retainer churn on initial case vetting.",
+    "research": {
+      "summary": "High-growth litigation practice handling commercial dispute cases. Current intake is gated by an overburdened paralegal staff conducting manual qualification interviews.",
+      "businessType": "Law Firm & Legal Counsel",
+      "industry": "Legal Services",
+      "estimatedSize": "8-20 attorneys",
+      "detectedTechStack": ["Squarespace", "Clio CRM", "Zendesk Chat"],
+      "painPoints": [
+        "Attorneys losing billable hours filtering out non-viable case leads",
+        "Intake forms lack automated conflict-of-interest pre-screening",
+        "Lead response time averages 4 hours during court sessions"
+      ],
+      "epicrioOpportunity": "Implement Epicrio Autonomous Client Triage: automated conversational intake agent that vets case jurisdiction, pre-screens facts, and creates pre-formatted case briefs directly in Clio.",
+      "suggestedService": "Autonomous CRM",
+      "confidence": "high",
+      "researchedAt": "2026-10-05T11:00:00.000Z",
+      "decisionMaker": {
+        "name": "Marcus Sterling",
+        "title": "Senior Managing Partner",
+        "email": "msterling@sterlingcroftlaw.com"
+      },
+      "contactMethodsFound": {
+        "emails": ["msterling@sterlingcroftlaw.com", "intake@sterlingcroftlaw.com"],
+        "phones": ["+1 (305) 555-0199"],
+        "formsFound": true
+      }
+    },
+    "outreach": {
+      "subject": "Automating case qualification at Sterling & Croft",
+      "body": "Hi Marcus,\n\nI noticed Sterling & Croft's recent litigation advisory expansions in South Florida — congratulations on the momentum.\n\nManaging high-volume litigation inquiries often creates an expensive bottleneck where senior staff spend hours screening out unviable claims or basic jurisdiction inquiries.\n\nWe build autonomous intake infrastructure for modern legal practices. The system conducts preliminary intake, checks case qualification parameters, and delivers organized case summaries into your CRM (like Clio) before an attorney ever picks up the phone.\n\nWould you be open to seeing how other commercial litigation firms reduced initial intake time by 75%?\n\nWarm regards,\nBhavesh • Epicrio",
+      "angle": "operations_audit",
+      "status": "draft"
+    },
+    "telegramNotified": true,
+    "createdAt": "2026-10-04T15:00:00.000Z",
+    "updatedAt": "2026-10-05T11:00:00.000Z"
+  },
+  {
+    "id": "lead_inbound_03",
+    "name": "David Keller",
+    "company": "Keller Logistics & Freight",
+    "domain": "kellerfreight.io",
+    "email": "david@kellerfreight.io",
+    "phone": "+1 (415) 800-9921",
+    "location": "Chicago, IL",
+    "industry": "Logistics / Supply Chain",
+    "source": "website_inquiry",
+    "status": "researched",
+    "icpScore": 82,
+    "icpTier": "High Fit",
+    "notes": "Submitted inquiry via Epicrio website. Interested in back-office dispatch automation & automated ERP invoicing.",
+    "research": {
+      "summary": "Regional freight brokerage coordinating 120+ monthly carrier dispatches. Heavy reliance on manual spreadsheets, PDF invoice extraction, and driver SMS status calls.",
+      "businessType": "Freight Brokerage & Fleet Dispatch",
+      "industry": "Logistics",
+      "estimatedSize": "25-60 employees",
+      "detectedTechStack": ["Custom Portal", "QuickBooks Desktop", "Dialpad"],
+      "painPoints": [
+        "Manual proof-of-delivery (POD) document processing and rate confirmation matching",
+        "Carrier dispatchers spending 40% of their workday answering 'where is my load' phone calls",
+        "Delayed invoice dispatch causing 45-day payment collection cycles"
+      ],
+      "epicrioOpportunity": "Deploy Epicrio All-in-One Operations Suite (Odoo ERP backend + automated voice/SMS status bot for carriers + zero-touch invoice reconciliation).",
+      "suggestedService": "Odoo Operations Suite",
+      "confidence": "medium",
+      "researchedAt": "2026-10-05T12:00:00.000Z",
+      "decisionMaker": {
+        "name": "David Keller",
+        "title": "Director of Operations",
+        "email": "david@kellerfreight.io"
+      },
+      "contactMethodsFound": {
+        "emails": ["david@kellerfreight.io"],
+        "phones": ["+1 (415) 800-9921"],
+        "formsFound": true
+      }
+    },
+    "outreach": {
+      "subject": "Blueprint for Keller Freight — Autonomous Dispatch & Invoice Flow",
+      "body": "Hi David,\n\nThanks for submitting an inquiry through Epicrio.\n\nOur team reviewed Keller Freight's dispatch footprint. Coordinating rate confirmations, proof-of-deliveries, and invoice matching manually creates massive overhead as carrier volumes scale.\n\nWe have drafted a custom architecture map showing how an autonomous dispatch & Odoo ERP workflow will automate load tracking calls and drop invoice generation latency down to minutes.\n\nLet's review the blueprint on a 20-minute architecture review:\nhttps://epicrio-git-main-wearemillionaire6-3440s-projects.vercel.app/book\n\nBest,\nBhavesh • Epicrio Operations Engineering",
+      "angle": "crm_backoffice",
+      "status": "draft"
+    },
+    "telegramNotified": true,
+    "createdAt": "2026-10-05T09:00:00.000Z",
+    "updatedAt": "2026-10-05T12:00:00.000Z"
+  }
+]
